@@ -1,0 +1,13 @@
+```markdown
+## Hypothesis:
+Diabetes occurrence is positively associated with unhealthy dietary habits and lack of physical activities. This association remains statistically significant even after controlling for the presence of high cholesterol levels and high blood pressure.
+## Test:
+Logistic regression model with diabetes_binary as the dependent variable and BMI, Smoker, PhysActivity, Fruits, Veggies as the independent variables, while adjusting for HighBP, HighChol
+
+## Hypothesis:
+Individuals with unhealthy dietary habits, lack of physical activities, high blood pressure, high cholesterol levels, or a combination of these factors are more likely to be diagnosed with diabetes than their counterparts with healthier lifestyles without high cholesterol levels or high blood pressure.
+## Test:
+Separate logistic regression models for each factor (BMI, Smoker, PhysActivity, Fruits, Veggies) with diabetes_binary as the dependent variable, while adjusting for HighBP, HighChol
+
+
+```

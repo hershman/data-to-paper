@@ -1,0 +1,9 @@
+```markdown
+
+## Research Goal: 
+The goal of this research is to investigate the role of dietary habits and physical activity in the prevalence of diabetes among individuals with or without high blood pressure, high cholesterol levels, or both. 
+
+## Hypothesis: 
+Diabetes occurrence is positively associated with unhealthy dietary habits and lack of physical activities. This association remains statistically significant even after controlling for the presence of high cholesterol levels and high blood pressure. Individuals with unhealthy dietary habits, lack of physical activities, high blood pressure, high cholesterol levels, or a combination of these factors, are more likely to be diagnosed with diabetes than their counterparts with healthier lifestyles and without high cholesterol levels or high blood pressure.
+
+```
