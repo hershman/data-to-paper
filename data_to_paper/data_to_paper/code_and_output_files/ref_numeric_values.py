@@ -10,23 +10,27 @@ LINK = r'\hyperlink'
 
 def get_numeric_value_pattern(must_follow: Optional[str] = None, allow_commas: bool = True) -> str:
     """
-    Get a pattern for a numeric value that must follow a sequence of characters.
+    Get a pattern for a numeric value that must follow a sequence of characters,
+    but not directly after certain LaTeX commands.
     """
-    # if must_follow is None:
-    #     must_follow = ''
-    # if allow_commas:
-    #     return fr'(?<={must_follow})(?:[-+]?\d+(?:,\d{{3}})*(?:\.\d+)?(?:e[-+]?\d+)?|\d{{1,3}}(?:,\d{{3}})+)(?!\d)'
-    # return fr'(?<={must_follow})[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?'
+    # Define a pattern that must NOT be directly before the numeric pattern
+    exclude_pattern = r'\\(?:multi(?:column|row)\b.*?){'
 
     if must_follow is None:
         must_follow = ''
     else:
         must_follow = fr'(?<={must_follow})'
+
+    # General numeric pattern
     if allow_commas:
-        pattern = r'(?:[-+]?\d+(?:,\d{3})*(?:\.\d+)?(?:e[-+]?\d+)?|\d{1,3}(?:,\d{{3}})+)(?!\d)'
+        numeric_pattern = r'(?:[-+]?\d+(?:,\d{3})*(?:\.\d+)?(?:e[-+]?\d+)?|\d{1,3}(?:,\d{3})+)(?!\d)'
     else:
-        pattern = r'[-+]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?'
-    return must_follow + pattern
+        numeric_pattern = r'[-+]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?'
+
+    # Combine everything into a single pattern with negative lookbehind to exclude unwanted precedents
+    full_pattern = fr'(?<!{exclude_pattern}){must_follow}{numeric_pattern}'
+
+    return full_pattern
 
 
 numeric_values_in_products_pattern = get_numeric_value_pattern(must_follow=r'[$,{<=\s\n\(\[]', allow_commas=True)
