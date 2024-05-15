@@ -22,6 +22,7 @@ class ModelEngine(IndexOrderedEnum):
     LLAMA_2_7b = "meta-llama/Llama-2-7b-chat-hf"
     LLAMA_2_70b = "meta-llama/Llama-2-70b-chat-hf"
     CODELLAMA = "codellama/CodeLlama-34b-Instruct-hf"
+    CUSTOM = "<custom_model_name>"
 
     def __str__(self):
         return self.value
@@ -67,6 +68,7 @@ ModelEngine.MODELS_TO_MORE_CONTEXT = {
     ModelEngine.LLAMA_2_7b: None,
     ModelEngine.LLAMA_2_70b: None,
     ModelEngine.CODELLAMA: None,
+    ModelEngine.CUSTOM: None,
 }
 
 
@@ -78,6 +80,7 @@ ModelEngine.MODELS_TO_MORE_STRENGTH = {
     ModelEngine.LLAMA_2_7b: None,
     ModelEngine.LLAMA_2_70b: None,
     ModelEngine.CODELLAMA: None,
+    ModelEngine.CUSTOM: None,
 }
 
 
@@ -90,6 +93,7 @@ ModelEngine.MODEL_ENGINE_TO_MAX_TOKENS_AND_IN_OUT_DOLLAR = {
     "meta-llama/Llama-2-7b-chat-hf": (4096, 0.0002, 0.0002),
     "meta-llama/Llama-2-70b-chat-hf": (4096, 0.0007, 0.001),
     "codellama/CodeLlama-34b-Instruct-hf": (4096, 0.0006, 0.0006),
+    "<custom_model_name>": (None, None, None),
 }
 
 
