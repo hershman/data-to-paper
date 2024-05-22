@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from typing import Type, Tuple, Optional, Collection
+from typing import Type, Tuple, Optional, Collection, Dict, Any
 
 from data_to_paper.base_steps import DebuggerConverser
 from data_to_paper.base_steps.request_code import CodeReviewPrompt
 from data_to_paper.code_and_output_files.code_and_output import CodeAndOutput
+from data_to_paper.code_and_output_files.file_view_params import ContentView, ContentViewPurpose
 from data_to_paper.code_and_output_files.output_file_requirements import TextContentOutputFileRequirement, \
     OutputFileRequirements, OutputFileRequirement
+from data_to_paper.code_and_output_files.referencable_text import BaseReferenceableText, FromTextReferenceableText
 from data_to_paper.research_types.scientific_research.cast import ScientificAgent
 from data_to_paper.research_types.scientific_research.coding.base_code_conversers import BaseScientificCodeProductsGPT
-from data_to_paper.research_types.scientific_research.coding.latex_table_debugger import UtilsCodeRunner
 from data_to_paper.research_types.scientific_research.scientific_products import HypertargetPrefix, ScientificProducts
 from data_to_paper.run_gpt_code.code_runner import CodeRunner
 from data_to_paper.utils import dedent_triple_quote_str
@@ -27,6 +28,7 @@ class CreateFiguresCodeAndOutput(CodeAndOutput):
 class FigureOutputFileRequirement(OutputFileRequirement):
     filename: str = '*.png'
     minimal_count: int = 1
+    should_keep_file = True
 
     def get_content(self, file_path: str) -> Optional[str]:
         """
@@ -39,14 +41,62 @@ class FigureOutputFileRequirement(OutputFileRequirement):
 class FigureLatexOutputFileRequirement(TextContentOutputFileRequirement):
     filename: str = '*.tex'
     minimal_count: int = 1
-    hypertarget_prefixes = HypertargetPrefix.FIGURES.value
-    max_tokens = None
+    should_keep_file = True
+
+    def get_content_as_html(self, filename, content: str) -> str:
+        """
+        Return the content as html.
+        """
+        # extract the caption latex content
+        caption = content.split('\\caption{')[1].split('}')[0]
+        # get the path to the .png file
+        png_file_path = filename.replace('.tex', '.png')
+        return f'<img src="{png_file_path}" width="350" align="right" /> <br> <p>\n{caption}</p>'
+
+    def get_content_as_latex(self, file_path: str) -> str:
+        """
+        Return the content of the file.
+        """
+        with open(file_path, 'r') as file:
+            return file.read()
+
+    def get_referencable_text(self, content: Any, filename: str = None, num_file: int = 0,
+                              content_view: ContentView = None) -> BaseReferenceableText:
+        if content_view == ContentViewPurpose.APP_HTML:
+            content = self.get_content_as_html(filename, content)
+        result = FromTextReferenceableText(
+            text=content,
+            filename=filename,
+            hypertarget_prefix=None,
+            content_view_purpose_converter=self.content_view_purpose_converter,
+        )
+        return result
+
+
+class FigureUtilsRunner(CodeRunner):
+    def _modify_code(self, code: str) -> Tuple[str, int]:
+        modified_code, lines_added = super()._modify_code(code)
+        modified_code = (modified_code.replace('sns.set()', '')
+        .replace('import seaborn as sns', '')
+        .replace(
+            'from my_utils import to_latex_figure_with_caption',
+            dedent_triple_quote_str('''
+            from data_to_paper.research_types.scientific_research.coding.utils_modified_for_gpt_use \t
+            import to_latex_figure_with_caption
+            import seaborn as sns
+            rc_params = {'figure.figsize': [10, 6], 'font.size': 14, 'savefig.dpi': 300, 'savefig.bbox':'tight', \t
+            'savefig.facecolor': 'white', 'axes.facecolor': 'white'}
+            sns.set_theme(style='ticks', rc=rc_params)
+            sns.set_context('talk')
+            ''')
+        ))
+        return modified_code, lines_added
 
 
 @dataclass
 class FigureDebuggerConverser(DebuggerConverser):
     products: ScientificProducts = None
-    code_runner_cls: Type[CodeRunner] = UtilsCodeRunner
+    code_runner_cls: Type[CodeRunner] = FigureUtilsRunner
 
 
 @dataclass
@@ -69,6 +119,7 @@ class CreateFiguresCodeProductsGPT(BaseScientificCodeProductsGPT):
     supported_packages: Tuple[str, ...] = ('pandas', 'numpy', 'matplotlib', 'seaborn', 'my_utils')
     output_file_requirements: OutputFileRequirements = OutputFileRequirements(
         [FigureOutputFileRequirement(), FigureLatexOutputFileRequirement()])
+    allow_data_files_from_sections = ('data_analysis',)
 
     provided_code: str = dedent_triple_quote_str('''
         def to_latex_figure_with_caption(figure, filename: str, caption: str, label: str, comment: str = None):
