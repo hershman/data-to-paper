@@ -181,4 +181,52 @@ class CreateFiguresCodeProductsGPT(BaseScientificCodeProductsGPT):
         Do not send any presumed output examples.
         ''')
 
-    code_review_prompts: Collection[CodeReviewPrompt] = ()
+    code_review_prompts: Collection[CodeReviewPrompt] = (
+        CodeReviewPrompt('all created figures', 'figure_*.tex', False, dedent_triple_quote_str("""
+    I ran your code.
+
+    Here is the content (in latex) of the figures that the code created for our scientific paper:
+
+    {file_contents_str}
+    
+    In addition, we have also provided you with the code that was written to create these figures.
+
+    Please carefully review the figure content and the code and return a point by point assessment.
+    {code_review_formatting_instructions}:
+
+    for example:
+    ```python
+    {
+        # * STYLING OF FIGURES:
+        # Does each of the figure axis includes labeled ticks and an axis label?
+        # Are the axis labels and ticks readable and well positioned (they are inside the plot area, and not \t
+        overlapping)?
+        # Does the figure include a title and a legend (if applicable)?
+        # If applicable, is the legend well positioned and does not overlap with the plot area?
+        # If applicable, are the colors and styles of the lines or bars in the figure well defined in a legend?
+        # If applicable, are the scales of the axes appropriate (for example, log scale for a power law relationship)?
+        # Is the chosen type of plot appropriate for the data being presented?
+        # For example:
+        "styling of figures": ("OK", "We include a title and a legend in each figure. The colors and styles of the \t
+        lines are well defined in the legend."),
+        "chosen type of plot": ("CONCERN", "We should have used a scatter plot instead of a bar plot for figure_?.png"),
+
+        # * CONSISTENCY ACROSS FIGURES:
+        # Figures do not overlap or have the same title.
+        # Figures are not redundant.
+        # For example:
+        "Consistency among figure": ("CONCERN", "figure_1.png and figure_2.png present the same data. We should \t 
+        remove one of them."),
+
+        # * MISSING DATA: 
+        # Do the figures represent all the key findings as found in the provided data analysis tables?
+        # For example:
+        "Missing data": ("CONCERN", "We are missing a figure to represent the logistic regression coefficients from \t
+        table_2.pkl"),
+
+    }
+    ```
+
+    {code_review_notes}
+    """)),
+    )
