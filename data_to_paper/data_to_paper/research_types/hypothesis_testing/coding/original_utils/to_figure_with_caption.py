@@ -2,6 +2,7 @@ def to_latex_figure_with_caption(figure, filename: str, caption: str, label: str
     """
     Save a figure with a caption and label.
     """
+    figure.tight_layout()
     figure.savefig(filename)
     latex = f"""
         \\begin{{figure}}[htbp]
