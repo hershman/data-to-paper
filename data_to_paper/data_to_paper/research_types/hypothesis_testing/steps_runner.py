@@ -6,7 +6,7 @@ from .app_startup import HypothesisTestingStartDialog
 
 from .cast import ScientificAgent
 from .coding.after_coding import RequestCodeExplanation, RequestCodeProducts
-from .coding.latex_tables import CreateLatexTablesCodeProductsGPT
+from .coding.displayitems import CreateLatexTablesCodeProductsGPT
 from .coding.preprocessing import DataPreprocessingCodeProductsGPT
 from .coding.data_analysis import DataAnalysisCodeProductsGPT
 from .coding.data_exploration import DataExplorationCodeProductsGPT
