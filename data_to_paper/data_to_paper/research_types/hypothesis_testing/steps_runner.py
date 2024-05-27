@@ -187,7 +187,7 @@ class HypothesisTestingStepsRunner(DataStepRunner, CheckLatexCompilation):
                                   explain_created_files_class=None,
                                   ).get_code_and_output_and_descriptions()
         self.send_product_to_client('codes_and_outputs_with_explanations:data_analysis')
-        self.advance_stage(ScientificStage.TABLES)
+        self.advance_stage(ScientificStage.DISPLAYITEMS)
         RequestCodeProducts.from_(self,
                                   code_step='data_to_latex',
                                   latex_document=self.latex_document,

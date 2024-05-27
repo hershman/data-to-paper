@@ -9,7 +9,7 @@ class ScientificStage(Stage):
     ASSESS_NOVELTY = "Assess Novelty"
     PLAN = "Hypothesis & Plan"
     CODE = "Data Analysis"
-    TABLES = "Create Tables"
+    DISPLAYITEMS = "Tables/Figures"
     INTERPRETATION = "Draft abstract"
     LITERATURE_REVIEW_WRITING = "Lit. Review II"
     WRITING_RESULTS = "Results"
