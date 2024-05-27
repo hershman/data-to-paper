@@ -13,6 +13,11 @@ BACKGROUND_COLOR = "#151515"
 APP_BACKGROUND_COLOR = "#303030"
 
 CSS = '''
+p {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: white;
+}
 .runtime_error {
     color: red;
     font-family: Consolas, 'Courier New', monospace; font-size: 14px;
