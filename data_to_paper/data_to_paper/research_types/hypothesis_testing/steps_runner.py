@@ -3,36 +3,36 @@ from typing import Tuple, Type, List, Union
 
 from data_to_paper.base_steps import DirectorProductGPT, CheckLatexCompilation, DataStepRunner
 from .app_startup import HypothesisTestingStartDialog
-
 from .cast import ScientificAgent
 from .coding.after_coding import RequestCodeExplanation, RequestCodeProducts
-from .coding.displayitems import CreateLatexTablesCodeProductsGPT
-from .coding.preprocessing import DataPreprocessingCodeProductsGPT
 from .coding.data_analysis import DataAnalysisCodeProductsGPT
 from .coding.data_exploration import DataExplorationCodeProductsGPT
+from .coding.displayitems import CreateLatexTablesCodeProductsGPT
+from .coding.preprocessing import DataPreprocessingCodeProductsGPT
 from .literature_search import WritingLiteratureSearchReviewGPT, GoalLiteratureSearchReviewGPT
 from .produce_pdf_step import ProduceScientificPaperPDFWithAppendix
 from .product_types import GoalAndHypothesisProduct
-from .scientific_products import ScientificProducts
-from .scientific_stage import ScientificStage, SECTION_NAMES_TO_WRITING_STAGES
 from .reviewing_steps import GoalReviewGPT, HypothesesTestingPlanReviewGPT, NoveltyAssessmentReview, ReGoalReviewGPT, \
     GetMostSimilarCitations
+from .scientific_products import ScientificProducts
+from .scientific_stage import ScientificStage, SECTION_NAMES_TO_WRITING_STAGES
 from .writing_steps import SectionWriterReviewBackgroundProductsConverser, \
     FirstTitleAbstractSectionWriterReviewGPT, SecondTitleAbstractSectionWriterReviewGPT, \
     MethodsSectionWriterReviewGPT, IntroductionSectionWriterReviewGPT, ResultsSectionWriterReviewGPT, \
     DiscussionSectionWriterReviewGPT
+from ...utils.highlighted_text import text_to_html
 
 PAPER_SECTIONS_NAMES = ['title', 'abstract', 'introduction', 'results', 'discussion', 'methods']
 SECTIONS_WITH_CITATIONS = ['introduction', 'discussion']
 
 SECTIONS_TO_WRITING_CLASS = [
-            (('results',), ResultsSectionWriterReviewGPT),
-            (('title', 'abstract'), SecondTitleAbstractSectionWriterReviewGPT),
-            (('methods',), MethodsSectionWriterReviewGPT),
-            (('introduction',), IntroductionSectionWriterReviewGPT),
-            (('discussion',), DiscussionSectionWriterReviewGPT),
-            # (('conclusion',), ConclusionSectionWriterReviewGPT),
-        ]
+    (('results',), ResultsSectionWriterReviewGPT),
+    (('title', 'abstract'), SecondTitleAbstractSectionWriterReviewGPT),
+    (('methods',), MethodsSectionWriterReviewGPT),
+    (('introduction',), IntroductionSectionWriterReviewGPT),
+    (('discussion',), DiscussionSectionWriterReviewGPT),
+    # (('conclusion',), ConclusionSectionWriterReviewGPT),
+]
 
 
 @dataclass
@@ -107,8 +107,8 @@ class HypothesisTestingStepsRunner(DataStepRunner, CheckLatexCompilation):
         # Goal
         self.advance_stage(ScientificStage.GOAL)
         research_goal = director_converser.get_product_or_no_product_from_director(
-                product_name='Research Goal', returned_product=self.project_parameters['research_goal'],
-                acknowledge_no_product_message="OK. no problem. I will devise the goal myself.")
+            product_name='Research Goal', returned_product=self.project_parameters['research_goal'],
+            acknowledge_no_product_message="OK. no problem. I will devise the goal myself.")
         if research_goal is None:
             # we did not get a goal from the director, so we need to devise it ourselves:
             products.research_goal = GoalReviewGPT.from_(
@@ -150,9 +150,11 @@ class HypothesisTestingStepsRunner(DataStepRunner, CheckLatexCompilation):
         else:
             products.research_goal = GoalAndHypothesisProduct(value=research_goal)
             self._app_send_product_of_stage(ScientificStage.LITERATURE_REVIEW_GOAL,
-                                            'This stage was skipped because the goal was provided by the user.')
+                                            text_to_html(
+                                                'This stage was skipped because the goal was provided by the user.'))
             self._app_send_product_of_stage(ScientificStage.ASSESS_NOVELTY,
-                                            'This stage was skipped because the goal was provided by the user.')
+                                            text_to_html(
+                                                'This stage was skipped because the goal was provided by the user.'))
             self.send_product_to_client('research_goal', save_to_file=True)
 
         # Plan
