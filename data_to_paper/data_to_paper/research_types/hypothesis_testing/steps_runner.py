@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Tuple, Type, List, Union
 
+from data_to_paper.utils.highlighted_text import text_to_html
 from data_to_paper.base_steps import DirectorProductGPT, CheckLatexCompilation, DataStepRunner
 from .app_startup import HypothesisTestingStartDialog
 from .cast import ScientificAgent
@@ -20,7 +21,6 @@ from .writing_steps import SectionWriterReviewBackgroundProductsConverser, \
     FirstTitleAbstractSectionWriterReviewGPT, SecondTitleAbstractSectionWriterReviewGPT, \
     MethodsSectionWriterReviewGPT, IntroductionSectionWriterReviewGPT, ResultsSectionWriterReviewGPT, \
     DiscussionSectionWriterReviewGPT
-from ...utils.highlighted_text import text_to_html
 
 PAPER_SECTIONS_NAMES = ['title', 'abstract', 'introduction', 'results', 'discussion', 'methods']
 SECTIONS_WITH_CITATIONS = ['introduction', 'discussion']
