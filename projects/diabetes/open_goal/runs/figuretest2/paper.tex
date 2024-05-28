@@ -1,0 +1,737 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{sectsty}
+\usepackage{graphicx}
+\sectionfont{\Large}
+\subsectionfont{\normalsize}
+\subsubsectionfont{\normalsize}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttfamily\footnotesize,
+morekeywords={self, import, as, from, if, for, while},              % Add keywords here
+keywordstyle=\color{deepblue},
+stringstyle=\color{deepred},
+commentstyle=\color{cyan},
+breaklines=true,
+escapeinside={(*@}{@*)},            % Define escape delimiters
+postbreak=\mbox{\textcolor{deepgreen}{$\hookrightarrow$}\space},
+showstringspaces=false
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+% Code output style for highlighting
+\newcommand\outputstyle{\lstset{
+    language=,
+    basicstyle=\ttfamily\footnotesize\color{gray},
+    breaklines=true,
+    showstringspaces=false,
+    escapeinside={(*@}{@*)},            % Define escape delimiters
+}}
+
+% Code output environment
+\lstnewenvironment{codeoutput}[1][]
+{
+    \outputstyle
+    \lstset{#1}
+}
+{}
+
+
+\title{Physical Activity as a Moderator of Age-Dependent BMI and Diabetes Risk}
+\author{data-to-paper}
+\begin{document}
+\maketitle
+\begin{abstract}
+Diabetes prevalence is an escalating global health crisis, with lifestyle factors such as body mass index (BMI) and physical activity being key elements influencing its development. Addressing the gap in understanding how physical activity interacts with BMI in modifying diabetes risk across different age groups offers potent insights for prevention strategies. We analyzed data from over 253,000 adult respondents from the 2015 Behavioral Risk Factor Surveillance System, utilizing logistic regression to elucidate the influences of BMI, physical activity, and age on diabetes risk. Our analysis unveiled a clear protective effect of physical activity against diabetes, which attenuates the BMI-related diabetes risk, and this moderating role varies across age groups. Additionally, our work demonstrated a consistent pattern of higher BMI among diabetics across all ages. The dataset's breadth supports the reliability of our findings, yet the cross-sectional and self-reported nature warrants caution. Despite these constraints, our study highlights physical activity's potential to temper diabetes risk related to BMI, advocating for age-responsive, activity-centric public health interventions. The discernment of causality and the unraveling of the underlying biological mechanisms remain imperative and entail further longitudinal investigations.
+\end{abstract}
+\section*{Introduction}
+
+Diabetes, a rapidly escalating global health crisis, has been linked to a variety of lifestyle and physical factors, necessitating a comprehensive approach to its understanding \cite{Chen2022CausalRB}. Body Mass Index (BMI) and physical activity are amongst these imperative lifestyle factors, with the former shown to be a robust predictor of diabetes, and the latter proven to provide protective effects against the onset of Type II diabetes \cite{Singh2013TheAQ, Bohn2015ImpactOP, Wing2011BenefitsOM}. Current understanding, however, leaves a considerable gap in grasping specifically how physical activity interacts with BMI to influence diabetes risk, and how these dynamics are further nuanced by age \cite{Park2014GenderDI}. 
+
+Prior research provides initial illumination into this interaction between physical activity, BMI, and diabetes risk. For instance, studies on gender differences have unearthed unique health implications contingent upon dementia onset related to BMI and physical activity \cite{Kim2019SexspecificRO}. Others have delineated the association of loneliness with physical and mental health outcomes \cite{Richard2017LonelinessIA}. While these attempts are animating, they often focus on narrow demographic segments, constraining the comprehensiveness of their findings. Hence, a lacuna persists in unveiling these interactions in a more generalized population framework, taking into account the role of age. 
+
+Addressing this knowledge vacuum, our study leverages the 2015 Behavioral Risk Factor Surveillance System (BRFSS) dataset. This dataset amasses responses of over 253,000 adults, encapsulating a wide array of health indicators, and hence, allows for an expansive population-wide exploration of the interfaces between BMI, physical activity, age, and diabetes risk \cite{Preedy1989BehavioralRF, Zahnd2019LungCS}. 
+
+Our methodological blueprint involves executing a logistic regression to gauge the impact and interrelations of BMI, physical activity, and their interaction on diabetes outcomes, subsequently adjusted for age. This approach enables us to accurately quantify these relationships and distill essential insights into their complexities \cite{Menard1996AppliedLR}. Besides, we conduct stratified analysis to illuminate how these dynamics shift across different age groups and iterate the value of considering an age-graded perspective in this discourse \cite{Peduzzi1996ASS}. 
+
+Emerging from this methodological trajectory, our findings delineate a clear protective role of physical activity against diabetes, which notably moderates the impact of BMI on diabetes risk. Moreover, this modulating impact of physical activity was found to differ across age groups, underscoring the relevance of age in this purview. Through this exploration, we thus enhance our understanding of the influences of these lifestyle factors on diabetes risk and underline the importance of incorporating an age-attuned approach in formulating effective diabetes prevention strategies.
+
+\section*{Results}
+
+First, to discern the extent to which physical activity moderates the association between body mass index (BMI) and diabetes, and if this relationship is contingent upon age, we executed a logistic regression. The model elucidated that with each increase of one BMI unit, there is an associated increase in the odds of diabetes, encapsulated by a 95\% confidence interval of the odds ratio from \hyperlink{A1a}{1.078} to \hyperlink{A1b}{1.083}. For individuals engaging in physical activity, the odds of having diabetes were \hyperlink{A2c}{0.4025} times the odds compared to inactive individuals, indicating a protective effect of physical activity against diabetes risk. The interaction term between BMI and physical activity yielded an odds ratio of \hyperlink{A3c}{1.016}, which translates to a marginally altered risk of diabetes with increasing BMI in those who are physically active (Table \ref{table:df_1}).
+
+% This latex displayitem was generated from: `df_1.pkl`
+
+\begin{table}[h]
+\caption{\protect\hyperlink{file-df-1-pkl}{Logistic regression effect of physical activity on BMI and Diabetes, with age control}}
+\label{table:df_1}
+\begin{threeparttable}
+\renewcommand{\TPTminimum}{\linewidth}
+\makebox[\linewidth]{%
+\begin{tabular}{lrrrl}
+\toprule
+ & 0 & 1 & O.R. & p-value \\
+\midrule
+\textbf{Intercept} & \raisebox{2ex}{\hypertarget{A0a}{}}0.002995 & \raisebox{2ex}{\hypertarget{A0b}{}}0.003675 & \raisebox{2ex}{\hypertarget{A0c}{}}0.003318 & $<$\raisebox{2ex}{\hypertarget{A0d}{}}$10^{-6}$ \\
+\textbf{BMI} & \raisebox{2ex}{\hypertarget{A1a}{}}1.078 & \raisebox{2ex}{\hypertarget{A1b}{}}1.083 & \raisebox{2ex}{\hypertarget{A1c}{}}1.081 & $<$\raisebox{2ex}{\hypertarget{A1d}{}}$10^{-6}$ \\
+\textbf{P. Act.} & \raisebox{2ex}{\hypertarget{A2a}{}}0.3613 & \raisebox{2ex}{\hypertarget{A2b}{}}0.4484 & \raisebox{2ex}{\hypertarget{A2c}{}}0.4025 & $<$\raisebox{2ex}{\hypertarget{A2d}{}}$10^{-6}$ \\
+\textbf{BMI*P.Act.} & \raisebox{2ex}{\hypertarget{A3a}{}}1.012 & \raisebox{2ex}{\hypertarget{A3b}{}}1.019 & \raisebox{2ex}{\hypertarget{A3c}{}}1.016 & $<$\raisebox{2ex}{\hypertarget{A3d}{}}$10^{-6}$ \\
+\textbf{Age C.} & \raisebox{2ex}{\hypertarget{A4a}{}}1.242 & \raisebox{2ex}{\hypertarget{A4b}{}}1.253 & \raisebox{2ex}{\hypertarget{A4c}{}}1.247 & $<$\raisebox{2ex}{\hypertarget{A4d}{}}$10^{-6}$ \\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\footnotesize
+\item O.R.=Odds Ratio in logistic regression model.
+\item \textbf{BMI}: Body Mass Index
+\item \textbf{P. Act.}: Physical Activity in the past 30 days (0=no, 1=yes)
+\item \textbf{Age C.}: Age in 13-level age category with intervals of 5 years (1= 18 - 24, 2= 25 - 29, ..., 12= 75 - 79, 13 = 80 or older)
+\item \textbf{O.R.}: Odds Ratio of diabetes obtained from logistic regression model.
+\item \textbf{BMI*P.Act.}: Interaction term between BMI and Physical Activity
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Then, to inspect differences in body weight between individuals with and without diabetes across age strata, we analyzed mean BMI, stratified by age groups and diabetes status. Results imparted a consistent pattern: individuals with diabetes consistently exhibited a higher average BMI relative to those without diabetes within their respective age cohorts. Statistical significance of these differences, although implied by the data, was not directly tested. Noteworthy, the young, middle-aged, and old groups revealed average BMIs of approximately \hyperlink{B0a}{27.99} vs. \hyperlink{B1a}{34.5}, \hyperlink{B2a}{28.22} vs. \hyperlink{B3a}{33.2}, and \hyperlink{B4a}{27.11} vs. \hyperlink{B5a}{30.62} for non-diabetics and diabetics, respectively. These findings underline that, on average, diabetic individuals tend to have higher BMI readings than non-diabetics within these age categories. Furthermore, the standard deviations and 95\% confidence intervals depicted alongside these mean values point to the variability and precision of these estimates (Figure \ref{figure:df_2}).
+
+% This latex displayitem was generated from: `df_2.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df_2.png}
+\caption{\protect\hyperlink{file-df-2-pkl}{Difference in mean BMI between individuals with diabetes and those without diabetes, stratified by age group and diabetes.}
+Bars indicate standard deviation (STD). 
+Avg. BMI: Average Body Mass Index. 
+STD BMI: Standard Deviation of Body Mass Index. 
+95\% CI: 95\% Confidence Interval. }
+\label{figure:df_2}
+\end{figure}
+% This latex figure presents "df_2.png" which was created from the following df:
+% 
+% \begin{tabular}{llrrl}
+% \toprule
+%  &  & Avg. BMI & STD BMI & 95\% CI \\
+% AgeGroup & Diabetes\_binary &  &  &  \\
+% \midrule
+% \multirow[t]{2}{*}{\textbf{Young}} & \textbf{0} & \raisebox{2ex}{\hypertarget{B0a}{}}27.99 & \raisebox{2ex}{\hypertarget{B0b}{}}7.037 & (27.927827774476444, 28.048567075308963) \\
+% \textbf{} & \textbf{1} & \raisebox{2ex}{\hypertarget{B1a}{}}34.5 & \raisebox{2ex}{\hypertarget{B1b}{}}9.133 & (34.12119592593766, 34.882878315800674) \\
+% \cline{1-5}
+% \multirow[t]{2}{*}{\textbf{Middle-aged}} & \textbf{0} & \raisebox{2ex}{\hypertarget{B2a}{}}28.22 & \raisebox{2ex}{\hypertarget{B2b}{}}6.403 & (28.181084048267966, 28.26234926794142) \\
+% \textbf{} & \textbf{1} & \raisebox{2ex}{\hypertarget{B3a}{}}33.2 & \raisebox{2ex}{\hypertarget{B3b}{}}7.793 & (33.07124573926681, 33.32211727165994) \\
+% \cline{1-5}
+% \multirow[t]{2}{*}{\textbf{Old}} & \textbf{0} & \raisebox{2ex}{\hypertarget{B4a}{}}27.11 & \raisebox{2ex}{\hypertarget{B4b}{}}5.442 & (27.070421928255232, 27.150610025277178) \\
+% \textbf{} & \textbf{1} & \raisebox{2ex}{\hypertarget{B5a}{}}30.62 & \raisebox{2ex}{\hypertarget{B5b}{}}6.452 & (30.527704739465996, 30.71460862408597) \\
+% \cline{1-5}
+% \bottomrule
+% \end{tabular}
+% 
+% 
+% To create the figure, this df was plotted with the following command:
+% 
+% df.plot(**{'kind': 'bar', 'y': 'Avg. BMI', 'yerr': 'STD BMI'})
+
+Finally, the robustness of our dataset fortified the reliability of our findings. Our analysis comprised an extensive cohort with a total of \hyperlink{R0a}{253680} participants. Such a considerable sample size bolsters the validity of the conclusions derived from this study.
+
+In summary, these findings advocate for a discernible moderating influence of physical activity on the BMI-diabetes relationship, nuanced by age, and substantiate that, on average, diabetes is teamed with higher BMI figures across all age strata. The observed protective effect of physical activity, especially its significance in modulating the BMI's impact on diabetes risk, is further strengthened by the exhaustiveness of the dataset.
+
+\section*{Discussion}
+
+We embarked on this study to penetrate the interface between BMI, physical activity, and age, and their collective effect on diabetes risk. This was motivated by a gap in current knowledge; while individual associations between these variables and diabetes have been highlighted \cite{Chan1994ObesityFD, Singh2013TheAQ, Bohn2015ImpactOP, Wahid2016QuantifyingTA}, their interplay remains less illuminated, especially how this nexus is contoured by age.
+
+In view of this, we employed logistic regression as our primary analytic tool. This technique designates pertinence given our primary variable of interest (diabetes) is dichotomous, and our goal was to predict the log odds of diabetes incidence based on our predictor variables. Logistic regression's output of odds ratios aids to quantify the strength and direction of these relationships, thus offering precise indicators of the interaction between BMI, physical activity, and diabetes risk, while accommodating age adjustments \cite{Menard1996AppliedLR}. Complementing the regression with stratified analysis allowed us to discern group-based difference in mean BMI values between diabetic and non-diabetic individuals across distinct age cohorts.
+
+Our logistic regression findings forwarded two compelling insights. First, physical activity was shown to exert a pronounced moderating influence on the relationship between BMI and diabetes. This supports previous assertions that physical activity acts as a defensive shield against diabetes risk, capable of attenuating the detrimental impacts of higher BMI \cite{Mao2022PhysicalAR, Park2014GenderDI}. Second, this moderating effect was not uniform across age groups, causing fluctuations in diabetes risk with age. This complexity mirrors findings from past research where physical activity and BMI have been proven to differentially impact health outcomes, varying with age and other demographic indicators \cite{Richard2017LonelinessIA, Kriska1990DevelopmentOQ}.
+
+Exploring the mean BMI values illustrated a rather consistent trend: across all age categories, those with diabetes had a higher average BMI compared to their non-diabetic counterparts. This pattern corroborates existing literature where higher BMI levels have been associated with the onset of diabetes \cite{Singh2013TheAQ, Chan1994ObesityFD}.
+
+While our findings shed light on a relatively underexplored context, certain limitations are worth discussion. The cross-sectional design of the BRFSS 2015 dataset restricts the establishment of causal relationships among the variables. Although we observed interesting correlations and interactions, we cannot definitively confirm if physical activity reduces the BMI-effects on diabetes risk, or if it is these factors changing in response to the onset of diabetes. Additionally, the reliance on self-reported data in the BRFSS dataset surfaces potential inaccuracies due to recall bias. Future studies might employ longitudinal designs and objective measures of physical activity, and possibly BMI, to address these limitations.
+
+Despite these constraints, our study lends substantive insights to the ongoing investigation of diabetes and its risk factors. By explicating both the direct and moderating associations existing among physical activity, BMI, and age in relation to diabetes risk, we give credence to the relevance of age-tailored, physical activity-encouraging preventive strategies for diabetes. Future research could look to substantiate our findings and unravel the causality underlying these associations, besides examining the biological mechanisms triggering these interactions \cite{Chen2022CausalRB}.
+
+In conclusion, our exploration into the confluence of BMI, physical activity, and age reveals intricate dynamics that inform diabetes risk. This not only aligns with extant research witnessing the individual roles of these factors \cite{Astrup2001HealthyLI, Wing2011BenefitsOM, Bohn2015ImpactOP}, but also enriches the knowledge base by explicating their interconnected dance. The implications of these findings have the potential to shape public health strategies against the onslaught of health burdens associated with diabetes.
+
+\section*{Methods}
+
+\subsection*{Data Source}
+The dataset utilized in this study originates from the Centers for Disease Control and Prevention's Behavioral Risk Factor Surveillance System (BRFSS) for the year 2015. The BRFSS encompasses a substantial health-related telephone survey, which aggregates annual data from responses of more than 400,000 Americans. It encompasses an array of health-related risk behaviors, chronic health conditions, and preventative service usage. These data points are engendered from direct participant responses or are computed based on the responses. The dataset in question represents a subset specifically curated for examining the association between diabetes and a host of other risk factors, encompassing 253,680 instances, with 22 distinct health-indicator features.
+
+\subsection*{Data Preprocessing}
+The dataset utilized in this study required no preliminary data preparation steps before analysis. All instances with missing values had been previously omitted, resulting in a dataset devoid of missing entries. Therefore, our study commences directly with the analytical procedures on the data as it was provided.
+
+\subsection*{Data Analysis}
+The primary objective of the data analysis was to ascertain the influence of physical activity in moderating the relationship between the body mass index (BMI) and diabetes, and to discern how this moderating role is further nuanced by age. This goal was pursued through two distinct analytical methods.
+
+Firstly, logistic regression was performed to evaluate the interaction between BMI and physical activity, with the addition of age as a controlling variable. This step enabled the estimation of the odds ratios for developing diabetes in relation to BMI and physical activity, alongside their interaction, adjusted for age.
+
+Secondly, the study sought to compare mean BMI values between individuals with and without diabetes stratified by age groups. The age groups were demarcated into three categorical strata: young, middle-aged, and old. Within each age group, diabetic and non-diabetic subgroups were delineated. The computation of mean BMI within these strata was accompanied by the calculation of standard deviations and 95\% confidence intervals.
+
+The analytic framework adopted in this research thus combines logistic regression with stratified descriptive analysis to comprehensively scrutinize the multifaceted interplay between BMI, physical activity, age, and diabetes risk.\subsection*{Code Availability}
+
+Custom code used to perform the data preprocessing and analysis, as well as the raw code outputs, are provided in Supplementary Methods.
+
+
+\bibliographystyle{unsrt}
+\bibliography{citations}
+
+
+\clearpage
+\appendix
+
+\section{Data Description} \label{sec:data_description} Here is the data description, as provided by the user:
+
+\begin{codeoutput}
+\#\# General Description
+(*@\raisebox{2ex}{\hypertarget{S}{}}@*)The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year (*@\raisebox{2ex}{\hypertarget{S0a}{}}@*)2015.
+The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
+Each year, the survey collects responses from over (*@\raisebox{2ex}{\hypertarget{S1a}{}}@*)400,000 Americans on health-related risk behaviors, chronic health conditions, and the use of preventative services. These features are either questions directly asked of participants, or calculated variables based on individual participant responses.
+
+\#\# Data Files
+The dataset consists of 1 data file:
+
+\#\#\# "diabetes\_binary\_health\_indicators\_BRFSS2015.csv"
+(*@\raisebox{2ex}{\hypertarget{T}{}}@*)The csv file is a clean dataset of (*@\raisebox{2ex}{\hypertarget{T0a}{}}@*)253,680 responses (rows) and (*@\raisebox{2ex}{\hypertarget{T0b}{}}@*)22 features (columns).
+All rows with missing values were removed from the original dataset; the current file contains no missing values.
+
+The columns in the dataset are:
+
+\#1 `Diabetes\_binary`: (int, bool) Diabetes ((*@\raisebox{2ex}{\hypertarget{T1a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T1b}{}}@*)1=yes)
+\#2 `HighBP`: (int, bool) High Blood Pressure ((*@\raisebox{2ex}{\hypertarget{T2a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T2b}{}}@*)1=yes)
+\#3 `HighChol`: (int, bool) High Cholesterol ((*@\raisebox{2ex}{\hypertarget{T3a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T3b}{}}@*)1=yes)
+\#4 `CholCheck`: (int, bool) Cholesterol check in (*@\raisebox{2ex}{\hypertarget{T4a}{}}@*)5 years ((*@\raisebox{2ex}{\hypertarget{T4b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T4c}{}}@*)1=yes)
+\#5 `BMI`: (int, numerical) Body Mass Index
+\#6 `Smoker`: (int, bool) ((*@\raisebox{2ex}{\hypertarget{T5a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T5b}{}}@*)1=yes)
+\#7 `Stroke`: (int, bool) Stroke ((*@\raisebox{2ex}{\hypertarget{T6a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T6b}{}}@*)1=yes)
+\#8 `HeartDiseaseorAttack`: (int, bool) coronary heart disease (CHD) or myocardial infarction (MI), ((*@\raisebox{2ex}{\hypertarget{T7a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T7b}{}}@*)1=yes)
+\#9 `PhysActivity`: (int, bool) Physical Activity in past (*@\raisebox{2ex}{\hypertarget{T8a}{}}@*)30 days ((*@\raisebox{2ex}{\hypertarget{T8b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T8c}{}}@*)1=yes)
+\#10 `Fruits`: (int, bool) Consume one fruit or more each day ((*@\raisebox{2ex}{\hypertarget{T9a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T9b}{}}@*)1=yes)
+\#11 `Veggies`: (int, bool) Consume one Vegetable or more each day ((*@\raisebox{2ex}{\hypertarget{T10a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T10b}{}}@*)1=yes)
+\#12 `HvyAlcoholConsump` (int, bool) Heavy drinkers ((*@\raisebox{2ex}{\hypertarget{T11a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T11b}{}}@*)1=yes)
+\#13 `AnyHealthcare` (int, bool) Have any kind of health care coverage ((*@\raisebox{2ex}{\hypertarget{T12a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T12b}{}}@*)1=yes)
+\#14 `NoDocbcCost` (int, bool) Was there a time in the past (*@\raisebox{2ex}{\hypertarget{T13a}{}}@*)12 months when you needed to see a doctor but could not because of cost? ((*@\raisebox{2ex}{\hypertarget{T13b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T13c}{}}@*)1=yes)
+\#15 `GenHlth` (int, ordinal) self-reported health ((*@\raisebox{2ex}{\hypertarget{T14a}{}}@*)1=excellent, (*@\raisebox{2ex}{\hypertarget{T14b}{}}@*)2=very good, (*@\raisebox{2ex}{\hypertarget{T14c}{}}@*)3=good, (*@\raisebox{2ex}{\hypertarget{T14d}{}}@*)4=fair, (*@\raisebox{2ex}{\hypertarget{T14e}{}}@*)5=poor)
+\#16 `MentHlth` (int, ordinal) How many days during the past (*@\raisebox{2ex}{\hypertarget{T15a}{}}@*)30 days was your mental health not good? ((*@\raisebox{2ex}{\hypertarget{T15b}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T15c}{}}@*)30 days)
+\#17 `PhysHlth` (int, ordinal) Hor how many days during the past (*@\raisebox{2ex}{\hypertarget{T16a}{}}@*)30 days was your physical health not good? ((*@\raisebox{2ex}{\hypertarget{T16b}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T16c}{}}@*)30 days)
+\#18 `DiffWalk` (int, bool) Do you have serious difficulty walking or climbing stairs? ((*@\raisebox{2ex}{\hypertarget{T17a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T17b}{}}@*)1=yes)
+\#19 `Sex` (int, categorical) Sex ((*@\raisebox{2ex}{\hypertarget{T18a}{}}@*)0=female, (*@\raisebox{2ex}{\hypertarget{T18b}{}}@*)1=male)
+\#20 `Age` (int, ordinal) Age, (*@\raisebox{2ex}{\hypertarget{T19a}{}}@*)13-level age category in intervals of (*@\raisebox{2ex}{\hypertarget{T19b}{}}@*)5 years ((*@\raisebox{2ex}{\hypertarget{T19c}{}}@*)1= (*@\raisebox{2ex}{\hypertarget{T19d}{}}@*)18 - (*@\raisebox{2ex}{\hypertarget{T19e}{}}@*)24, (*@\raisebox{2ex}{\hypertarget{T19f}{}}@*)2= (*@\raisebox{2ex}{\hypertarget{T19g}{}}@*)25 - (*@\raisebox{2ex}{\hypertarget{T19h}{}}@*)29, ..., (*@\raisebox{2ex}{\hypertarget{T19i}{}}@*)12= (*@\raisebox{2ex}{\hypertarget{T19j}{}}@*)75 - (*@\raisebox{2ex}{\hypertarget{T19k}{}}@*)79, (*@\raisebox{2ex}{\hypertarget{T19l}{}}@*)13 = (*@\raisebox{2ex}{\hypertarget{T19m}{}}@*)80 or older)
+\#21 `Education` (int, ordinal) Education level on a scale of (*@\raisebox{2ex}{\hypertarget{T20a}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T20b}{}}@*)6 ((*@\raisebox{2ex}{\hypertarget{T20c}{}}@*)1=Never attended school, (*@\raisebox{2ex}{\hypertarget{T20d}{}}@*)2=Elementary, (*@\raisebox{2ex}{\hypertarget{T20e}{}}@*)3=Some high school, (*@\raisebox{2ex}{\hypertarget{T20f}{}}@*)4=High school, (*@\raisebox{2ex}{\hypertarget{T20g}{}}@*)5=Some college, (*@\raisebox{2ex}{\hypertarget{T20h}{}}@*)6=College)
+\#22 `Income` (int, ordinal) Income scale on a scale of (*@\raisebox{2ex}{\hypertarget{T21a}{}}@*)1 to (*@\raisebox{2ex}{\hypertarget{T21b}{}}@*)8 ((*@\raisebox{2ex}{\hypertarget{T21c}{}}@*)1= $<$=(*@\raisebox{2ex}{\hypertarget{T21d}{}}@*)10K, (*@\raisebox{2ex}{\hypertarget{T21e}{}}@*)2= $<$=(*@\raisebox{2ex}{\hypertarget{T21f}{}}@*)15K, (*@\raisebox{2ex}{\hypertarget{T21g}{}}@*)3= $<$=(*@\raisebox{2ex}{\hypertarget{T21h}{}}@*)20K, (*@\raisebox{2ex}{\hypertarget{T21i}{}}@*)4= $<$=(*@\raisebox{2ex}{\hypertarget{T21j}{}}@*)25K, (*@\raisebox{2ex}{\hypertarget{T21k}{}}@*)5= $<$=(*@\raisebox{2ex}{\hypertarget{T21l}{}}@*)35K, (*@\raisebox{2ex}{\hypertarget{T21m}{}}@*)6= $<$=(*@\raisebox{2ex}{\hypertarget{T21n}{}}@*)50K, (*@\raisebox{2ex}{\hypertarget{T21o}{}}@*)7= $<$=(*@\raisebox{2ex}{\hypertarget{T21p}{}}@*)75K, (*@\raisebox{2ex}{\hypertarget{T21q}{}}@*)8= $>$75K)
+
+
+\end{codeoutput}
+
+\section{Data Exploration}
+\subsection{{Code}}
+The Data Exploration was carried out using the following custom code:
+
+\begin{python}
+
+# Import required packages
+import pandas as pd
+
+# Load the data file
+df = pd.read_csv('diabetes_binary_health_indicators_BRFSS2015.csv')
+
+# Key Variables for summary
+key_numerical_variables = ['BMI', 'GenHlth', 'MentHlth', 'PhysHlth', 'Age', 'Education', 'Income']
+key_categorical_variables = ['Diabetes_binary', 'HighBP', 'HighChol', 'Smoker', 'Stroke', 'HeartDiseaseorAttack', 'Sex']
+
+# Open the output file
+(*@\raisebox{2ex}{\hypertarget{code-Data Exploration-data-exploration-txt}{}}@*)with open('data_exploration.txt', 'w') as f:
+    # Data Size
+    f.write('# Data Size\n')
+    f.write('Number of rows: {}\n'.format(df.shape[0]))
+    f.write('Number of columns: {}\n\n'.format(df.shape[1]))
+
+    # Summary Statistics (Numerical Variables only)
+    f.write('# Summary Statistics (Numerical Variables)\n')
+    f.write(str(df[key_numerical_variables].describe()))
+    f.write('\n\n')
+
+    # Categorical Variables Analysis
+    f.write('# Categorical Variables\n')
+    for var in key_categorical_variables:
+        f.write('Variable "{}": Most common value: {}\n'.format(var, df[var].mode().values[0]))
+    f.write('\n')
+
+    # Missing Values
+    f.write('# Missing Values\n')
+    f.write('Missing, unknown, or undefined values: {}\n'.format(df.isnull().sum().sum()))
+    
+    # Assuming '9' as code for unknown/undefined in some columns like 'GenHlth'
+    f.write("Count of '9' in 'GenHlth' (represents unknown/undefined): {}\n\n".format(df[df['GenHlth'] == 9].shape[0]))
+
+    # Any other summary : Here, I used unique value counts for key categorical variables
+    f.write('# Unique Values Count (for key categorical variables)\n')
+    for var in key_categorical_variables:
+        f.write("Unique value counts for '{}': \n{}\n".format(var, df[var].value_counts()))
+    f.write('\n')
+
+\end{python}
+
+\subsection{Code Description}
+
+The Data Exploration code provided performs an analysis on the diabetes binary health indicators dataset obtained from the CDC's Behavioral Risk Factor Surveillance System (BRFSS) for the year 2015. The code aims to provide a summary of the dataset by calculating descriptive statistics for numerical variables and analyzing categorical variables.
+
+First, the code loads the dataset into a pandas DataFrame object. It then defines key variables of interest for the summary analysis, including numerical variables such as BMI, GenHlth, MentHlth, PhysHlth, Age, Education, and Income, as well as categorical variables such as Diabetes\_binary, HighBP, HighChol, Smoker, Stroke, HeartDiseaseorAttack, and Sex.
+
+The code then opens the output file "data\_exploration.txt" for writing, where it will store the results of the data exploration. 
+
+The code begins by providing information about the size of the dataset, including the number of rows and columns.
+
+Next, it calculates summary statistics for the numerical variables. This includes measures such as count, mean, standard deviation, minimum, and maximum.
+
+Moving on, the code analyzes the categorical variables. It determines the most common value for each categorical variable, which provides an understanding of the distribution and prevalence of certain health indicators.
+
+The code also checks for missing values in the dataset and reports the total count. Additionally, it specifically checks for the code '9' in the variable 'GenHlth' to identify and count any unknown or undefined values in this column.
+
+Finally, the code calculates the count of unique values for each of the key categorical variables. This provides insights into the distribution of different responses for each variable.
+
+The results of the data exploration, such as the size of the dataset, summary statistics for numerical variables, most common values for categorical variables, count of missing values, count of unknown/undefined values, and count of unique values for each categorical variable, are written into the "data\_exploration.txt" file.
+
+\subsection{Code Output}\hypertarget{file-data-exploration-txt}{}
+
+\subsubsection*{\hyperlink{code-Data Exploration-data-exploration-txt}{data\_exploration.txt}}
+
+\begin{codeoutput}
+\# Data Size
+Number of rows: 253680
+Number of columns: 22
+
+\# Summary Statistics (Numerical Variables)
+         BMI GenHlth MentHlth PhysHlth    Age Education Income
+count 253680  253680   253680   253680 253680    253680 253680
+mean   28.38   2.511    3.185    4.242  8.032      5.05  6.054
+std    6.609   1.068    7.413    8.718  3.054    0.9858  2.071
+min       12       1        0        0      1         1      1
+25\%       24       2        0        0      6         4      5
+50\%       27       2        0        0      8         5      7
+75\%       31       3        2        3     10         6      8
+max       98       5       30       30     13         6      8
+
+\# Categorical Variables
+Variable "Diabetes\_binary": Most common value: 0
+Variable "HighBP": Most common value: 0
+Variable "HighChol": Most common value: 0
+Variable "Smoker": Most common value: 0
+Variable "Stroke": Most common value: 0
+Variable "HeartDiseaseorAttack": Most common value: 0
+Variable "Sex": Most common value: 0
+
+\# Missing Values
+Missing, unknown, or undefined values: 0
+Count of '9' in 'GenHlth' (represents unknown/undefined): 0
+
+\# Unique Values Count (for key categorical variables)
+Unique value counts for 'Diabetes\_binary': 
+Diabetes\_binary
+0    218334
+1     35346
+Name: count, dtype: int64
+Unique value counts for 'HighBP': 
+HighBP
+0    144851
+1    108829
+Name: count, dtype: int64
+Unique value counts for 'HighChol': 
+HighChol
+0    146089
+1    107591
+Name: count, dtype: int64
+Unique value counts for 'Smoker': 
+Smoker
+0    141257
+1    112423
+Name: count, dtype: int64
+Unique value counts for 'Stroke': 
+Stroke
+0    243388
+1     10292
+Name: count, dtype: int64
+Unique value counts for 'HeartDiseaseorAttack': 
+HeartDiseaseorAttack
+0    229787
+1     23893
+Name: count, dtype: int64
+Unique value counts for 'Sex': 
+Sex
+0    141974
+1    111706
+Name: count, dtype: int64
+\end{codeoutput}
+
+\section{Data Analysis}
+\subsection{{Code}}
+The Data Analysis was carried out using the following custom code:
+
+\begin{python}
+
+# IMPORT
+import pandas as pd
+import numpy as np
+from scipy import stats
+import statsmodels.api as sm
+from statsmodels.formula.api import logit
+import pickle
+
+# LOAD DATA
+df = pd.read_csv("diabetes_binary_health_indicators_BRFSS2015.csv")
+
+# DATASET PREPARATIONS
+# No dataset preparations are needed.
+
+# DESCRIPTIVE STATISTICS
+# No descriptive statistics table is needed.
+
+# PREPROCESSING
+# No preprocessing is needed.
+
+# ANALYSIS
+
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-df-1-pkl}{}}@*)## DF 1: "Logistic regression analysis of the moderation effect of physical activity on the association between BMI and Diabetes, controlling for age"
+model = logit("Diabetes_binary ~ BMI * PhysActivity + Age", data=df).fit()
+params = np.exp(model.params)
+conf= np.exp(model.conf_int())
+conf['OR'] = params
+p_values = model.pvalues
+conf['p-value'] = p_values
+df1 = conf
+df1.to_pickle('df_1.pkl')  
+
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-df-2-pkl}{}}@*)## DF 2: "Difference in mean BMI between individuals with diabetes and those without diabetes, stratified by age group and diabetes"
+bins = [1, 5, 9, df['Age'].max()]
+labels = ['Young', 'Middle-aged', 'Old']
+df['AgeGroup'] = pd.cut(df['Age'], bins=bins, labels = labels, include_lowest=True)
+
+df2 = df.groupby(['AgeGroup', 'Diabetes_binary'])['BMI'].agg(['mean', 'std', lambda x: stats.norm.interval(0.95, loc=np.mean(x), scale=stats.sem(x))])
+df2.columns = ['Mean BMI', 'STD BMI', '95% CI']
+df2.index.names = ['AgeGroup', 'Diabetes_binary']
+df2.to_pickle('df_2.pkl')  
+
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-additional-results-pkl}{}}@*)# SAVE ADDITIONAL RESULTS
+additional_results = {
+    'Total number of observations': df.shape[0]
+}
+with open('additional_results.pkl', 'wb') as f:
+    pickle.dump(additional_results, f)
+
+\end{python}
+
+\subsection{Code Description}
+
+In this code, we perform a data analysis on the given dataset using several analysis techniques. The code has the following major steps:
+
+1. Data loading: The code loads the dataset from the "diabetes\_binary\_health\_indicators\_BRFSS2015.csv" file.
+
+2. Preprocessing: No preprocessing steps are performed in this code.
+
+3. Analysis 1: Logistic Regression - Moderation Effect of Physical Activity on Association between BMI and Diabetes:
+   The code fits a logistic regression model using the "logit" function from the statsmodels library. The model predicts the probability of having diabetes based on the interactions of BMI, Physical Activity, and Age. The exponential of the model coefficients are computed to obtain the odds ratios. The confidence intervals and p-values for the odds ratios are saved in a DataFrame and stored in the "df\_1.pkl" file.
+
+4. Analysis 2: Difference in Mean BMI between individuals with and without Diabetes, Stratified by Age Group:
+   The code calculates the mean, standard deviation, and 95\% confidence interval of BMI for individuals with and without diabetes, stratified by age group. The results are grouped and aggregated using the "groupby" function of pandas. The aggregated results are saved in a DataFrame and stored in the "df\_2.pkl" file.
+
+5. Additional Results: The code also saves some additional results in the "additional\_results.pkl" file. This includes the total number of observations present in the dataset.
+
+These analysis steps provide insights into the relationship between diabetes and related factors such as BMI, physical activity, and age. The results can be used for further interpretation and discussion in the research paper.
+
+\subsection{Code Output}\hypertarget{file-df-1-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-df-1-pkl}{df\_1.pkl}}
+
+\begin{codeoutput}
+                        0        1       OR   p-value
+Intercept        0.002995 0.003675 0.003318         0
+BMI                 1.078    1.083    1.081         0
+PhysActivity       0.3613   0.4484   0.4025  2.27e-61
+BMI:PhysActivity    1.012    1.019    1.016  1.03e-19
+Age                 1.242    1.253    1.247         0
+\end{codeoutput}\hypertarget{file-df-2-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-df-2-pkl}{df\_2.pkl}}
+
+\begin{codeoutput}
+                            Mean BMI STD BMI              95\% CI
+AgeGroup    Diabetes\_binary                                     
+Young       0                  27.99   7.037  ('27.93', '28.05')
+            1                   34.5   9.133  ('34.12', '34.88')
+Middle-aged 0                  28.22   6.403  ('28.18', '28.26')
+            1                   33.2   7.793  ('33.07', '33.32')
+Old         0                  27.11   5.442  ('27.07', '27.15')
+            1                  30.62   6.452  ('30.53', '30.71')
+\end{codeoutput}\hypertarget{file-additional-results-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-additional-results-pkl}{additional\_results.pkl}}
+
+\begin{codeoutput}
+{
+    'Total number of observations': (*@\raisebox{2ex}{\hypertarget{R0a}{}}@*)253680,
+}
+\end{codeoutput}
+
+\section{LaTeX Table Design}
+\subsection{{Code}}
+The LaTeX Table Design was carried out using the following custom code:
+
+\begin{python}
+
+# IMPORT
+import pandas as pd
+from my_utils import to_latex_with_note, to_figure_with_note, is_str_in_df, split_mapping, AbbrToNameDef
+import matplotlib
+matplotlib.use('Agg')  # Switch to a non-interactive backend suitable for scripts without GUI.
+
+# PREPARATION FOR ALL TABLES AND FIGURES
+shared_mapping: AbbrToNameDef = {
+    'BMI': ('BMI', 'Body Mass Index'),
+    'PhysActivity': ('P. Act.', 'Physical Activity in the past 30 days (0=no, 1=yes)'),
+    'Diabetes_binary': ('Diabetes', 'Diabetes(0=no, 1=yes)'),
+    'Age': ('Age C.', 'Age in 13-level age category with intervals of 5 years (1= 18 - 24, 2= 25 - 29, ..., 12= 75 - 79, 13 = 80 or older)'),
+}
+
+(*@\raisebox{2ex}{\hypertarget{code-LaTeX Table Design-df-1-tex}{}}@*)# DF 1: "Logistic regression analysis of the moderation effect of physical activity on the association between BMI and Diabetes, controlling for age"
+df1 = pd.read_pickle('df_1.pkl')
+
+# Format values:
+# Not Applicable
+
+# Rename rows and columns:
+mapping1 = dict((k, v) for k, v in shared_mapping.items() if is_str_in_df(df1, k)) 
+mapping1 |= {
+    '0': ('Lower', None),
+    '1': ('Higher', None),
+    'OR': ('O.R.', 'Odds Ratio of diabetes obtained from logistic regression model.'),
+    'BMI:PhysActivity': ('BMI*P.Act.', 'Interaction term between BMI and Physical Activity')
+}
+abbrs_to_names1, glossary1 = split_mapping(mapping1)
+df1 = df1.rename(columns=abbrs_to_names1, index=abbrs_to_names1)
+
+# Create latex table:
+to_latex_with_note(
+    df1, 'df_1.tex',
+    caption="Logistic regression effect of physical activity on BMI and Diabetes, with age control", 
+    label='table:df_1',
+    note="O.R.=Odds Ratio in logistic regression model.",
+    glossary=glossary1)
+
+(*@\raisebox{2ex}{\hypertarget{code-LaTeX Table Design-df-2-tex}{}}@*)# DF 2: "Difference in mean BMI between individuals with diabetes and those without diabetes, stratified by age group and diabetes"
+df2 = pd.read_pickle('df_2.pkl')
+
+# Format values:
+# Not Applicable
+
+# Rename rows and columns:
+mapping2 = dict((k, v) for k, v in shared_mapping.items() if is_str_in_df(df2, k)) 
+mapping2 |= {
+    '0': ('No', None),
+    '1': ('Yes', None),
+    'Mean BMI': ('Avg. BMI', 'Average Body Mass Index'),
+    'STD BMI': ('STD BMI', 'Standard Deviation of Body Mass Index'),
+    '95% CI': ('95% CI', '95% Confidence Interval'),
+}
+abbrs_to_names2, glossary2 = split_mapping(mapping2)
+df2 = df2.rename(columns=abbrs_to_names2, index=abbrs_to_names2)
+
+# Create latex figure:
+to_figure_with_note(
+    df2, 'df_2.tex',
+    caption="Difference in mean BMI between individuals with diabetes and those without diabetes, stratified by age group and diabetes.", 
+    label='figure:df_2',
+    note="Bars indicate standard deviation (STD).",
+    glossary=glossary2,
+    kind='bar',
+    y='Avg. BMI',
+    yerr='STD BMI',  
+)
+
+\end{python}
+
+\subsection{Provided Code}
+The code above is using the following provided functions:
+
+\begin{python}
+def to_latex_with_note(df, filename: str, caption: str, label: str,
+                       note: str = None, glossary: Dict[str, str] = None, **kwargs):
+    """
+    Saves a DataFrame as a LaTeX table with optional note and glossary added below the table.
+
+    Parameters:
+    - df, filename, caption, label: as in `df.to_latex`.
+    - note (optional): Additional note below the table.
+    - glossary (optional): Dictionary mapping abbreviations to full names.
+    - **kwargs: Additional arguments for `df.to_latex`.
+    """
+
+def to_figure_with_note(df, filename: str, caption: str, label: str,
+                        note: str = None, glossary: Dict[str, str] = None, 
+                        x: Optional[str] = None, y: Optional[str] = None, kind: str = 'line',
+                        use_index: bool = True, 
+                        logx: bool = False, logy: bool = False,
+                        xerr: str = None, yerr: str = None,
+                        x_ci: Union[str, Tuple[str, str]] = None, y_ci: Union[str, Tuple[str, str]] = None,
+                        x_p_value: str = None, y_p_value: str = None,
+                        ):
+    """
+    Saves a DataFrame to a LaTeX figure with caption and optional glossary added below the figure.
+
+    Parameters:
+    `df`: DataFrame to plot (with column names and index as scientific labels). 
+    `filename` (str): name of a .tex file to create (a matching .png file will also be created). 
+    `caption` (str): Caption for the figure (can be multi-line).
+    `label` (str): Latex label for the figure, 'figure:xxx'. 
+    `glossary` (optional, dict): Dictionary mapping abbreviated df col/row labels to full names.
+
+    Parameters for df.plot():
+    `x` / `y` (optional, str): Column name for x-axis / y-axis values.
+    `kind` (str): Type of plot: 'line', 'scatter', 'bar'.
+    `use_index` (bool): If True, use the index as x-axis values.
+    `logx` / `logy` (bool): If True, use log scale for x/y axis.
+    `xerr` / `yerr` (optional, str): Column name for x/y error bars.
+
+    Additional plotting options:
+    `x_p_value` / `y_p_value` (optional, str): Column name for x/y p-values to show as stars above data points.
+        p-values are converted to: '***' if < 0.001, '**' if < 0.01, '*' if < 0.05, 'NS' if >= 0.05.
+
+    Instead of xerr/yerr, you can directly provide confidence intervals:
+    `x_ci` / `y_ci` (optional, str or (str, str)): an be either a single column name where each row contains
+        a 2-element tuple (n x 2 matrix when expanded), or a list containing two column names 
+        representing the lower and upper bounds of the confidence interval.
+
+    Note on error bars (explanation for y-axis is provided, x-axis is analogous):
+    Either `yerr` or `y_ci` can be provided, but not both.
+    If `yerr` is provided, the plotted error bars are (df[y]-df[yerr], df[y]+df[yerr]).
+    If `y_ci` is provided, the plotted error bars are (df[y_ci][0], df[y_ci][1]).
+    Note that unlike yerr, the y_ci are NOT added to the nominal df[y] values. 
+    Instead, the provided y_ci values should flank the nominal df[y] values.
+    """
+
+def is_str_in_df(df: pd.DataFrame, s: str):
+    return any(s in level for level in getattr(df.index, 'levels', [df.index]) + getattr(df.columns, 'levels', [df.columns]))
+
+AbbrToNameDef = Dict[Any, Tuple[Optional[str], Optional[str]]]
+
+def split_mapping(abbrs_to_names_and_definitions: AbbrToNameDef):
+    abbrs_to_names = {abbr: name for abbr, (name, definition) in abbrs_to_names_and_definitions.items() if name is not None}
+    names_to_definitions = {name or abbr: definition for abbr, (name, definition) in abbrs_to_names_and_definitions.items() if definition is not None}
+    return abbrs_to_names, names_to_definitions
+
+\end{python}
+
+
+
+\subsection{Code Output}
+
+\subsubsection*{\hyperlink{code-LaTeX Table Design-df-1-tex}{df\_1.tex}}
+
+\begin{codeoutput}
+\% This latex displayitem was generated from: `df\_1.pkl`
+
+\begin{table}[h]
+\caption{Logistic regression effect of physical activity on BMI and Diabetes, with age control}
+\label{table:df\_1}
+\begin{threeparttable}
+\renewcommand{\TPTminimum}{\linewidth}
+\makebox[\linewidth]{\%
+\begin{tabular}{lrrrl}
+\toprule
+ \& 0 \& 1 \& O.R. \& p-value \\
+\midrule
+\textbf{Intercept} \& 0.002995 \& 0.003675 \& 0.003318 \& \$$<$\$1e-06 \\
+\textbf{BMI} \& 1.078 \& 1.083 \& 1.081 \& \$$<$\$1e-06 \\
+\textbf{P. Act.} \& 0.3613 \& 0.4484 \& 0.4025 \& \$$<$\$1e-06 \\
+\textbf{BMI*P.Act.} \& 1.012 \& 1.019 \& 1.016 \& \$$<$\$1e-06 \\
+\textbf{Age C.} \& 1.242 \& 1.253 \& 1.247 \& \$$<$\$1e-06 \\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\footnotesize
+\item O.R.=Odds Ratio in logistic regression model.
+\item \textbf{BMI}: Body Mass Index
+\item \textbf{P. Act.}: Physical Activity in the past 30 days (0=no, 1=yes)
+\item \textbf{Age C.}: Age in 13-level age category with intervals of 5 years (1= 18 - 24, 2= 25 - 29, ..., 12= 75 - 79, 13 = 80 or older)
+\item \textbf{O.R.}: Odds Ratio of diabetes obtained from logistic regression model.
+\item \textbf{BMI*P.Act.}: Interaction term between BMI and Physical Activity
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\end{codeoutput}
+
+\subsubsection*{\hyperlink{code-LaTeX Table Design-df-2-tex}{df\_2.tex}}
+
+\begin{codeoutput}
+\% This latex displayitem was generated from: `df\_2.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df\_2.png}
+\caption{Difference in mean BMI between individuals with diabetes and those without diabetes, stratified by age group and diabetes.
+Bars indicate standard deviation (STD). 
+Avg. BMI: Average Body Mass Index. 
+STD BMI: Standard Deviation of Body Mass Index. 
+95\% CI: 95\% Confidence Interval. }
+\label{figure:df\_2}
+\end{figure}
+\% This latex figure presents "df\_2.png" which was created from the following df:
+\% 
+\% \begin{tabular}{llrrl}
+\% \toprule
+\%  \&  \& Avg. BMI \& STD BMI \& 95\% CI \\
+\% AgeGroup \& Diabetes\_binary \&  \&  \&  \\
+\% \midrule
+\% \multirow[t]{2}{*}{\textbf{Young}} \& \textbf{0} \& 27.99 \& 7.037 \& (27.927827774476444, 28.048567075308963) \\
+\% \textbf{} \& \textbf{1} \& 34.5 \& 9.133 \& (34.12119592593766, 34.882878315800674) \\
+\% \cline{1-5}
+\% \multirow[t]{2}{*}{\textbf{Middle-aged}} \& \textbf{0} \& 28.22 \& 6.403 \& (28.181084048267966, 28.26234926794142) \\
+\% \textbf{} \& \textbf{1} \& 33.2 \& 7.793 \& (33.07124573926681, 33.32211727165994) \\
+\% \cline{1-5}
+\% \multirow[t]{2}{*}{\textbf{Old}} \& \textbf{0} \& 27.11 \& 5.442 \& (27.070421928255232, 27.150610025277178) \\
+\% \textbf{} \& \textbf{1} \& 30.62 \& 6.452 \& (30.527704739465996, 30.71460862408597) \\
+\% \cline{1-5}
+\% \bottomrule
+\% \end{tabular}
+\% 
+\% 
+\% To create the figure, this df was plotted with the following command:
+\% 
+\% df.plot(**{'kind': 'bar', 'y': 'Avg. BMI', 'yerr': 'STD BMI'})
+\end{codeoutput}
+
+\end{document}

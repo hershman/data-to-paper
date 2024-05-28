@@ -1,0 +1,17 @@
+## Statistical considerations:
+### Confounding variables:
+We should account for age as a confounding variable in our analysis, as it is known to be associated with both BMI and diabetes.
+### Missing data points:
+We should account for any missing data in our analysis, as missing data can introduce bias in our results.
+
+## Hypotheses:
+### Hypothesis:
+There is an interaction between BMI and level of physical activity in determining the risk of having diabetes, while controlling for age.
+### Test:
+To test this hypothesis, we can perform a logistic regression analysis with the "Diabetes_binary" variable as the dependent variable, and "BMI", "PhysActivity", "Age", and their interaction term as the independent variables. We should adjust for age to account for its potential confounding effect. Additionally, we should handle any missing data points appropriately, such as through complete case analysis or using appropriate imputation methods.
+
+### Hypothesis:
+The relationship between BMI and the risk of having diabetes differs across age groups.
+### Test:
+To explore this hypothesis, we can perform an analysis stratified by age groups (e.g., 18-24, 25-29, etc.) and compare the BMI distribution between individuals with diabetes (Diabetes_binary = 1) and those without diabetes (Diabetes_binary = 0) within each age group. We can use box plots or violin plots to visually compare the distributions. Additionally, we can perform statistical tests such as t-tests or Mann-Whitney U tests to formally compare the means or medians of BMI between the two groups within each age group. We should also account for any missing data in our analysis to ensure the validity of our results.
+
