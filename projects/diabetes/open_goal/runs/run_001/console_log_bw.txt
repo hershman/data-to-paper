@@ -184,7 +184,7 @@ This script performs the following data exploration tasks:
 just print "No missing values".
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<5> - <-1> [2 MESSAGES]) -> Data Exploration Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -1477,13 +1477,25 @@ Thank you for the Hypothesis Testing Plan.
 [10] COMMENTER -> "Data Analysis Code"  <after_background>  : Background messages completed. Requesting "Data Analysis code".
 
 [11] ---- USER {Debugger} -> "Data Analysis Code"  ---------------------------------------------------------------------------------------------------
-Write a complete Python code to analyze the data and create dataframes as basis for scientific Tables for our paper.
+Write a complete Python code to analyze the data and create dataframes as basis for scientific Tables and Figures for our paper.
+
+Created df for tables will be later converted to LaTeX tables using `df.to_latex()`.
+Created df for figures will be later converted to plots using a `my_plot(df, x=, y=, ...)` function, which is similar to `df.plot()` but also allows
+specifying:
+- Confidence intervals (CI) for error bars. Like:
+`my_plot(df, x=, y='height', y_ci='height_ci', ...)`
+where 'height_ci' is a column in the df with the CI values as a tuple (lower, upper).
+- P-values for plotting significance as stars. Like:
+`my_plot(df, x=, y='height', y_p_value='height_pval', ...)`
+where 'height_pval' is a column in the df with the p-values.
+
+Important: We are not making the plots in this code, only creating dataframes that will be used later to create the plots and tables.
 
 The code must have the following sections (with these exact capitalized headers):
 
 `# IMPORT`
 `import pickle`
-You can also import here any other packages you need from:
+You can also import here any other packages including:
 ('pandas', 'numpy', 'scipy', 'statsmodels', 'sklearn', 'pickle')
 
 
@@ -1505,16 +1517,23 @@ If no dataset preparations are needed, write below this header:
 
 `# DESCRIPTIVE STATISTICS`
 * In light of our study goals and the hypothesis testing plan (see above "Goal and Hypothesis" and "Hypothesis Testing Plan"), decide whether and
-which descriptive statistics are needed to be included in the research paper and create a relevant table.
+which descriptive statistics are needed to be included in the research paper and create dfs for relevant tables and figures.
 
 For example:
-`## DF 0: "Descriptive statistics of height and age stratified by sex"`
-Write here the code to create a descriptive statistics dataframe `df0` and save it using:
+`## DF 0: "Table: Descriptive statistics of height and age stratified by sex"`
+`# Designed for creating a scientific table using: df0.to_latex()`
+Write here the code to create a descriptive statistics dataframe `df0`.
+Do not convert to latex yet. Just save it using:
 `df0.to_pickle('df_0.pkl')`
-
 If no descriptive statistics are needed, write:
 `# No descriptive statistics table is needed.`
 
+And/or, for a figure:
+`## DF 1: "Figure: Distribution of height"`
+`# Designed for creating a scientific figure using: my_plot(df1, kind='hist', x='height')`
+Write here the code to create `df1`. Like, `df1 = data_after_cleaning['height']`.
+Do not create the plot yet. Just save the dataframe using:
+`df1.to_pickle('df_1.pkl')`
 
 `# PREPROCESSING`
 Perform any preprocessing steps needed to prepare the data for the analysis.
@@ -1527,31 +1546,33 @@ If no preprocessing is needed, write:
 
 
 `# ANALYSIS`
-Considering our "Goal and Hypothesis" and "Hypothesis Testing Plan", decide on 1-3 tables (in addition to the above descriptive statistics, if any) we
-should create for our scientific paper. Typically, we should have at least one table for each hypothesis test.
+Considering our "Goal and Hypothesis" and "Hypothesis Testing Plan", decide on 1-3 additional displayitems (tables/figures) we should create for our
+scientific paper. Typically, we should have at least one table or figure for each hypothesis test.
 
-For each such scientific table:
-[a] Write a comment with a suggested table's caption.
-Choose a caption that clearly describes the table's content and its purpose.
+For each such displayitem, follow these 3 steps:
+[a] Write a comment with a suggested table/figure caption.
 For example:
-`## DF 1: "Test of association between age and risk of death, accounting for sex and race"`
+`## DF 1: "Table: Test of association between age and risk of death, accounting for sex and race"`
+Or
+`## DF 1: "Figure: Adjusted and unadjusted odds ratios for ..."
 Avoid generic captions such as `## DF 1: "Results of analysis"`.
 
 [b] Perform analysis
 - Perform appropriate analysis and/or statistical tests (see above our "Hypothesis Testing Plan").
 - Account for relevant confounding variables, as applicable.
 - Note that you may need to perform more than one test for each hypothesis.
-- Try using inherent functionality and syntax provided in functions from the available Python packages (above). Avoid, as possible, manually
-implementing generically available functionality.
+- Try using inherent functionality and syntax provided in functions from the available Python packages (above).
+- Avoid, as possible, manually implementing generically available functionality.
 For example, to include interactions in regression analysis (if applicable), use the `formula = "y ~ a * b"` syntax in statsmodels formulas, rather
 than trying to manually multiply the variables.
 {mediation_note_if_applicable}
-[c] Create and save a dataframe representing the scientific table (`df1`, `df2`, etc):
+[c] Create and save a dataframe for the scientific table/figure (`df1`, `df2`, etc):
 * Only include information that is relevant and suitable for inclusion in a scientific table.
 * Nominal values should be accompanied by a measure of uncertainty (CI or STD and p-value).
+As applicable, CI should be provided as a column of tuple (lower, upper).
 * Exclude data not important to the research goal, or that are too technical.
-* Do not repeat the same data in multiple tables.
-* The table should have labels for both the columns and the index (rows):
+* Do not repeat the same data in multiple tables/figures.
+* The df should have labels for both the columns and the index (rows):
     - As possible, do not invent new names; just keep the original variable names from the dataset.
     - As applicable, also keep any attr names from statistical test results.
 
@@ -1559,12 +1580,19 @@ than trying to manually multiply the variables.
 Overall, the section should have the following structure:
 
 `# ANALYSIS`
-`## DF 1: <your chosen table name here>`
+`## DF 1: "Table: <your chosen table name here>"`
+`# Intended use: df1.to_latex()`
 Write here the code to analyze the data and create a dataframe df1 for table 1
 `df1.to_pickle('df_1.pkl')`
 
-`## DF 2: <your chosen table name here>`
-etc, up to 3 tables.
+`## DF 2: "Figure: <your chosen figure name here>"`
+`# Intended use: my_plot(df2, kind='bar', y=['height', 'weight', ...], y_ci=['height_ci', 'weight_ci', ...],
+y_p_value=['height_pval', 'weight_pval', ...])`
+Write here the code to analyze the data and create a dataframe df2 for figure 2.
+Do not create the plot yet. Just save the dataframe using:
+`df2.to_pickle('df_2.pkl')`
+
+etc, up to 3-4 display items.
 
 
 # SAVE ADDITIONAL RESULTS
@@ -1584,7 +1612,7 @@ with open('additional_results.pkl', 'wb') as f:
 
 Avoid the following:
 Do not provide a sketch or pseudocode; write a complete runnable code including all '# HEADERS' sections.
-Do not create any graphics, figures or any plots.
+Do not create the actual plots or latex tables; only prepare and save the suitable dataframes.
 Do not send any presumed output examples.
 Avoid convoluted or indirect methods of data extraction and manipulation; For clarity, use direct attribute access for clarity and simplicity.
 For clarity, access dataframes using string-based column/index names, rather than integer-based column/index positions.
@@ -1592,10 +1620,10 @@ For clarity, access dataframes using string-based column/index names, rather tha
 
 [12] COMMENTER -> "Data Analysis Code"  : Starting to write and debug code. Revision 1/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 3463 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 3942 context tokens and 500 expected tokens.
 [13] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3463 tokens):
+CONTEXT TOTAL (3942 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -1605,7 +1633,7 @@ CONTEXT TOTAL (3463 tokens):
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
 # 7      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 8 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 9      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 9      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 
 #10 ASSISTANT ( 488 tokens): Here is the Python code to perform the described data analysis.  python # [...] f)
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>}
@@ -1665,7 +1693,7 @@ with open('additional_results.pkl', 'wb') as f:
     pickle.dump(additional_results, f)
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<11> - <-1> [2 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -1772,16 +1800,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3726 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4205 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3726 tokens):
+CONTEXT TOTAL (4205 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 588 tokens): ## Request Review of code flaws The code runs without any obvious bugs, but I [...] to in the code.
 
@@ -1901,16 +1929,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4107 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4586 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (4107 tokens):
+CONTEXT TOTAL (4586 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 969 tokens): ## Request Review of data handling The code runs without any obvious bugs, [...] to in the code.
 
@@ -1984,6 +2012,8 @@ For example:
     # does it also report their measures of uncertainty (like p-value, CI, or STD, as applicable)?
     # For example:
     "Measures of uncertainty": ("CONCERN", "We should have included p-values for ..."),
+    Or:
+    "Measures of uncertainty": ("CONCERN", "CI should be provided as a column of (lower, upper) tuple"),
 
     # * MISSING DATA:
     # Are we missing key variables, or important results, that we should calculate and report in the table?
@@ -2003,18 +2033,18 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3781 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4291 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3781 tokens):
+CONTEXT TOTAL (4291 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
-# 7      USER ( 643 tokens): ## Request Review of "df_1.pkl" I ran your code.  Here is the content of the [...] to in the code.
+# 7      USER ( 674 tokens): ## Request Review of "df_1.pkl" I ran your code.  Here is the content of the [...] to in the code.
 
 # 8 ASSISTANT ( 211 tokens): python {  # * SENSIBLE NUMERIC VALUES:  "Sensible values": ("OK", "All the [...] HighBP"),  }
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0}
@@ -2076,6 +2106,8 @@ For example:
     # does it also report their measures of uncertainty (like p-value, CI, or STD, as applicable)?
     # For example:
     "Measures of uncertainty": ("CONCERN", "We should have included p-values for ..."),
+    Or:
+    "Measures of uncertainty": ("CONCERN", "CI should be provided as a column of (lower, upper) tuple"),
 
     # * MISSING DATA:
     # Are we missing key variables, or important results, that we should calculate and report in the table?
@@ -2095,18 +2127,18 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3783 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4293 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3783 tokens):
+CONTEXT TOTAL (4293 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
-# 7      USER ( 645 tokens): ## Request Review of "df_2.pkl" I ran your code.  Here is the content of the [...] to in the code.
+# 7      USER ( 676 tokens): ## Request Review of "df_2.pkl" I ran your code.  Here is the content of the [...] to in the code.
 
 # 8 ASSISTANT ( 272 tokens): python {  # * SENSIBLE NUMERIC VALUES:  "Sensible values": ("OK", "All the [...] no missing data.
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0}
@@ -2170,6 +2202,8 @@ For example:
     # does it also report their measures of uncertainty (like p-value, CI, or STD, as applicable)?
     # For example:
     "Measures of uncertainty": ("CONCERN", "We should have included p-values for ..."),
+    Or:
+    "Measures of uncertainty": ("CONCERN", "CI should be provided as a column of (lower, upper) tuple"),
 
     # * MISSING DATA:
     # Are we missing key variables, or important results, that we should calculate and report in the table?
@@ -2189,18 +2223,18 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3781 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4291 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3781 tokens):
+CONTEXT TOTAL (4291 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
-# 7      USER ( 643 tokens): ## Request Review of "df_3.pkl" I ran your code.  Here is the content of the [...] to in the code.
+# 7      USER ( 674 tokens): ## Request Review of "df_3.pkl" I ran your code.  Here is the content of the [...] to in the code.
 
 # 8 ASSISTANT ( 289 tokens): python {  # * SENSIBLE NUMERIC VALUES:  "Sensible values": ("OK", "All the [...] Stroke."),  }
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0}
@@ -2269,6 +2303,8 @@ For example:
     # does it also report their measures of uncertainty (like p-value, CI, or STD, as applicable)?
     # For example:
     "Measures of uncertainty": ("CONCERN", "We should have included p-values for ..."),
+    Or:
+    "Measures of uncertainty": ("CONCERN", "CI should be provided as a column of (lower, upper) tuple"),
 
     # * MISSING DATA:
     # Are we missing key variables, or important results, that we should calculate and report in the table?
@@ -2288,18 +2324,18 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3968 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4478 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3968 tokens):
+CONTEXT TOTAL (4478 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
-# 7      USER ( 830 tokens): ## Request Review of "df_4.pkl" I ran your code.  Here is the content of the [...] to in the code.
+# 7      USER ( 861 tokens): ## Request Review of "df_4.pkl" I ran your code.  Here is the content of the [...] to in the code.
 
 # 8 ASSISTANT ( 259 tokens): Here is the review of the table 'df_4.pkl':  python {  # * SENSIBLE NUMERIC [...] important results.
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0}
@@ -2417,16 +2453,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4274 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4753 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (4274 tokens):
+CONTEXT TOTAL (4753 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER (1136 tokens): ## Request Review of all created files I ran your code.  Here is the content [...] to in the code.
 
@@ -2488,16 +2524,16 @@ Remember, your code must contain the following sections:
 
 [14] COMMENTER -> "Data Analysis Code"  : Starting to write and debug code. Revision 2/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 3294 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 3773 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3294 tokens):
+CONTEXT TOTAL (3773 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 156 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 
@@ -2565,7 +2601,7 @@ This unites the tables as you requested and provides all the relevant informatio
 unadjusted tests are done for the same variables systematically. The intercept is not included in the final dataframe.
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<14> - <-1> [1 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -2648,16 +2684,16 @@ Remember, your code must contain the following sections:
 "# SAVE ADDITIONAL RESULTS"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3942 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4421 context tokens and 500 expected tokens.
 [17] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3942 tokens):
+CONTEXT TOTAL (4421 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 156 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 # 8 SURROGATE ( 496 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] f)
@@ -2689,7 +2725,7 @@ for Age, BMI, and Sex"
 +    'p_value_adjusted_Stroke': adjusted_model.pvalues
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<14> - <-1> [3 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -2757,13 +2793,30 @@ with open('additional_results.pkl', 'wb') as f:
 
 AppendMessage, Debug iteration 2/20: 
 [16] ---- USER {Debugger} -> "Data Analysis Code"  ---------------------------------------------------------------------------------------------------
-# Checking df: too many columns
+# Checking df: NaN values
 ## df_1.pkl:
-The table has 12 columns, which is way too many for a scientific table.
+Note that the table has 30 NaN values.
+Here is the `isnull` of the table:
 
-Please revise the code so that created tables have just 2-5 columns and definitely not more than 10.
-Note that simply trimming the data is not always a good solution. You might instead want to think of a different representation/organization of the
-table.
+         unadjusted_HighBP p_value_unadjusted_HighBP adjusted_HighBP p_value_adjusted_HighBP unadjusted_HighChol p_value_unadjusted_HighChol
+adjusted_HighChol p_value_adjusted_HighChol unadjusted_Stroke p_value_unadjusted_Stroke adjusted_Stroke p_value_adjusted_Stroke
+Age                   True                      True           False                   False                True                        True
+False                     False              True                      True           False                   False
+BMI                   True                      True           False                   False                True                        True
+False                     False              True                      True           False                   False
+HighBP               False                     False           False                   False                True                        True
+False                     False              True                      True           False                   False
+HighChol              True                      True           False                   False               False                       False
+False                     False              True                      True           False                   False
+Sex                   True                      True           False                   False                True                        True
+False                     False              True                      True           False                   False
+Stroke                True                      True           False                   False                True                        True
+False                     False             False                     False           False                   False
+
+
+Please revise the code to avoid NaN values in the created tables.
+If the NaNs are legit and stand for missing values: replace them with the string '-'.
+Otherwise, if they are computational errors, please revise the code to fix it.
 
 # Instructions:
 Please rewrite the complete code again with these issues corrected.
@@ -2781,20 +2834,20 @@ Remember, your code must contain the following sections:
 "# SAVE ADDITIONAL RESULTS"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4082 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4794 context tokens and 500 expected tokens.
 [17] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (4082 tokens):
+CONTEXT TOTAL (4794 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 521 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 156 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 # 8 SURROGATE ( 598 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] f)
-# 9      USER ( 189 tokens): # Checking df: too many columns ## df_1.pkl: The table has 12 columns, which [...] ADDITIONAL RESULTS"
+# 9      USER ( 422 tokens): # Checking df: NaN values ## df_1.pkl: Note that the table has 30 NaN values. [...] ADDITIONAL RESULTS"
 
 #10 ASSISTANT ( 561 tokens): Sure, let's unite adjusted and non-adjusted coefficients with respective [...] f)
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>}
@@ -2832,7 +2885,7 @@ adjusted_model.pvalues.HighChol]
 +
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<11> - <-1> [6 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -2958,16 +3011,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3880 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4359 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3880 tokens):
+CONTEXT TOTAL (4359 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 562 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 701 tokens): ## Request Review of all created files I ran your code.  Here is the content [...] to in the code.
 
@@ -3032,16 +3085,16 @@ Remember, your code must contain the following sections:
 
 [14] COMMENTER -> "Data Analysis Code"  : Starting to write and debug code. Revision 3/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 3355 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 3834 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3355 tokens):
+CONTEXT TOTAL (3834 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 562 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 176 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 
@@ -3114,7 +3167,7 @@ with open('additional_results.pkl', 'wb') as f:
 Please run this updated Python code.
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<14> - <-1> [1 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -3206,16 +3259,16 @@ Remember, your code must contain the following sections:
 "# SAVE ADDITIONAL RESULTS"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4065 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4544 context tokens and 500 expected tokens.
 [17] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (4065 tokens):
+CONTEXT TOTAL (4544 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 562 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 176 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 # 8 SURROGATE ( 502 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] f)
@@ -3244,7 +3297,7 @@ Here is the corrected code:
 +adjusted_model = smf.logit(formula="Diabetes_binary ~ " + model_vars, data=df).fit()
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<11> - <-1> [6 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -3379,16 +3432,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 3795 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4274 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (3795 tokens):
+CONTEXT TOTAL (4274 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 470 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 708 tokens): ## Request Review of all created files I ran your code.  Here is the content [...] to in the code.
 
@@ -3447,16 +3500,16 @@ Remember, your code must contain the following sections:
 
 [14] COMMENTER -> "Data Analysis Code"  : Starting to write and debug code. Revision 4/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 3225 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 3704 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3225 tokens):
+CONTEXT TOTAL (3704 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 470 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 138 tokens): # Review of all created files The code has some issues that need to be fixed: [...] ADDITIONAL RESULTS"
 
@@ -3501,7 +3554,7 @@ adjusted_model.pvalues[var]]
 This code has considered both the issues and has been updated accordingly. Please feel free to make any further suggestions.
 ======================================================================================================================================================
 
-CodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<11> - <-1> [4 MESSAGES]) -> Data Analysis Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -3642,16 +3695,16 @@ You can also add as many other relevant checks, both positive ("OK", "...") and 
 Be specific in the description of the checks (keys) and assessment (values), so that it is clear what you are referring to in the code.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4067 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4546 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>, 'temperature': 0.0} {Performer} -> "Data Analysis Code"  ============================
 
-CONTEXT TOTAL (4067 tokens):
+CONTEXT TOTAL (4546 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 313 tokens): # Hypothesis Testing Plan ## Statistical considerations: ### Confounding [...] effects.
 # 4 SURROGATE (  11 tokens): Thank you for the Hypothesis Testing Plan.
-# 5      USER (1129 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
+# 5      USER (1608 tokens): Write a complete Python code to analyze the data and create dataframes as [...] positions.
 # 6 SURROGATE ( 552 tokens): Here is the code to perform the analysis. It creates the files: ['df_1.pkl', [...] f)
 # 7      USER ( 898 tokens): ## Request Review of all created files I ran your code.  Here is the content [...] to in the code.
 
@@ -4076,6 +4129,7 @@ def to_figure_with_note(df, filename: str, caption: str, label: str,
                         note: str = None, glossary: Dict[str, str] = None,
                         x: Optional[str] = None, y: Optional[str] = None, kind: str = 'line',
                         use_index: bool = True,
+                        xlabel: str = None, ylabel: str = None,
                         logx: bool = False, logy: bool = False,
                         xerr: str = None, yerr: str = None,
                         x_ci: Union[str, Tuple[str, str]] = None, y_ci: Union[str, Tuple[str, str]] = None,
@@ -4097,9 +4151,10 @@ def to_figure_with_note(df, filename: str, caption: str, label: str,
     `use_index` (bool): If True, use the index as x-axis values.
     `logx` / `logy` (bool): If True, use log scale for x/y axis.
     `xerr` / `yerr` (optional, str): Column name for x/y error bars.
+    `xlabel` / `ylabel` (optional, str): Label for x/y axis.
 
     Additional plotting options:
-    `x_p_value` / `y_p_value` (optional, str): Column name for x/y p-values to plot as stars above the data points.
+    `x_p_value` / `y_p_value` (optional, str): Column name for x/y p-values to show as stars above data points.
         p-values are converted to: '***' if < 0.001, '**' if < 0.01, '*' if < 0.05, 'NS' if >= 0.05.
 
     Instead of xerr/yerr, you can directly provide confidence intervals:
@@ -4205,6 +4260,7 @@ to_figure_with_note(
     glossary=glossary1,
     kind='bar',
     y='coef',
+    ylabel='Coefficient',
     y_ci='CI',  # or y_ci=('CI_LB', 'CI_UB')
     y_p_value='PV',  # a column with p-values for the y values. Will be presented as stars in the plot.
 )
@@ -4222,10 +4278,10 @@ Do not send any presumed output examples.
 
 [12] COMMENTER -> "LaTeX Table Design Code"  : Starting to write and debug code. Revision 1/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 4198 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4234 context tokens and 500 expected tokens.
 [13] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "LaTeX Table Design Code"  ===========================================
 
-CONTEXT TOTAL (4198 tokens):
+CONTEXT TOTAL (4234 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -4235,7 +4291,7 @@ CONTEXT TOTAL (4198 tokens):
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
 # 7      USER ( 351 tokens): # Content of Files Created by the Data Analysis Code Here is the content of [...] -0.3249 <1e-06
 # 8 SURROGATE (  15 tokens): Thank you for the Content of Files Created by the Data Analysis Code.
-# 9      USER (2090 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
+# 9      USER (2126 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
 
 #10 ASSISTANT ( 644 tokens): # IMPORT import pandas as pd from my_utils import to_latex_with_note, [...] glossary=glossary2)
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>}
@@ -4321,10 +4377,10 @@ Remember, your code must contain the following sections:
 "# DF 2"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 4925 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4961 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "LaTeX Table Design Code"  ===========================================
 
-CONTEXT TOTAL (4925 tokens):
+CONTEXT TOTAL (4961 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -4334,7 +4390,7 @@ CONTEXT TOTAL (4925 tokens):
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
 # 7      USER ( 351 tokens): # Content of Files Created by the Data Analysis Code Here is the content of [...] -0.3249 <1e-06
 # 8 SURROGATE (  15 tokens): Thank you for the Content of Files Created by the Data Analysis Code.
-# 9      USER (2090 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
+# 9      USER (2126 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
 #10 ASSISTANT ( 644 tokens): # IMPORT import pandas as pd from my_utils import to_latex_with_note, [...] glossary=glossary2)
 #11      USER (  83 tokens): # Code extraction problem Error extracting 'triple-backtick "python" block' [...] "# DF 1" "# DF 2"
 
@@ -4409,7 +4465,7 @@ to_latex_with_note(
     glossary=glossary2)
 ======================================================================================================================================================
 
-UtilsCodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<12> - <-1> [3 MESSAGES]) -> LaTeX Table Design Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -4480,12 +4536,54 @@ to_latex_with_note(
     glossary=glossary2)
 ======================================================================================================================================================
 
-AppendMessage, Debug iteration 2/20: Code created forbidden files
+AppendMessage, Debug iteration 2/20: Table too wide
 [14] ---- USER {InterpretationReviewer} -> "LaTeX Table Design Code"  --------------------------------------------------------------------------------
-# Wrong output files
-Your code creates the following files ['test.log', 'test.aux', 'test.pdf', 'test.out'] which is not allowed.
+There are some issues that need to be corrected:
 
-Your code should only write to these files: "*.tex", "*.png".
+# Table too wide
+## df_1.tex:
+Here is the created table:
+
+```latex
+\begin{table}[h]
+\caption{Table 1: Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable}
+\label{table:1}
+\begin{threeparttable}
+\renewcommand{\TPTminimum}{\linewidth}
+\makebox[\linewidth]{%
+\begin{tabular}{lrrrl}
+\toprule
+ & Unadjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Unadjusted \\
+\midrule
+\textbf{High Blood Pressure} & @@<1.617>@@ & @@<1.591>@@ & @@<1.643>@@ & $<$@@<1e-06>@@ \\
+\textbf{High Cholesterol} & @@<1.18>@@ & @@<1.156>@@ & @@<1.204>@@ & $<$@@<1e-06>@@ \\
+\textbf{Stroke} & @@<1.12>@@ & @@<1.077>@@ & @@<1.163>@@ & $<$@@<1e-06>@@ \\
+\textbf{Body Mass Index} & @@<0.0786>@@ & @@<0.077>@@ & @@<0.08019>@@ & $<$@@<1e-06>@@ \\
+\textbf{Physical Activity} & @@<-0.7134>@@ & @@<-0.7372>@@ & @@<-0.6896>@@ & $<$@@<1e-06>@@ \\
+\bottomrule
+\end{tabular}}
+\begin{tablenotes}
+\footnotesize
+\item \textbf{High Blood Pressure}: High Blood Pressure (0=no, 1=yes)
+\item \textbf{High Cholesterol}:  High Cholesterol (0=no, 1=yes)
+\item \textbf{Stroke}: Stroke (0=no, 1=yes)
+\item \textbf{Body Mass Index}: Body Mass Index
+\item \textbf{Physical Activity}: Physical Activity in past 30 days (0=no, 1=yes)
+\item \textbf{CI Lower Bound}: 95\% Confidence Interval
+\item \textbf{CI Upper Bound}: 95\% Confidence Interval
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+```
+I tried to compile it, but the table is too wide.
+
+
+Please change the code to make the table narrower. Consider any of the following options:
+
+- Rename column labels to shorter names. Use `df.rename(columns=...)`
+
+- Rename the index labels to shorter names. Use `df.rename(index=...)`
+
 
 # Instructions:
 Please rewrite the complete code again with these issues corrected.
@@ -4500,10 +4598,10 @@ Remember, your code must contain the following sections:
 "# DF 2"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 5000 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 5586 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "LaTeX Table Design Code"  ===========================================
 
-CONTEXT TOTAL (5000 tokens):
+CONTEXT TOTAL (5586 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -4513,9 +4611,9 @@ CONTEXT TOTAL (5000 tokens):
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
 # 7      USER ( 351 tokens): # Content of Files Created by the Data Analysis Code Here is the content of [...] -0.3249 <1e-06
 # 8 SURROGATE (  15 tokens): Thank you for the Content of Files Created by the Data Analysis Code.
-# 9      USER (2090 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
+# 9      USER (2126 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
 #10 SURROGATE ( 658 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] glossary=glossary2)
-#11      USER ( 143 tokens): # Wrong output files Your code creates the following files ['test.log', [...] "# DF 1" "# DF 2"
+#11      USER ( 693 tokens): There are some issues that need to be corrected:  # Table too wide ## [...] "# DF 1" "# DF 2"
 
 #12 ASSISTANT ( 741 tokens): Apologies for the confusion in previous version. Below is the corrected [...] Adjusted' )
                                                                                {'model_engine': <ModelEngine.GPT4: 'gpt-4'>}
@@ -4561,7 +4659,7 @@ Apologies for the confusion in previous version. Below is the corrected Python c
 +)
 ======================================================================================================================================================
 
-UtilsCodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<12> - <-1> [3 MESSAGES]) -> LaTeX Table Design Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -4675,10 +4773,10 @@ Remember, your code must contain the following sections:
 "# DF 2"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 5207 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 5243 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "LaTeX Table Design Code"  ===========================================
 
-CONTEXT TOTAL (5207 tokens):
+CONTEXT TOTAL (5243 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -4688,7 +4786,7 @@ CONTEXT TOTAL (5207 tokens):
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
 # 7      USER ( 351 tokens): # Content of Files Created by the Data Analysis Code Here is the content of [...] -0.3249 <1e-06
 # 8 SURROGATE (  15 tokens): Thank you for the Content of Files Created by the Data Analysis Code.
-# 9      USER (2090 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
+# 9      USER (2126 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
 #10 SURROGATE ( 731 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] Adjusted' )
 #11      USER ( 277 tokens): There are some issues that need to be corrected:  # Problem with displayitem [...] "# DF 1" "# DF 2"
 
@@ -4707,7 +4805,7 @@ Here is the corrected code following your instructions:
 +    caption="Figure 2: Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable",
 ======================================================================================================================================================
 
-UtilsCodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<12> - <-1> [3 MESSAGES]) -> LaTeX Table Design Code
 
 AppendMessage, Code is freshly re-posted, as if it was the FIRST response.
@@ -4821,10 +4919,10 @@ Remember, your code must contain the following sections:
 "# DF 2"
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 5207 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 5243 context tokens and 500 expected tokens.
 [15] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "LaTeX Table Design Code"  ===========================================
 
-CONTEXT TOTAL (5207 tokens):
+CONTEXT TOTAL (5243 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
@@ -4834,7 +4932,7 @@ CONTEXT TOTAL (5207 tokens):
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
 # 7      USER ( 351 tokens): # Content of Files Created by the Data Analysis Code Here is the content of [...] -0.3249 <1e-06
 # 8 SURROGATE (  15 tokens): Thank you for the Content of Files Created by the Data Analysis Code.
-# 9      USER (2090 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
+# 9      USER (2126 tokens): Please write a Python code to convert and re-style the "df_?.pkl" dataframes [...] output examples.
 #10 SURROGATE ( 731 tokens): Here is the code to perform the requested analysis: python # IMPORT import [...] Adjusted' )
 #11      USER ( 277 tokens): There are some issues that need to be corrected:  # Problem with displayitem [...] "# DF 1" "# DF 2"
 
@@ -4857,7 +4955,7 @@ Sure, I misunderstood the instructions for the caption. I've fixed it now. Here'
 +    label='figure:Adjusted_Coefficients',
 ======================================================================================================================================================
 
-UtilsCodeRunner: Running and caching output.
+CodeRunnerWrapper: Running and caching output.
 DeleteMessages(<11> - <-1> [4 MESSAGES]) -> LaTeX Table Design Code
 
 AppendMessage, Adding the debugged code as if it was the original response.
@@ -5005,11 +5103,11 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % \toprule
 %  & Unadjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Unadjusted \\
 % \midrule
-% \textbf{High Blood Pressure} & 1.617 & 1.591 & 1.643 & <1e-06 \\
-% \textbf{High Cholesterol} & 1.18 & 1.156 & 1.204 & <1e-06 \\
-% \textbf{Stroke} & 1.12 & 1.077 & 1.163 & <1e-06 \\
-% \textbf{Body Mass Index} & 0.0786 & 0.077 & 0.08019 & <1e-06 \\
-% \textbf{Physical Activity} & -0.7134 & -0.7372 & -0.6896 & <1e-06 \\
+% \textbf{High Blood Pressure} & 1.617 & 1.591 & 1.643 & $<$1e-06 \\
+% \textbf{High Cholesterol} & 1.18 & 1.156 & 1.204 & $<$1e-06 \\
+% \textbf{Stroke} & 1.12 & 1.077 & 1.163 & $<$1e-06 \\
+% \textbf{Body Mass Index} & 0.0786 & 0.077 & 0.08019 & $<$1e-06 \\
+% \textbf{Physical Activity} & -0.7134 & -0.7372 & -0.6896 & $<$1e-06 \\
 % \bottomrule
 % \end{tabular}
 %
@@ -5051,11 +5149,11 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % \toprule
 %  & Adjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Adjusted \\
 % \midrule
-% \textbf{High Blood Pressure} & 0.9799 & 0.9518 & 1.008 & <1e-06 \\
-% \textbf{High Cholesterol} & 0.6891 & 0.6633 & 0.7149 & <1e-06 \\
-% \textbf{Stroke} & 0.5472 & 0.5005 & 0.5938 & <1e-06 \\
-% \textbf{Body Mass Index} & 0.07242 & 0.07068 & 0.07416 & <1e-06 \\
-% \textbf{Physical Activity} & -0.351 & -0.3771 & -0.3249 & <1e-06 \\
+% \textbf{High Blood Pressure} & 0.9799 & 0.9518 & 1.008 & $<$1e-06 \\
+% \textbf{High Cholesterol} & 0.6891 & 0.6633 & 0.7149 & $<$1e-06 \\
+% \textbf{Stroke} & 0.5472 & 0.5005 & 0.5938 & $<$1e-06 \\
+% \textbf{Body Mass Index} & 0.07242 & 0.07068 & 0.07416 & $<$1e-06 \\
+% \textbf{Physical Activity} & -0.351 & -0.3771 & -0.3249 & $<$1e-06 \\
 % \bottomrule
 % \end{tabular}
 %
@@ -5107,8 +5205,8 @@ The Abstract should provide a concise, interesting to read, single-paragraph sum
 * short statement of the subject and its importance.
 * description of the research gap/question/motivation.
 * short, non-technical, description of the dataset used and a non-technical explanation of the methodology.
-* summary of each of the main results. It should summarize each key result which is evident from the displyitems, but without referring to specific
-numeric values from the displayitems.
+* summary of each of the main results. Summarize each key result which is evident from the displayitems, but without referring to specific numeric
+values from the displayitems.
 * statement of limitations and implications.
 
 Write in tex format, escaping any math or symbols that needs tex escapes.
@@ -5172,8 +5270,8 @@ The Abstract should provide a concise, interesting to read, single-paragraph sum
 * short statement of the subject and its importance.
 * description of the research gap/question/motivation.
 * short, non-technical, description of the dataset used and a non-technical explanation of the methodology.
-* summary of each of the main results. It should summarize each key result which is evident from the displyitems, but without referring to specific
-numeric values from the displayitems.
+* summary of each of the main results. Summarize each key result which is evident from the displayitems, but without referring to specific numeric
+values from the displayitems.
 * statement of limitations and implications.
 
 Write in tex format, escaping any math or symbols that needs tex escapes.
@@ -5189,20 +5287,20 @@ The title and abstract for a research paper should be formatted as a triple-back
 ```
 ======================================================================================================================================================
 
-Using GPT4_TURBO (max 128000 tokens) for 2387 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 2396 context tokens and 500 expected tokens.
 [12] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract (first draft)"  ======
 
-CONTEXT TOTAL (2387 tokens):
+CONTEXT TOTAL (2396 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER (1260 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 5      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 6 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
 # 7      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
 # 8 SURROGATE (  12 tokens): Thank you for the Additional Results (additional_results.pkl).
-# 9      USER ( 286 tokens): Based on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
+# 9      USER ( 285 tokens): Based on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
 
 #10 ASSISTANT ( 279 tokens): latex \title{The Impact of Lifestyle and Health Indicators on Diabetes [...] \end{abstract}
                                                                                {'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>}
@@ -5266,8 +5364,8 @@ The Abstract should provide a concise, interesting to read, single-paragraph sum
 * short statement of the subject and its importance.
 * description of the research gap/question/motivation.
 * short, non-technical, description of the dataset used and a non-technical explanation of the methodology.
-* summary of each of the main results. It should summarize each key result which is evident from the displyitems, but without referring to specific
-numeric values from the displayitems.
+* summary of each of the main results. Summarize each key result which is evident from the displayitems, but without referring to specific numeric
+values from the displayitems.
 * statement of limitations and implications.
 
 
@@ -5281,20 +5379,20 @@ changes"; If you chose to provide bullet-point feedback then DO NOT include "The
 changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 2999 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 3007 context tokens and 500 expected tokens.
 [11] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Writer} -> "Writing: Title and Abstract (first draft) (other)"  =
 
-CONTEXT TOTAL (2999 tokens):
+CONTEXT TOTAL (3007 tokens):
 # 0    SYSTEM (  74 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
 # 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER (1260 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 5      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 6 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
 # 7      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
-# 8 SURROGATE ( 298 tokens): Thank you for the Additional Results (additional_results.pkl).   Based on the [...] \end{abstract}
-# 9      USER ( 627 tokens): latex \title{The Impact of Lifestyle and Health Indicators on Diabetes [...] any changes".
+# 8 SURROGATE ( 297 tokens): Thank you for the Additional Results (additional_results.pkl).   Based on the [...] \end{abstract}
+# 9      USER ( 626 tokens): latex \title{The Impact of Lifestyle and Health Indicators on Diabetes [...] any changes".
 
 #10 ASSISTANT ( 419 tokens): - Consider revising the title to ensure that it is as short as possible while [...] the abstract too.
                                                                                {'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>}
@@ -5640,11 +5738,11 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % \toprule
 %  & Unadjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Unadjusted \\
 % \midrule
-% \textbf{High Blood Pressure} & \hypertarget{A0a}{1.617} & \hypertarget{A0b}{1.591} & \hypertarget{A0c}{1.643} & <1e-06 \\
-% \textbf{High Cholesterol} & \hypertarget{A1a}{1.18} & \hypertarget{A1b}{1.156} & \hypertarget{A1c}{1.204} & <1e-06 \\
-% \textbf{Stroke} & \hypertarget{A2a}{1.12} & \hypertarget{A2b}{1.077} & \hypertarget{A2c}{1.163} & <1e-06 \\
-% \textbf{Body Mass Index} & \hypertarget{A3a}{0.0786} & \hypertarget{A3b}{0.077} & \hypertarget{A3c}{0.08019} & <1e-06 \\
-% \textbf{Physical Activity} & \hypertarget{A4a}{-0.7134} & \hypertarget{A4b}{-0.7372} & \hypertarget{A4c}{-0.6896} & <1e-06 \\
+% \textbf{High Blood Pressure} & \hypertarget{A0a}{1.617} & \hypertarget{A0b}{1.591} & \hypertarget{A0c}{1.643} & $<$\hypertarget{A0d}{1e-06} \\
+% \textbf{High Cholesterol} & \hypertarget{A1a}{1.18} & \hypertarget{A1b}{1.156} & \hypertarget{A1c}{1.204} & $<$\hypertarget{A1d}{1e-06} \\
+% \textbf{Stroke} & \hypertarget{A2a}{1.12} & \hypertarget{A2b}{1.077} & \hypertarget{A2c}{1.163} & $<$\hypertarget{A2d}{1e-06} \\
+% \textbf{Body Mass Index} & \hypertarget{A3a}{0.0786} & \hypertarget{A3b}{0.077} & \hypertarget{A3c}{0.08019} & $<$\hypertarget{A3d}{1e-06} \\
+% \textbf{Physical Activity} & \hypertarget{A4a}{-0.7134} & \hypertarget{A4b}{-0.7372} & \hypertarget{A4c}{-0.6896} & $<$\hypertarget{A4d}{1e-06} \\
 % \bottomrule
 % \end{tabular}
 %
@@ -5686,11 +5784,11 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % \toprule
 %  & Adjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Adjusted \\
 % \midrule
-% \textbf{High Blood Pressure} & \hypertarget{B0a}{0.9799} & \hypertarget{B0b}{0.9518} & \hypertarget{B0c}{1.008} & <1e-06 \\
-% \textbf{High Cholesterol} & \hypertarget{B1a}{0.6891} & \hypertarget{B1b}{0.6633} & \hypertarget{B1c}{0.7149} & <1e-06 \\
-% \textbf{Stroke} & \hypertarget{B2a}{0.5472} & \hypertarget{B2b}{0.5005} & \hypertarget{B2c}{0.5938} & <1e-06 \\
-% \textbf{Body Mass Index} & \hypertarget{B3a}{0.07242} & \hypertarget{B3b}{0.07068} & \hypertarget{B3c}{0.07416} & <1e-06 \\
-% \textbf{Physical Activity} & \hypertarget{B4a}{-0.351} & \hypertarget{B4b}{-0.3771} & \hypertarget{B4c}{-0.3249} & <1e-06 \\
+% \textbf{High Blood Pressure} & \hypertarget{B0a}{0.9799} & \hypertarget{B0b}{0.9518} & \hypertarget{B0c}{1.008} & $<$\hypertarget{B0d}{1e-06} \\
+% \textbf{High Cholesterol} & \hypertarget{B1a}{0.6891} & \hypertarget{B1b}{0.6633} & \hypertarget{B1c}{0.7149} & $<$\hypertarget{B1d}{1e-06} \\
+% \textbf{Stroke} & \hypertarget{B2a}{0.5472} & \hypertarget{B2b}{0.5005} & \hypertarget{B2c}{0.5938} & $<$\hypertarget{B2d}{1e-06} \\
+% \textbf{Body Mass Index} & \hypertarget{B3a}{0.07242} & \hypertarget{B3b}{0.07068} & \hypertarget{B3c}{0.07416} & $<$\hypertarget{B3d}{1e-06} \\
+% \textbf{Physical Activity} & \hypertarget{B4a}{-0.351} & \hypertarget{B4b}{-0.3771} & \hypertarget{B4c}{-0.3249} & $<$\hypertarget{B4d}{1e-06} \\
 % \bottomrule
 % \end{tabular}
 %
@@ -5893,10 +5991,10 @@ as part the Discussion section, not the Results section).
 numeric values in compilation).
 ======================================================================================================================================================
 
-Using GPT4_TURBO (max 128000 tokens) for 5444 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5554 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (5444 tokens):
+CONTEXT TOTAL (5554 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -5904,7 +6002,7 @@ CONTEXT TOTAL (5444 tokens):
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1545 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
 # 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
@@ -5999,10 +6097,10 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [0 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6552 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6662 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6552 tokens):
+CONTEXT TOTAL (6662 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -6010,7 +6108,7 @@ CONTEXT TOTAL (6552 tokens):
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1545 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
 # 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
@@ -6106,10 +6204,10 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [2 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6560 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6670 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6560 tokens):
+CONTEXT TOTAL (6670 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -6117,7 +6215,7 @@ CONTEXT TOTAL (6560 tokens):
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1545 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
 # 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
@@ -6176,10 +6274,10 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [2 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6047 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6157 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6047 tokens):
+CONTEXT TOTAL (6157 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -6187,7 +6285,7 @@ CONTEXT TOTAL (6047 tokens):
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1545 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
 # 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
@@ -6259,8 +6357,8 @@ Please provide a bullet-point list of constructive feedback on the above `Result
 actionable instructions for improvements in bullet points.
 In particular, make sure that the section is correctly grounded in the information provided above.
 If you find any inconsistencies or discrepancies, please mention them explicitly in your feedback.
-Do not suggest adding missing information, or stating whats missing from the displayitems and Numerical Values, only suggest changes that are relevant
-to the Results section itself and that are supported by the given displayitems and Numerical Values.
+Do not suggest adding missing information, or stating whats missing from the displayitems or Numerical Values.
+Only suggest changes that are relevant to the Results section itself and that are supported by the given displayitems and Numerical Values.
 
 Do not suggest changes to the `Results` section that may require data not available in the the displayitems and Numerical Values.
 
@@ -6274,10 +6372,10 @@ IMPORTANT: You should EITHER provide bullet-point feedback, or respond solely wi
 to provide bullet-point feedback then DO NOT include "The `Results` section does not require any changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 4171 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 4181 context tokens and 500 expected tokens.
 [13] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Writer} -> "Writing: Results (other)"  ==========================
 
-CONTEXT TOTAL (4171 tokens):
+CONTEXT TOTAL (4181 tokens):
 # 0    SYSTEM (  71 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -6285,7 +6383,7 @@ CONTEXT TOTAL (4171 tokens):
 # 4 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1260 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 7      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 8 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
 # 9      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
 #10 SURROGATE ( 375 tokens): Thank you for the Additional Results (additional_results.pkl).   Based on the [...] in compilation).
@@ -7072,8 +7170,8 @@ The Abstract should provide a concise, interesting to read, single-paragraph sum
 * short statement of the subject and its importance.
 * description of the research gap/question/motivation.
 * short, non-technical, description of the dataset used and a non-technical explanation of the methodology.
-* summary of each of the main results. It should summarize each key result which is evident from the displyitems, but without referring to specific
-numeric values from the displayitems.
+* summary of each of the main results. Summarize each key result which is evident from the displayitems, but without referring to specific numeric
+values from the displayitems.
 * statement of limitations and implications.
 
 
@@ -7094,10 +7192,10 @@ Your response should be formatted as a triple-backtick "latex" block, like this:
 ```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 5022 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5021 context tokens and 500 expected tokens.
 [19] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5022 tokens):
+CONTEXT TOTAL (5021 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
@@ -7111,7 +7209,7 @@ CONTEXT TOTAL (5022 tokens):
 #10 SURROGATE (  12 tokens): Thank you for the "results"-related literature search.
 #11      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 #12 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-#13      USER ( 345 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
+#13      USER ( 344 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
 
 #14 ASSISTANT ( 263 tokens): latex \title{Lifestyle Determinants of Diabetes: A Quantitative Assessment of [...] \end{abstract}
                                                                                {'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>}
@@ -7161,10 +7259,10 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<18> - <-3> [0 MESSAGES]) -> Writing: Title and Abstract
 
-Using GPT4_TURBO (max 128000 tokens) for 5396 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5395 context tokens and 500 expected tokens.
 [21] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5396 tokens):
+CONTEXT TOTAL (5395 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
@@ -7178,7 +7276,7 @@ CONTEXT TOTAL (5396 tokens):
 #10 SURROGATE (  12 tokens): Thank you for the "results"-related literature search.
 #11      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 #12 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-#13      USER ( 345 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
+#13      USER ( 344 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
 #14 SURROGATE ( 263 tokens): latex \title{Lifestyle Determinants of Diabetes: A Quantitative Assessment of [...] \end{abstract}
 #15      USER ( 110 tokens): # Colon in title Titles of manuscripts in Nature Communications typically do [...] \end{abstract}
 
@@ -7223,10 +7321,10 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<-2> - <-1> [2 MESSAGES]) -> Writing: Title and Abstract
 
-Using GPT4_TURBO (max 128000 tokens) for 5396 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5395 context tokens and 500 expected tokens.
 [21] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5396 tokens):
+CONTEXT TOTAL (5395 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
@@ -7240,7 +7338,7 @@ CONTEXT TOTAL (5396 tokens):
 #10 SURROGATE (  12 tokens): Thank you for the "results"-related literature search.
 #11      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 #12 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-#13      USER ( 345 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
+#13      USER ( 344 tokens): Bases on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
 #14 SURROGATE ( 263 tokens): latex \title{Lifestyle Determinants of Diabetes: A Quantitative Assessment of [...] \end{abstract}
 #15      USER ( 110 tokens): # Colon in title Titles of manuscripts in Nature Communications typically do [...] \end{abstract}
 

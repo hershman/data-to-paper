@@ -1,0 +1,706 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{sectsty}
+\usepackage{graphicx}
+\sectionfont{\Large}
+\subsectionfont{\normalsize}
+\subsubsectionfont{\normalsize}
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttfamily\footnotesize,
+morekeywords={self, import, as, from, if, for, while},              % Add keywords here
+keywordstyle=\color{deepblue},
+stringstyle=\color{deepred},
+commentstyle=\color{cyan},
+breaklines=true,
+escapeinside={(*@}{@*)},            % Define escape delimiters
+postbreak=\mbox{\textcolor{deepgreen}{$\hookrightarrow$}\space},
+showstringspaces=false
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+% Code output style for highlighting
+\newcommand\outputstyle{\lstset{
+    language=,
+    basicstyle=\ttfamily\footnotesize\color{gray},
+    breaklines=true,
+    showstringspaces=false,
+    escapeinside={(*@}{@*)},            % Define escape delimiters
+}}
+
+% Code output environment
+\lstnewenvironment{codeoutput}[1][]
+{
+    \outputstyle
+    \lstset{#1}
+}
+{}
+
+
+\title{Diabetes Risk and Lifestyle Correlates Quantified through National Health Data}
+\author{data-to-paper}
+\begin{document}
+\maketitle
+\begin{abstract}
+The current diabetes epidemic not only compromises individual health but also burdens healthcare systems worldwide. Addressing this condition necessitates the elucidation of modifiable risk factors to inform effective intervention strategies. This study bridges the knowledge gap by quantifying the impact of lifestyle factors on diabetes prevalence. Capitalizing on data from the CDC's Behavioral Risk Factor Surveillance System, our analysis encompasses a cohort of more than 250,000 Americans, focusing on key health-related behaviors and conditions. The method involves univariate and multivariate logistic regression analyses to unpack the individual and aggregate contributions of blood pressure, cholesterol, stroke history, body mass index, and physical activity to diabetes susceptibility. Results reveal significant and differential impacts of health indicators on diabetes risks, with physical activity conferring a protective effect. The robustness of these associations persists after demographic adjustments, cementing the direct relevance of these lifestyle factors to diabetes. Self-reporting in data collection is an acknowledged limitation that might bias the findings. Nevertheless, our results highlight actionable health domains and reinforce the imperative for targeted public health initiatives. The findings advance our understanding of diabetes pathogenesis and support the prioritization of lifestyle modifications in prevention efforts.
+\end{abstract}
+\section*{Introduction}
+
+The burden of diabetes, a multifactorial disorder detrimental to individual and societal health, continues to surge across the globe \cite{Lam2012TheWD}. With diabetes impacting a significant proportion of the population and posing immense social and economic challenges, it is vital to characterize the disease's key attributes and risk factors \cite{Singh2013TheAQ, Wu2014RiskFC}. In particular, lifestyle determinants such as dietary habits, physical activity, and body mass index (BMI) have shown substantial influences on the genesis and progression of diabetes \cite{Wang2021TrendsIP, Bi2012AdvancedRO}. Efforts to quantify the effect of these modifiable risk factors on diabetes susceptibility are crucial for refining intervention strategies and mitigating the diabetes epidemic.
+
+Existing studies have delineated the individual roles of health-related behaviors, such as physical activity and dietary patterns, in diabetes pathogenesis \cite{Ng2019SmokingDD, Kodama2013AssociationBP}. However, the collective impact of lifestyle factors, assessed concurrently rather than in isolation, is underexplored, leaving a significant gap in our understanding of the diabetes risk landscape. Furthermore, the complex interplay between these risk factors under different demographic contexts remains unclear \cite{Hjerkind2017AdiposityPA, Bays2007TheRO, Shostrom2017HistoryOG}. A comprehensive evaluation of the joint influence of critical health indicators on diabetes incidence, within diverse demographic settings, is hence timely and of immense relevance.
+
+Our study confronts this gap by leveraging data from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), a national health-related telephone survey that annually aggregates responses from over 400,000 Americans \cite{Preedy1989BehavioralRF, Merrick2018PrevalenceOA}. By analyzing this notably vast sample size, our study interrogates the interdependent roles of blood pressure, cholesterol, stroke history, BMI, and physical activity in diabetes development. This dataset provides a thorough demographic representation, thereby enabling a nuanced understanding of the differentially weighted impacts of these variables on diabetes risk across diverse population strata \cite{Mirbolouk2018PrevalenceAD, Heslin2021SexualOD}.
+
+We apply univariate and multivariate logistic regression models to dissect the individual and cumulative contributions of these health indicators to diabetes prevalence \cite{Fernandez2004MultivariateAO}. Our findings reveal significant and differential impacts of lifestyle factors on diabetes risk and further underscore the protective effect of physical activity. This work contributes to deepening our understanding of the pathogenesis of diabetes and its correlation with lifestyle modifications.
+
+\section*{Results}
+
+First, to understand whether individual health indicators exhibit a direct association with diabetes, univariate logistic regression analyses were conducted for each risk factor. Within a large sample of \hyperlink{R0a}{253,680} participants, univariate logistic regression revealed that each investigated variable was statistically significant. High blood pressure, high cholesterol, stroke, and body mass index were positively associated with the likelihood of diabetes with coefficients of \hyperlink{A0a}{1.617}, \hyperlink{A1a}{1.18}, \hyperlink{A2a}{1.12}, and \hyperlink{A3a}{0.0786} respectively as demonstrated in Figure \ref{figure:Unadjusted_Coefficients}. Physical activity presented a negative association, implying a protective effect against diabetes development with a coefficient of \hyperlink{A4a}{-0.7134}.
+
+% This latex displayitem was generated from: `df_1.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df_1.png}
+\caption{\protect\hyperlink{file-df-1-pkl}{Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable}
+High Blood Pressure: High Blood Pressure (0=no, 1=yes). 
+High Cholesterol: High Cholesterol (0=no, 1=yes). 
+Stroke: Stroke (0=no, 1=yes). 
+Body Mass Index: Body Mass Index. 
+Physical Activity: Physical Activity in past 30 days (0=no, 1=yes). 
+CI Lower Bound: 95\% Confidence Interval. 
+CI Upper Bound: 95\% Confidence Interval. 
+Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
+\label{figure:Unadjusted_Coefficients}
+\end{figure}
+% This latex figure presents "df_1.png" which was created from the following df:
+% 
+% \begin{tabular}{lrrrl}
+% \toprule
+%  & Unadjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Unadjusted \\
+% \midrule
+% \textbf{High Blood Pressure} & \raisebox{2ex}{\hypertarget{A0a}{}}1.617 & \raisebox{2ex}{\hypertarget{A0b}{}}1.591 & \raisebox{2ex}{\hypertarget{A0c}{}}1.643 & $<$\raisebox{2ex}{\hypertarget{A0d}{}}$10^{-6}$ \\
+% \textbf{High Cholesterol} & \raisebox{2ex}{\hypertarget{A1a}{}}1.18 & \raisebox{2ex}{\hypertarget{A1b}{}}1.156 & \raisebox{2ex}{\hypertarget{A1c}{}}1.204 & $<$\raisebox{2ex}{\hypertarget{A1d}{}}$10^{-6}$ \\
+% \textbf{Stroke} & \raisebox{2ex}{\hypertarget{A2a}{}}1.12 & \raisebox{2ex}{\hypertarget{A2b}{}}1.077 & \raisebox{2ex}{\hypertarget{A2c}{}}1.163 & $<$\raisebox{2ex}{\hypertarget{A2d}{}}$10^{-6}$ \\
+% \textbf{Body Mass Index} & \raisebox{2ex}{\hypertarget{A3a}{}}0.0786 & \raisebox{2ex}{\hypertarget{A3b}{}}0.077 & \raisebox{2ex}{\hypertarget{A3c}{}}0.08019 & $<$\raisebox{2ex}{\hypertarget{A3d}{}}$10^{-6}$ \\
+% \textbf{Physical Activity} & \raisebox{2ex}{\hypertarget{A4a}{}}-0.7134 & \raisebox{2ex}{\hypertarget{A4b}{}}-0.7372 & \raisebox{2ex}{\hypertarget{A4c}{}}-0.6896 & $<$\raisebox{2ex}{\hypertarget{A4d}{}}$10^{-6}$ \\
+% \bottomrule
+% \end{tabular}
+% 
+% 
+% To create the figure, this df was plotted with the following command:
+% 
+% df.plot(**{'kind': 'bar', 'y': 'Unadjusted Coefficient'})
+% 
+% Confidence intervals for y-values were then plotted based on column: ('CI Lower Bound', 'CI Upper Bound').
+% 
+% P-values for y-values were taken from column: 'P-value Unadjusted'.
+% 
+% These p-values were presented above the data points as stars:
+% NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
+
+Then, to examine the influence of these factors while controlling for confounding variables, we performed multivariate logistic regression accounting for age and sex. After adjustment, Figure \ref{figure:Adjusted_Coefficients} indicates that the variables maintained their directional influence on diabetes prevalence with updated coefficients: High blood pressure (\hyperlink{B0a}{0.9799}), high cholesterol (\hyperlink{B1a}{0.6891}), stroke (\hyperlink{B2a}{0.5472}), and BMI (\hyperlink{B3a}{0.07242}) each remained positively associated with diabetes; physical activity (\hyperlink{B4a}{-0.351}) continued demonstrating a protective relationship. All findings were statistically significant.
+
+% This latex displayitem was generated from: `df_2.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df_2.png}
+\caption{\protect\hyperlink{file-df-2-pkl}{Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable}
+High Blood Pressure: High Blood Pressure (0=no, 1=yes). 
+High Cholesterol: High Cholesterol (0=no, 1=yes). 
+Stroke: Stroke (0=no, 1=yes). 
+Body Mass Index: Body Mass Index. 
+Physical Activity: Physical Activity in past 30 days (0=no, 1=yes). 
+CI Lower Bound: 95\% Confidence Interval. 
+CI Upper Bound: 95\% Confidence Interval. 
+Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
+\label{figure:Adjusted_Coefficients}
+\end{figure}
+% This latex figure presents "df_2.png" which was created from the following df:
+% 
+% \begin{tabular}{lrrrl}
+% \toprule
+%  & Adjusted Coefficient & CI Lower Bound & CI Upper Bound & P-value Adjusted \\
+% \midrule
+% \textbf{High Blood Pressure} & \raisebox{2ex}{\hypertarget{B0a}{}}0.9799 & \raisebox{2ex}{\hypertarget{B0b}{}}0.9518 & \raisebox{2ex}{\hypertarget{B0c}{}}1.008 & $<$\raisebox{2ex}{\hypertarget{B0d}{}}$10^{-6}$ \\
+% \textbf{High Cholesterol} & \raisebox{2ex}{\hypertarget{B1a}{}}0.6891 & \raisebox{2ex}{\hypertarget{B1b}{}}0.6633 & \raisebox{2ex}{\hypertarget{B1c}{}}0.7149 & $<$\raisebox{2ex}{\hypertarget{B1d}{}}$10^{-6}$ \\
+% \textbf{Stroke} & \raisebox{2ex}{\hypertarget{B2a}{}}0.5472 & \raisebox{2ex}{\hypertarget{B2b}{}}0.5005 & \raisebox{2ex}{\hypertarget{B2c}{}}0.5938 & $<$\raisebox{2ex}{\hypertarget{B2d}{}}$10^{-6}$ \\
+% \textbf{Body Mass Index} & \raisebox{2ex}{\hypertarget{B3a}{}}0.07242 & \raisebox{2ex}{\hypertarget{B3b}{}}0.07068 & \raisebox{2ex}{\hypertarget{B3c}{}}0.07416 & $<$\raisebox{2ex}{\hypertarget{B3d}{}}$10^{-6}$ \\
+% \textbf{Physical Activity} & \raisebox{2ex}{\hypertarget{B4a}{}}-0.351 & \raisebox{2ex}{\hypertarget{B4b}{}}-0.3771 & \raisebox{2ex}{\hypertarget{B4c}{}}-0.3249 & $<$\raisebox{2ex}{\hypertarget{B4d}{}}$10^{-6}$ \\
+% \bottomrule
+% \end{tabular}
+% 
+% 
+% To create the figure, this df was plotted with the following command:
+% 
+% df.plot(**{'kind': 'bar', 'y': 'Adjusted Coefficient'})
+% 
+% Confidence intervals for y-values were then plotted based on column: ('CI Lower Bound', 'CI Upper Bound').
+% 
+% P-values for y-values were taken from column: 'P-value Adjusted'.
+% 
+% These p-values were presented above the data points as stars:
+% NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
+
+Finally, the goodness of fit for the multivariate model was assessed by the log-likelihood statistic, which yielded a value of \hyperlink{R1a}{$-8.598\ 10^{4}$}, suggesting an adequate fit of the proposed model for the relationship between lifestyle indicators and diabetes within the analyzed population.
+
+In summary, the results indicate that high blood pressure, high cholesterol, stroke, and higher BMI are associated with increased diabetes risk, while physical activity is inversely associated, even after controlling for age and sex. The prevalence of diabetes in the study's cohort underlines the significance of lifestyle and health indicators in understanding the disease.
+
+\section*{Discussion}
+
+This study interrogates the influence of health-related lifestyle factors on the prevalence of diabetes, an escalating public health concern with multifactorial underpinnings \cite{Lam2012TheWD, Singh2013TheAQ}. Using a dataset from the CDC's BRFSS that encompasses substantial demographic diversity, we focused on the contributions of blood pressure, cholesterol, stroke history, body mass index, and physical activity to diabetes incidence \cite{Wang2021TrendsIP, Bi2012AdvancedRO}.
+
+Our univariate and multivariate logistic regression analyses divulged significant associations of the investigated health indicators with diabetes prevalence. Consistent with previous research \cite{Ng2019SmokingDD, Bays2007TheRO}, we found that high blood pressure, high cholesterol, stroke, and higher BMI increased the likelihood of diabetes. Conversely, physical activity was inversely associated with diabetes risk. These relationships were robust against adjustments for age and sex, thereby fortifying the roles of these lifestyle factors in diabetes pathogenesis \cite{Kodama2013AssociationBP, Hjerkind2017AdiposityPA}.
+
+The comprehensive nature of the BRFSS dataset enabled us to simultaneously examine these factors' impacts, offering a more nuanced understanding of their conglomerate influence. This represents an advance over many previous studies which often focus on independent effects of singular factors \cite{Stamler1993DiabetesOR, Chan1994ObesityFD}. Thus, our findings underscore the merit of considering the interplay of multiple lifestyle dimensions in predicting diabetes risk and developing targeted intervention strategies.
+
+However, we note several limitations in our study. Despite the expansive BRFSS dataset, its foundation on self-reported measures may introduce bias, which could affect the validity of observed associations. Additionally, our research design is cross-sectional, limiting our ability to infer causal relationships between the examined factors and diabetes incidence.
+
+In conclusion, our study substantively contributes to the broader understanding of diabetes etiology. By illuminating the complex interplay between various lifestyle factors, it substantiates the necessity for comprehensive, multimodal lifestyle interventions to curb the diabetes epidemic. Implications of this research for clinical practice and public health policy highlight the importance of promoting physical activity and effectively managing health indicators like blood pressure, cholesterol levels, and BMI to mitigate diabetes risk. Future research directions could be longitudinal studies to validate the observed associations and interventions aiming at these lifestyle factors to assess their efficacy in decreasing diabetes prevalence.
+
+\section*{Methods}
+
+\subsection*{Data Source}
+The dataset utilized for this analysis was derived from the CDC's Behavioral Risk Factor Surveillance System (BRFSS) for the year 2015. BRFSS is a comprehensive telephone survey that collects data from over 400,000 Americans annually, pertaining to health-related risk behaviors, chronic health conditions, and use of preventive services. The distilled dataset employed here summarizes responses from 253,680 individuals and encompasses 22 health-related variables, including binary outcomes for diabetes, high blood pressure, and high cholesterol, as well as continuous variables representing body mass index and self-reported numbers of days of impaired physical and mental health.
+
+\subsection*{Data Preprocessing}
+Preprocessing of the dataset was minimal due to the comprehensive nature of data collection and cleaning undertaken at the source. The dataset did not require further cleaning or preprocessing steps ahead of analysis, with missing values already addressed prior to its compilation. All variables included in the dataset were directly used for the forthcoming regression analyses, poising the dataset as a decisive resource for the evaluation of various health indicators and their respective association with diabetes.
+
+\subsection*{Data Analysis}
+The statistical analysis of the dataset was tailored to determine the individual and collective impact of selected lifestyle and health factors on the prevalence of diabetes. The approach included both univariate and multivariate logistic regression models. Initially, each variable of interest (blood pressure, cholesterol, stroke history, body mass index, and physical activity) was independently assessed for its correlation with diabetes status using a series of univariate logistic regression models. This provided an initial insight into the potential relevance of each factor when considered in isolation. Then, a comprehensive multivariate logistic regression model was constructed to evaluate the joint effect of these health indicators, while also adjusting for confounding factors such as age and gender. This approach delineated the relative contribution of each variable to the predicted probability of diabetes, offering a rigorous examination of the interplay between various health determinants and diabetic outcomes within the studied population. The model's goodness-of-fit was also evaluated, providing a quantitative measure of its descriptive capacity in relation to the observed data.\subsection*{Code Availability}
+
+Custom code used to perform the data preprocessing and analysis, as well as the raw code outputs, are provided in Supplementary Methods.
+
+
+\bibliographystyle{unsrt}
+\bibliography{citations}
+
+
+\clearpage
+\appendix
+
+\section{Data Description} \label{sec:data_description} Here is the data description, as provided by the user:
+
+\begin{codeoutput}
+\#\# General Description
+(*@\raisebox{2ex}{\hypertarget{S}{}}@*)The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year (*@\raisebox{2ex}{\hypertarget{S0a}{}}@*)2015.
+The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
+Each year, the survey collects responses from over (*@\raisebox{2ex}{\hypertarget{S1a}{}}@*)400,000 Americans on health-related risk behaviors, chronic health conditions, and the use of preventative services. These features are either questions directly asked of participants, or calculated variables based on individual participant responses.
+
+\#\# Data Files
+The dataset consists of 1 data file:
+
+\#\#\# "diabetes\_binary\_health\_indicators\_BRFSS2015.csv"
+(*@\raisebox{2ex}{\hypertarget{T}{}}@*)The csv file is a clean dataset of (*@\raisebox{2ex}{\hypertarget{T0a}{}}@*)253,680 responses (rows) and (*@\raisebox{2ex}{\hypertarget{T0b}{}}@*)22 features (columns).
+All rows with missing values were removed from the original dataset; the current file contains no missing values.
+
+The columns in the dataset are:
+
+\#1 `Diabetes\_binary`: (int, bool) Diabetes ((*@\raisebox{2ex}{\hypertarget{T1a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T1b}{}}@*)1=yes)
+\#2 `HighBP`: (int, bool) High Blood Pressure ((*@\raisebox{2ex}{\hypertarget{T2a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T2b}{}}@*)1=yes)
+\#3 `HighChol`: (int, bool) High Cholesterol ((*@\raisebox{2ex}{\hypertarget{T3a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T3b}{}}@*)1=yes)
+\#4 `CholCheck`: (int, bool) Cholesterol check in (*@\raisebox{2ex}{\hypertarget{T4a}{}}@*)5 years ((*@\raisebox{2ex}{\hypertarget{T4b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T4c}{}}@*)1=yes)
+\#5 `BMI`: (int, numerical) Body Mass Index
+\#6 `Smoker`: (int, bool) ((*@\raisebox{2ex}{\hypertarget{T5a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T5b}{}}@*)1=yes)
+\#7 `Stroke`: (int, bool) Stroke ((*@\raisebox{2ex}{\hypertarget{T6a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T6b}{}}@*)1=yes)
+\#8 `HeartDiseaseorAttack`: (int, bool) coronary heart disease (CHD) or myocardial infarction (MI), ((*@\raisebox{2ex}{\hypertarget{T7a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T7b}{}}@*)1=yes)
+\#9 `PhysActivity`: (int, bool) Physical Activity in past (*@\raisebox{2ex}{\hypertarget{T8a}{}}@*)30 days ((*@\raisebox{2ex}{\hypertarget{T8b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T8c}{}}@*)1=yes)
+\#10 `Fruits`: (int, bool) Consume one fruit or more each day ((*@\raisebox{2ex}{\hypertarget{T9a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T9b}{}}@*)1=yes)
+\#11 `Veggies`: (int, bool) Consume one Vegetable or more each day ((*@\raisebox{2ex}{\hypertarget{T10a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T10b}{}}@*)1=yes)
+\#12 `HvyAlcoholConsump` (int, bool) Heavy drinkers ((*@\raisebox{2ex}{\hypertarget{T11a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T11b}{}}@*)1=yes)
+\#13 `AnyHealthcare` (int, bool) Have any kind of health care coverage ((*@\raisebox{2ex}{\hypertarget{T12a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T12b}{}}@*)1=yes)
+\#14 `NoDocbcCost` (int, bool) Was there a time in the past (*@\raisebox{2ex}{\hypertarget{T13a}{}}@*)12 months when you needed to see a doctor but could not because of cost? ((*@\raisebox{2ex}{\hypertarget{T13b}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T13c}{}}@*)1=yes)
+\#15 `GenHlth` (int, ordinal) self-reported health ((*@\raisebox{2ex}{\hypertarget{T14a}{}}@*)1=excellent, (*@\raisebox{2ex}{\hypertarget{T14b}{}}@*)2=very good, (*@\raisebox{2ex}{\hypertarget{T14c}{}}@*)3=good, (*@\raisebox{2ex}{\hypertarget{T14d}{}}@*)4=fair, (*@\raisebox{2ex}{\hypertarget{T14e}{}}@*)5=poor)
+\#16 `MentHlth` (int, ordinal) How many days during the past (*@\raisebox{2ex}{\hypertarget{T15a}{}}@*)30 days was your mental health not good? ((*@\raisebox{2ex}{\hypertarget{T15b}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T15c}{}}@*)30 days)
+\#17 `PhysHlth` (int, ordinal) Hor how many days during the past (*@\raisebox{2ex}{\hypertarget{T16a}{}}@*)30 days was your physical health not good? ((*@\raisebox{2ex}{\hypertarget{T16b}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T16c}{}}@*)30 days)
+\#18 `DiffWalk` (int, bool) Do you have serious difficulty walking or climbing stairs? ((*@\raisebox{2ex}{\hypertarget{T17a}{}}@*)0=no, (*@\raisebox{2ex}{\hypertarget{T17b}{}}@*)1=yes)
+\#19 `Sex` (int, categorical) Sex ((*@\raisebox{2ex}{\hypertarget{T18a}{}}@*)0=female, (*@\raisebox{2ex}{\hypertarget{T18b}{}}@*)1=male)
+\#20 `Age` (int, ordinal) Age, (*@\raisebox{2ex}{\hypertarget{T19a}{}}@*)13-level age category in intervals of (*@\raisebox{2ex}{\hypertarget{T19b}{}}@*)5 years ((*@\raisebox{2ex}{\hypertarget{T19c}{}}@*)1= (*@\raisebox{2ex}{\hypertarget{T19d}{}}@*)18 - (*@\raisebox{2ex}{\hypertarget{T19e}{}}@*)24, (*@\raisebox{2ex}{\hypertarget{T19f}{}}@*)2= (*@\raisebox{2ex}{\hypertarget{T19g}{}}@*)25 - (*@\raisebox{2ex}{\hypertarget{T19h}{}}@*)29, ..., (*@\raisebox{2ex}{\hypertarget{T19i}{}}@*)12= (*@\raisebox{2ex}{\hypertarget{T19j}{}}@*)75 - (*@\raisebox{2ex}{\hypertarget{T19k}{}}@*)79, (*@\raisebox{2ex}{\hypertarget{T19l}{}}@*)13 = (*@\raisebox{2ex}{\hypertarget{T19m}{}}@*)80 or older)
+\#21 `Education` (int, ordinal) Education level on a scale of (*@\raisebox{2ex}{\hypertarget{T20a}{}}@*)1 - (*@\raisebox{2ex}{\hypertarget{T20b}{}}@*)6 ((*@\raisebox{2ex}{\hypertarget{T20c}{}}@*)1=Never attended school, (*@\raisebox{2ex}{\hypertarget{T20d}{}}@*)2=Elementary, (*@\raisebox{2ex}{\hypertarget{T20e}{}}@*)3=Some high school, (*@\raisebox{2ex}{\hypertarget{T20f}{}}@*)4=High school, (*@\raisebox{2ex}{\hypertarget{T20g}{}}@*)5=Some college, (*@\raisebox{2ex}{\hypertarget{T20h}{}}@*)6=College)
+\#22 `Income` (int, ordinal) Income scale on a scale of (*@\raisebox{2ex}{\hypertarget{T21a}{}}@*)1 to (*@\raisebox{2ex}{\hypertarget{T21b}{}}@*)8 ((*@\raisebox{2ex}{\hypertarget{T21c}{}}@*)1= $<$=(*@\raisebox{2ex}{\hypertarget{T21d}{}}@*)10K, (*@\raisebox{2ex}{\hypertarget{T21e}{}}@*)2= $<$=(*@\raisebox{2ex}{\hypertarget{T21f}{}}@*)15K, (*@\raisebox{2ex}{\hypertarget{T21g}{}}@*)3= $<$=(*@\raisebox{2ex}{\hypertarget{T21h}{}}@*)20K, (*@\raisebox{2ex}{\hypertarget{T21i}{}}@*)4= $<$=(*@\raisebox{2ex}{\hypertarget{T21j}{}}@*)25K, (*@\raisebox{2ex}{\hypertarget{T21k}{}}@*)5= $<$=(*@\raisebox{2ex}{\hypertarget{T21l}{}}@*)35K, (*@\raisebox{2ex}{\hypertarget{T21m}{}}@*)6= $<$=(*@\raisebox{2ex}{\hypertarget{T21n}{}}@*)50K, (*@\raisebox{2ex}{\hypertarget{T21o}{}}@*)7= $<$=(*@\raisebox{2ex}{\hypertarget{T21p}{}}@*)75K, (*@\raisebox{2ex}{\hypertarget{T21q}{}}@*)8= $>$75K)
+
+
+\end{codeoutput}
+
+\section{Data Exploration}
+\subsection{{Code}}
+The Data Exploration was carried out using the following custom code:
+
+\begin{python}
+
+import pandas as pd
+
+# Load the data
+data = pd.read_csv("diabetes_binary_health_indicators_BRFSS2015.csv")
+
+# Open the output file
+(*@\raisebox{2ex}{\hypertarget{code-Data Exploration-data-exploration-txt}{}}@*)with open('data_exploration.txt', 'w') as f:
+
+    # Data Size
+    f.write('# Data Size\n')
+    f.write('Number of rows: {}\n'.format(data.shape[0]))
+    f.write('Number of columns: {}\n'.format(data.shape[1]))
+    f.write('\n')
+
+    # Summary Statistics
+    f.write('# Summary Statistics\n')
+    f.write(str(data.describe()))
+    f.write('\n\n')
+
+    # Categorical Variables
+    f.write('# Categorical Variables\n')
+    categorical_cols = data.select_dtypes(include=['object']).columns
+    for col in categorical_cols:
+        f.write('Column Name: {}\n'.format(col))
+        f.write('Most Common Value: {}\n'.format(data[col].mode()[0]))
+    if categorical_cols.size == 0:
+        f.write('Not Applicable\n')
+    f.write('\n')
+
+    # Missing Values
+    f.write('# Missing Values\n')
+    missing_values = data.isnull().sum()
+    n_missing_values = missing_values.sum()
+    if n_missing_values == 0:
+        f.write('No missing values')
+    else:
+        f.write(str(missing_values))
+    f.write('\n\n')
+
+\end{python}
+
+\subsection{Code Description}
+
+The provided code performs data exploration on the given dataset. It starts by loading the dataset into a pandas DataFrame. The code then proceeds to perform several analysis steps and writes the results into an output file named "data\_exploration.txt".
+
+First, the code calculates the size of the dataset by writing the number of rows and columns into the output file. This provides an initial understanding of the dataset's dimensions.
+
+Next, the code generates summary statistics for the dataset using the "describe()" function of pandas. These statistics include count, mean, standard deviation, minimum, 25th percentile, median, 75th percentile, and maximum for each numerical column. The code writes these summary statistics into the output file.
+
+After that, the code identifies and analyzes the categorical variables in the dataset. It selects columns that contain categorical data using the "select\_dtypes()" function with the 'object' parameter. For each categorical column, the code writes the column name and the most common value (mode) into the output file. If there are no categorical variables in the dataset, the code writes "Not Applicable" in the output file.
+
+Lastly, the code checks for missing values in the dataset. It uses the "isnull()" function to identify the missing values and the "sum()" function to count the total number of missing values. If there are no missing values, the code writes "No missing values" in the output file. Otherwise, it writes the number of missing values for each column in the dataset.
+
+Overall, the code performs data exploration by providing insights into the size of the dataset, generating summary statistics, analyzing categorical variables, and identifying missing values. The results are written into the "data\_exploration.txt" file for further analysis and interpretation.
+
+\subsection{Code Output}\hypertarget{file-data-exploration-txt}{}
+
+\subsubsection*{\hyperlink{code-Data Exploration-data-exploration-txt}{data\_exploration.txt}}
+
+\begin{codeoutput}
+\# Data Size
+Number of rows: 253680
+Number of columns: 22
+
+\# Summary Statistics
+      Diabetes\_binary HighBP HighChol CholCheck    BMI Smoker  Stroke HeartDiseaseorAttack PhysActivity Fruits Veggies HvyAlcoholConsump AnyHealthcare NoDocbcCost GenHlth MentHlth PhysHlth DiffWalk    Sex    Age Education Income
+count          253680 253680   253680    253680 253680 253680  253680               253680       253680 253680  253680            253680        253680      253680  253680   253680   253680   253680 253680 253680    253680 253680
+mean           0.1393  0.429   0.4241    0.9627  28.38 0.4432 0.04057              0.09419       0.7565 0.6343  0.8114            0.0562        0.9511     0.08418   2.511    3.185    4.242   0.1682 0.4403  8.032      5.05  6.054
+std            0.3463 0.4949   0.4942    0.1896  6.609 0.4968  0.1973               0.2921       0.4292 0.4816  0.3912            0.2303        0.2158      0.2777   1.068    7.413    8.718   0.3741 0.4964  3.054    0.9858  2.071
+min                 0      0        0         0     12      0       0                    0            0      0       0                 0             0           0       1        0        0        0      0      1         1      1
+25\%                 0      0        0         1     24      0       0                    0            1      0       1                 0             1           0       2        0        0        0      0      6         4      5
+50\%                 0      0        0         1     27      0       0                    0            1      1       1                 0             1           0       2        0        0        0      0      8         5      7
+75\%                 0      1        1         1     31      1       0                    0            1      1       1                 0             1           0       3        2        3        0      1     10         6      8
+max                 1      1        1         1     98      1       1                    1            1      1       1                 1             1           1       5       30       30        1      1     13         6      8
+
+\# Categorical Variables
+Not Applicable
+
+\# Missing Values
+No missing values
+\end{codeoutput}
+
+\section{Data Analysis}
+\subsection{{Code}}
+The Data Analysis was carried out using the following custom code:
+
+\begin{python}
+
+# IMPORT
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from scipy import stats
+import pickle
+
+# LOAD DATA
+df = pd.read_csv("diabetes_binary_health_indicators_BRFSS2015.csv")
+
+# DATASET PREPARATIONS
+# No dataset preparations are needed.
+
+# DESCRIPTIVE STATISTICS
+# No descriptive statistics table is needed.
+
+# PREPROCESSING
+# No preprocessing is needed, because the existing variables are sufficient and well-defined.
+
+# ANALYSIS
+# Include additional variables in the analysis
+variables = ["HighBP", "HighChol", "Stroke", "BMI", "PhysActivity"]
+
+## Univariate logistic regression for each variable
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-df-1-pkl}{}}@*)## DF 1: Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values 
+df1 = pd.DataFrame(columns=["Unadjusted_Coeff", "CI_Lower_Bound", "CI_Upper_Bound", "P-Value_Unadjusted"])
+for var in variables:
+    model_unadjusted = smf.logit(formula="Diabetes_binary ~ " + var, data=df).fit()
+    df1.loc[var] = [model_unadjusted.params[var], model_unadjusted.conf_int().loc[var][0], model_unadjusted.conf_int().loc[var][1], model_unadjusted.pvalues[var]]
+df1.to_pickle('df_1.pkl')
+
+## Multivariate logistic regression for the variables, accounting for Age and Sex
+model_vars = " + ".join(variables) + " + Age + Sex"
+adjusted_model = smf.logit(formula="Diabetes_binary ~ " + model_vars, data=df).fit()
+
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-df-2-pkl}{}}@*)## DF 2: Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values
+df2 = pd.DataFrame(columns=["Adjusted_Coeff", "CI_Lower_Bound", "CI_Upper_Bound", "P-Value_Adjusted"])
+for var in variables:
+    df2.loc[var] = [adjusted_model.params[var], adjusted_model.conf_int().loc[var][0], adjusted_model.conf_int().loc[var][1], adjusted_model.pvalues[var]]
+df2.to_pickle('df_2.pkl')
+
+(*@\raisebox{2ex}{\hypertarget{code-Data Analysis-additional-results-pkl}{}}@*)# SAVE ADDITIONAL RESULTS
+additional_results = {
+    'Total number of observations': len(df), 
+    'Goodness of fit of multivariable model': adjusted_model.llf
+}
+
+with open('additional_results.pkl', 'wb') as f:
+    pickle.dump(additional_results, f)  
+
+\end{python}
+
+\subsection{Code Description}
+
+The presented Python script executes a statistical examination of a dataset consisting of various health indicators related to diabetes. At the core of the analysis are two regression methodologies employed to discern the relationship between diabetes and selected predictor variables.
+
+Primarily, univariate logistic regression models are individually constructed for a subset of predictors: high blood pressure (HighBP), high cholesterol (HighChol), stroke, Body Mass Index (BMI), and physical activity (PhysActivity). Each model quantifies the effect of one predictor on the likelihood of having diabetes, yielding unadjusted coefficients, confidence intervals, and p-values. The outcomes of these univariate analyses are synthesized into a Pandas DataFrame (df1) for subsequent documentation.
+
+Subsequently, multivariate logistic regression is applied to integrate the influence of all selected predictors while adjusting for age and gender. This comprehensive approach allows for the assessment of each variable's contribution to the probability of diabetes occurrence while accounting for possible confounding effects of the controlled covariates. Adjusted coefficients, confidence intervals, and p-values from this analysis are aggregated into another DataFrame (df2).
+
+In the culmination of the process, auxiliary results comprising the model's goodness-of-fit statistic (likelihood function value) and the total sample size are preserved. These are serialized into a pickle file named "additional\_results.pkl," which encapsulates the overall fit quality of the multivariate model and contextual details of the dataset under study.
+
+\subsection{Code Output}\hypertarget{file-df-1-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-df-1-pkl}{df\_1.pkl}}
+
+\begin{codeoutput}
+             Unadjusted\_Coeff CI\_Lower\_Bound CI\_Upper\_Bound P-Value\_Unadjusted
+HighBP                  1.617          1.591          1.643                  0
+HighChol                 1.18          1.156          1.204                  0
+Stroke                   1.12          1.077          1.163                  0
+BMI                    0.0786          0.077        0.08019                  0
+PhysActivity          -0.7134        -0.7372        -0.6896                  0
+\end{codeoutput}\hypertarget{file-df-2-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-df-2-pkl}{df\_2.pkl}}
+
+\begin{codeoutput}
+             Adjusted\_Coeff CI\_Lower\_Bound CI\_Upper\_Bound P-Value\_Adjusted
+HighBP               0.9799         0.9518          1.008                0
+HighChol             0.6891         0.6633         0.7149                0
+Stroke               0.5472         0.5005         0.5938        5.96e-117
+BMI                 0.07242        0.07068        0.07416                0
+PhysActivity         -0.351        -0.3771        -0.3249        7.46e-153
+\end{codeoutput}\hypertarget{file-additional-results-pkl}{}
+
+\subsubsection*{\hyperlink{code-Data Analysis-additional-results-pkl}{additional\_results.pkl}}
+
+\begin{codeoutput}
+{
+    'Total number of observations': (*@\raisebox{2ex}{\hypertarget{R0a}{}}@*)253680,
+    'Goodness of fit of multivariable model': (*@\raisebox{2ex}{\hypertarget{R1a}{}}@*)-8.598e+04        ,
+}
+\end{codeoutput}
+
+\section{LaTeX Table Design}
+\subsection{{Code}}
+The LaTeX Table Design was carried out using the following custom code:
+
+\begin{python}
+
+# IMPORT
+import pandas as pd
+from my_utils import to_latex_with_note, to_figure_with_note, is_str_in_df, split_mapping, AbbrToNameDef
+
+# PREPARATION FOR ALL TABLES AND FIGURES
+shared_mapping: AbbrToNameDef = {
+    "HighBP": ("High Blood Pressure", "High Blood Pressure (0=no, 1=yes)"),
+    "HighChol": ("High Cholesterol", "High Cholesterol (0=no, 1=yes)"),
+    "Stroke": ("Stroke", "Stroke (0=no, 1=yes)"),
+    "BMI": ("Body Mass Index", "Body Mass Index"),
+    "PhysActivity": ("Physical Activity", "Physical Activity in past 30 days (0=no, 1=yes)")
+}
+
+(*@\raisebox{2ex}{\hypertarget{code-LaTeX Table Design-df-1-tex}{}}@*)# DF 1
+df1 = pd.read_pickle('df_1.pkl')
+
+# Format values:
+# Not Applicable
+
+# Rename rows and columns:
+mapping1 = dict((k, v) for k, v in shared_mapping.items() if is_str_in_df(df1, k)) 
+mapping1 |= {
+    'Unadjusted_Coeff': ('Unadjusted Coefficient', None),
+    'CI_Lower_Bound':   ('CI Lower Bound', '95% Confidence Interval'),
+    'CI_Upper_Bound':   ('CI Upper Bound', '95% Confidence Interval'),
+    'P-Value_Unadjusted': ('P-value Unadjusted', None),
+}
+abbrs_to_names1, glossary1 = split_mapping(mapping1)
+df1 = df1.rename(columns=abbrs_to_names1, index=abbrs_to_names1)
+
+# Create latex figure:
+to_figure_with_note(
+    df1, 'df_1.tex',
+    caption="Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable", 
+    label='figure:Unadjusted_Coefficients',
+    note=None,
+    glossary=glossary1,
+    kind='bar',
+    y='Unadjusted Coefficient',
+    y_ci=('CI Lower Bound', 'CI Upper Bound'), 
+    y_p_value='P-value Unadjusted'
+)
+
+(*@\raisebox{2ex}{\hypertarget{code-LaTeX Table Design-df-2-tex}{}}@*)# DF 2
+df2 = pd.read_pickle('df_2.pkl')
+
+# Format values:
+# Not Applicable
+
+# Rename rows and columns:
+mapping2 = dict((k, v) for k, v in shared_mapping.items() if is_str_in_df(df2, k)) 
+mapping2 |= {
+    'Adjusted_Coeff': ('Adjusted Coefficient', None),
+    'CI_Lower_Bound':   ('CI Lower Bound', '95% Confidence Interval'),
+    'CI_Upper_Bound':   ('CI Upper Bound', '95% Confidence Interval'),
+    'P-Value_Adjusted': ('P-value Adjusted', None),
+}
+abbrs_to_names2, glossary2 = split_mapping(mapping2)
+df2 = df2.rename(columns=abbrs_to_names2, index=abbrs_to_names2)
+
+# Create latex figure:
+to_figure_with_note(
+    df2, 'df_2.tex',
+    caption="Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable", 
+    label='figure:Adjusted_Coefficients',
+    note=None,
+    glossary=glossary2,
+    kind='bar',
+    y='Adjusted Coefficient',
+    y_ci=('CI Lower Bound', 'CI Upper Bound'), 
+    y_p_value='P-value Adjusted'
+)
+
+\end{python}
+
+\subsection{Provided Code}
+The code above is using the following provided functions:
+
+\begin{python}
+def to_latex_with_note(df, filename: str, caption: str, label: str,
+                       note: str = None, glossary: Dict[str, str] = None, **kwargs):
+    """
+    Saves a DataFrame as a LaTeX table with optional note and glossary added below the table.
+
+    Parameters:
+    - df, filename, caption, label: as in `df.to_latex`.
+    - note (optional): Additional note below the table.
+    - glossary (optional): Dictionary mapping abbreviations to full names.
+    - **kwargs: Additional arguments for `df.to_latex`.
+    """
+
+def to_figure_with_note(df, filename: str, caption: str, label: str,
+                        note: str = None, glossary: Dict[str, str] = None, 
+                        x: Optional[str] = None, y: Optional[str] = None, kind: str = 'line',
+                        use_index: bool = True, 
+                        xlabel: str = None, ylabel: str = None,
+                        logx: bool = False, logy: bool = False,
+                        xerr: str = None, yerr: str = None,
+                        x_ci: Union[str, Tuple[str, str]] = None, y_ci: Union[str, Tuple[str, str]] = None,
+                        x_p_value: str = None, y_p_value: str = None,
+                        ):
+    """
+    Saves a DataFrame to a LaTeX figure with caption and optional glossary added below the figure.
+
+    Parameters:
+    `df`: DataFrame to plot (with column names and index as scientific labels). 
+    `filename` (str): name of a .tex file to create (a matching .png file will also be created). 
+    `caption` (str): Caption for the figure (can be multi-line).
+    `label` (str): Latex label for the figure, 'figure:xxx'. 
+    `glossary` (optional, dict): Dictionary mapping abbreviated df col/row labels to full names.
+
+    Parameters for df.plot():
+    `x` / `y` (optional, str): Column name for x-axis / y-axis values.
+    `kind` (str): Type of plot: 'line', 'scatter', 'bar'.
+    `use_index` (bool): If True, use the index as x-axis values.
+    `logx` / `logy` (bool): If True, use log scale for x/y axis.
+    `xerr` / `yerr` (optional, str): Column name for x/y error bars.
+    `xlabel` / `ylabel` (optional, str): Label for x/y axis.
+
+    Additional plotting options:
+    `x_p_value` / `y_p_value` (optional, str): Column name for x/y p-values to show as stars above data points.
+        p-values are converted to: '***' if < 0.001, '**' if < 0.01, '*' if < 0.05, 'NS' if >= 0.05.
+
+    Instead of xerr/yerr, you can directly provide confidence intervals:
+    `x_ci` / `y_ci` (optional, str or (str, str)): an be either a single column name where each row contains
+        a 2-element tuple (n x 2 matrix when expanded), or a list containing two column names 
+        representing the lower and upper bounds of the confidence interval.
+
+    Note on error bars (explanation for y-axis is provided, x-axis is analogous):
+    Either `yerr` or `y_ci` can be provided, but not both.
+    If `yerr` is provided, the plotted error bars are (df[y]-df[yerr], df[y]+df[yerr]).
+    If `y_ci` is provided, the plotted error bars are (df[y_ci][0], df[y_ci][1]).
+    Note that unlike yerr, the y_ci are NOT added to the nominal df[y] values. 
+    Instead, the provided y_ci values should flank the nominal df[y] values.
+    """
+
+def is_str_in_df(df: pd.DataFrame, s: str):
+    return any(s in level for level in getattr(df.index, 'levels', [df.index]) + getattr(df.columns, 'levels', [df.columns]))
+
+AbbrToNameDef = Dict[Any, Tuple[Optional[str], Optional[str]]]
+
+def split_mapping(abbrs_to_names_and_definitions: AbbrToNameDef):
+    abbrs_to_names = {abbr: name for abbr, (name, definition) in abbrs_to_names_and_definitions.items() if name is not None}
+    names_to_definitions = {name or abbr: definition for abbr, (name, definition) in abbrs_to_names_and_definitions.items() if definition is not None}
+    return abbrs_to_names, names_to_definitions
+
+\end{python}
+
+
+
+\subsection{Code Output}
+
+\subsubsection*{\hyperlink{code-LaTeX Table Design-df-1-tex}{df\_1.tex}}
+
+\begin{codeoutput}
+\% This latex displayitem was generated from: `df\_1.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df\_1.png}
+\caption{Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable
+High Blood Pressure: High Blood Pressure (0=no, 1=yes). 
+High Cholesterol: High Cholesterol (0=no, 1=yes). 
+Stroke: Stroke (0=no, 1=yes). 
+Body Mass Index: Body Mass Index. 
+Physical Activity: Physical Activity in past 30 days (0=no, 1=yes). 
+CI Lower Bound: 95\% Confidence Interval. 
+CI Upper Bound: 95\% Confidence Interval. 
+Significance: NS p \$$>$\$= 0.01, * p \$$<$\$ 0.01, ** p \$$<$\$ 0.001, *** p \$$<$\$ 0.0001. }
+\label{figure:Unadjusted\_Coefficients}
+\end{figure}
+\% This latex figure presents "df\_1.png" which was created from the following df:
+\% 
+\% \begin{tabular}{lrrrl}
+\% \toprule
+\%  \& Unadjusted Coefficient \& CI Lower Bound \& CI Upper Bound \& P-value Unadjusted \\
+\% \midrule
+\% \textbf{High Blood Pressure} \& 1.617 \& 1.591 \& 1.643 \& \$$<$\$1e-06 \\
+\% \textbf{High Cholesterol} \& 1.18 \& 1.156 \& 1.204 \& \$$<$\$1e-06 \\
+\% \textbf{Stroke} \& 1.12 \& 1.077 \& 1.163 \& \$$<$\$1e-06 \\
+\% \textbf{Body Mass Index} \& 0.0786 \& 0.077 \& 0.08019 \& \$$<$\$1e-06 \\
+\% \textbf{Physical Activity} \& -0.7134 \& -0.7372 \& -0.6896 \& \$$<$\$1e-06 \\
+\% \bottomrule
+\% \end{tabular}
+\% 
+\% 
+\% To create the figure, this df was plotted with the following command:
+\% 
+\% df.plot(**{'kind': 'bar', 'y': 'Unadjusted Coefficient'})
+\% 
+\% Confidence intervals for y-values were then plotted based on column: ('CI Lower Bound', 'CI Upper Bound').
+\% 
+\% P-values for y-values were taken from column: 'P-value Unadjusted'.
+\% 
+\% These p-values were presented above the data points as stars:
+\% NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001
+\end{codeoutput}
+
+\subsubsection*{\hyperlink{code-LaTeX Table Design-df-2-tex}{df\_2.tex}}
+
+\begin{codeoutput}
+\% This latex displayitem was generated from: `df\_2.pkl`
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{df\_2.png}
+\caption{Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable
+High Blood Pressure: High Blood Pressure (0=no, 1=yes). 
+High Cholesterol: High Cholesterol (0=no, 1=yes). 
+Stroke: Stroke (0=no, 1=yes). 
+Body Mass Index: Body Mass Index. 
+Physical Activity: Physical Activity in past 30 days (0=no, 1=yes). 
+CI Lower Bound: 95\% Confidence Interval. 
+CI Upper Bound: 95\% Confidence Interval. 
+Significance: NS p \$$>$\$= 0.01, * p \$$<$\$ 0.01, ** p \$$<$\$ 0.001, *** p \$$<$\$ 0.0001. }
+\label{figure:Adjusted\_Coefficients}
+\end{figure}
+\% This latex figure presents "df\_2.png" which was created from the following df:
+\% 
+\% \begin{tabular}{lrrrl}
+\% \toprule
+\%  \& Adjusted Coefficient \& CI Lower Bound \& CI Upper Bound \& P-value Adjusted \\
+\% \midrule
+\% \textbf{High Blood Pressure} \& 0.9799 \& 0.9518 \& 1.008 \& \$$<$\$1e-06 \\
+\% \textbf{High Cholesterol} \& 0.6891 \& 0.6633 \& 0.7149 \& \$$<$\$1e-06 \\
+\% \textbf{Stroke} \& 0.5472 \& 0.5005 \& 0.5938 \& \$$<$\$1e-06 \\
+\% \textbf{Body Mass Index} \& 0.07242 \& 0.07068 \& 0.07416 \& \$$<$\$1e-06 \\
+\% \textbf{Physical Activity} \& -0.351 \& -0.3771 \& -0.3249 \& \$$<$\$1e-06 \\
+\% \bottomrule
+\% \end{tabular}
+\% 
+\% 
+\% To create the figure, this df was plotted with the following command:
+\% 
+\% df.plot(**{'kind': 'bar', 'y': 'Adjusted Coefficient'})
+\% 
+\% Confidence intervals for y-values were then plotted based on column: ('CI Lower Bound', 'CI Upper Bound').
+\% 
+\% P-values for y-values were taken from column: 'P-value Adjusted'.
+\% 
+\% These p-values were presented above the data points as stars:
+\% NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001
+\end{codeoutput}
+
+\end{document}
