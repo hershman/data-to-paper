@@ -15,12 +15,15 @@ from data_to_paper.utils.nice_list import NiceList
 from data_to_paper.utils.replacer import Replacer
 from data_to_paper.code_and_output_files.file_view_params import ContentViewPurpose
 
+from data_to_paper.interactive.symbols import Symbols
+from data_to_paper.run_gpt_code.dynamic_code import CodeRunner
+from data_to_paper.run_gpt_code.extract_and_check_code import CodeExtractor, ModifyAndCheckCodeExtractor
+
 from .debugger import DebuggerConverser
 from .base_products_conversers import BackgroundProductsConverser
 from .exceptions import FailedCreatingProductException
 from .request_python_value import PythonDictReviewBackgroundProductsConverser
 from .result_converser import Rewind
-from ..interactive.symbols import Symbols
 
 
 class CodeReviewPrompt(NamedTuple):
@@ -88,10 +91,10 @@ class BaseCodeProductsGPT(BackgroundProductsConverser):
     background_product_fields_to_hide_during_code_revision: Tuple[str, ...] = ()
     debugger_cls: Type[DebuggerConverser] = DebuggerConverser
     code_and_output_cls: Type[CodeAndOutput] = CodeAndOutput
+    code_extractor_cls: Type[CodeExtractor] = ModifyAndCheckCodeExtractor
+    code_runner_cls: Type[CodeRunner] = CodeRunner
     supported_packages: Tuple[str, ...] = SUPPORTED_PACKAGES
-
-    attrs_to_send_to_debugger: Tuple[str, ...] = \
-        ('output_file_requirements', 'data_filenames', 'data_folder', 'supported_packages', 'model_engine')
+    headers_required_in_code: Tuple[str, ...] = ()
 
     revision_round: int = 0
 
@@ -110,9 +113,6 @@ class BaseCodeProductsGPT(BackgroundProductsConverser):
     # The name of the file that gpt code is instructed to save the results to.
 
     code_name: str = ''  # e.g. "data analysis"
-
-    gpt_script_filename: str = 'gpt_code'
-    # The base name of the python file in which the code written by gpt is saved.
 
     present_code_as_fresh: str = dedent_triple_quote_str("""
         Here is the code to perform the analysis.
@@ -255,14 +255,20 @@ class BaseCodeProductsGPT(BackgroundProductsConverser):
                 self,
                 is_new_conversation=False,
                 max_debug_iterations=self.max_debug_iterations_per_attempt,
-                gpt_script_filename=f"{self.gpt_script_filename}_revision{self.revision_round}_attempt{attempt}",
                 background_product_fields_to_hide=(() if self.revision_round == 0
                                                    else self.background_product_fields_to_hide_during_code_revision),
                 code_and_output_cls=self.code_and_output_cls,
                 previous_code=previous_code,
                 previous_code_problem=CodeProblem.NoCode if previous_code is None else CodeProblem.AllOK,
+                code_extractor_cls=self.code_extractor_cls,
+                code_runner_cls=self.code_runner_cls,
+                output_file_requirements=self.output_file_requirements,
+                data_filenames=self.data_filenames,
+                data_folder=self.data_folder,
+                supported_packages=self.supported_packages,
+                model_engine=self.model_engine,
+                headers_required_in_code=self.headers_required_in_code,
                 additional_contexts=self._get_additional_contexts(),
-                **{k: getattr(self, k) for k in self.attrs_to_send_to_debugger},
             )
             code_and_output = debugger.run_debugging()
             if code_and_output is None:
