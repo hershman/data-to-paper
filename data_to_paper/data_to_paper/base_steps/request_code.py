@@ -16,7 +16,7 @@ from data_to_paper.utils.replacer import Replacer
 from data_to_paper.code_and_output_files.file_view_params import ContentViewPurpose
 
 from data_to_paper.interactive.symbols import Symbols
-from data_to_paper.run_gpt_code.dynamic_code import CodeRunner
+from data_to_paper.run_gpt_code.code_runner import CodeRunner
 from data_to_paper.run_gpt_code.extract_and_check_code import CodeExtractor, ModifyAndCheckCodeExtractor
 
 from .debugger import DebuggerConverser
