@@ -469,7 +469,7 @@ Please return a triple-backtick Latex Block explaining what the code above does.
 Do not provide a line-by-line explanation, rather provide a high-level explanation of the code in a language suitable for a Methods section of a
 research paper.
 Focus on analysis steps. There is no need to explain trivial parts, like reading/writing a file, etc.
-Also explain what does the code write into the "data_exploration.txt" file.
+Also explain what does the code write into the files(s): ['data_exploration.txt'].
 
 
 Your explanation should be written in LaTeX, and should be enclosed within a LaTeX Code Block, like this:
@@ -482,16 +482,16 @@ Your explanation should be written in LaTeX, and should be enclosed within a LaT
 Remember to enclose your explanation within a LaTeX Code Block, so that I can easily copy-paste it!
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 1628 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 1629 context tokens and 500 expected tokens.
 [8] ===== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Data Exploration Code - Explanation"  ===========
 
-CONTEXT TOTAL (1628 tokens):
+CONTEXT TOTAL (1629 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Exploration code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 306 tokens): # Data Exploration Code Here is our Data Exploration Code: python  import [...]  f.write('\n\n')
 # 4 SURROGATE (   9 tokens): Thank you for the Data Exploration Code.
-# 5      USER ( 151 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 152 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 
 # 6 ASSISTANT ( 358 tokens): \section{Code Explanation}  The provided code performs data exploration on [...] and interpretation.
                                                                                {'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>}
@@ -531,16 +531,16 @@ Please write the explanation of the Data Exploration code again according to my 
 Remember, your response should be formatted as a triple backtick latex block.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 2067 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 2068 context tokens and 500 expected tokens.
 [10] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Data Exploration Code - Explanation"  ===========
 
-CONTEXT TOTAL (2067 tokens):
+CONTEXT TOTAL (2068 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Exploration code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 306 tokens): # Data Exploration Code Here is our Data Exploration Code: python  import [...]  f.write('\n\n')
 # 4 SURROGATE (   9 tokens): Thank you for the Data Exploration Code.
-# 5      USER ( 151 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 152 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 # 6 ASSISTANT ( 358 tokens): \section{Code Explanation}  The provided code performs data exploration on [...] and interpretation.
 # 7      USER (  81 tokens): # Failed to extract latex block Error extracting 'triple-backtick "latex" [...] latex block.
 
@@ -684,6 +684,7 @@ with open('data_exploration.txt', 'w') as f:
 
 
 Here is the Output of our Data Exploration code:
+"data_exploration.txt":
 ```output
 # Data Size
 Number of rows: 253680
@@ -798,14 +799,14 @@ study goal.
 Remember to return a valid Python dictionary with the structure described above.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 2625 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 2631 context tokens and 500 expected tokens.
 [10] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Hypothesis Testing Plan"  =======================
 
-CONTEXT TOTAL (2625 tokens):
+CONTEXT TOTAL (2631 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -888,17 +889,17 @@ Remember, your response should be formatted as a Python dictionary with the foll
 DeleteMessages(<11> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
 FailedLLMResponse: FAILED:
-Number of tokens in context (3646) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
+Number of tokens in context (3652) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
 
 ############# Bumping model #############
-Using GPT35_TURBO_16 (max 16384 tokens) for 3646 context tokens and 500 expected tokens.
+Using GPT35_TURBO_16 (max 16384 tokens) for 3652 context tokens and 500 expected tokens.
 [12] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO_16: 'gpt-3.5-turbo-16k-0613'>} {Performer} -> "Hypothesis Testing Plan"  ================
 
-CONTEXT TOTAL (3646 tokens):
+CONTEXT TOTAL (3652 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -987,17 +988,17 @@ Remember, your response should be formatted as a Python dictionary with the foll
 DeleteMessages(<11> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
 FailedLLMResponse: FAILED:
-Number of tokens in context (4133) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
+Number of tokens in context (4139) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
 
 ############# Bumping model #############
-Using GPT35_TURBO_16 (max 16384 tokens) for 4133 context tokens and 500 expected tokens.
+Using GPT35_TURBO_16 (max 16384 tokens) for 4139 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO_16: 'gpt-3.5-turbo-16k-0613'>} {Performer} -> "Hypothesis Testing Plan"  ================
 
-CONTEXT TOTAL (4133 tokens):
+CONTEXT TOTAL (4139 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -1055,14 +1056,14 @@ Send back a complete rewrite of the hypothesis testing plan.
 Make sure to send the full corrected hypothesis testing plan, not just the parts that were revised.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 3075 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 3081 context tokens and 500 expected tokens.
 [12] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Hypothesis Testing Plan"  =======================
 
-CONTEXT TOTAL (3075 tokens):
+CONTEXT TOTAL (3081 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -1122,14 +1123,14 @@ Remember, your response should be formatted as a Python dictionary with the foll
 
 DeleteMessages(<13> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
-Using GPT35_TURBO (max 4096 tokens) for 3555 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 3561 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Hypothesis Testing Plan"  =======================
 
-CONTEXT TOTAL (3555 tokens):
+CONTEXT TOTAL (3561 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -1197,14 +1198,14 @@ Remember, your response should be formatted as a Python dictionary with the foll
 
 DeleteMessages(<-2> - <-1> [2 MESSAGES]) -> Hypothesis Testing Plan
 
-Using GPT35_TURBO_16 (max 16384 tokens) for 3555 context tokens and 500 expected tokens.
+Using GPT35_TURBO_16 (max 16384 tokens) for 3561 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO_16: 'gpt-3.5-turbo-16k-0613'>} {Performer} -> "Hypothesis Testing Plan"  ================
 
-CONTEXT TOTAL (3555 tokens):
+CONTEXT TOTAL (3561 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -1279,14 +1280,14 @@ Age, BMI, and Sex, by including them as control variables in each respective reg
 
 DeleteMessages(<13> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
-Using GPT35_TURBO_16 (max 16384 tokens) for 4023 context tokens and 500 expected tokens.
+Using GPT35_TURBO_16 (max 16384 tokens) for 4029 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO_16: 'gpt-3.5-turbo-16k-0613'>} {Performer} -> "Hypothesis Testing Plan"  ================
 
-CONTEXT TOTAL (4023 tokens):
+CONTEXT TOTAL (4029 tokens):
 # 0    SYSTEM (  12 tokens): You are a scientist who needs to write hypothesis testing plan.
 # 1      USER ( 914 tokens): # Description of the Original Dataset ## General Description The dataset [...] 7= <=75K, 8= >75K)
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER (1097 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
+# 3      USER (1103 tokens): # Data Exploration Code and Output Here is our Data Exploration Code: python  [...] No missing values
 # 4 SURROGATE (  11 tokens): Thank you for the Data Exploration Code and Output.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -1399,6 +1400,7 @@ Thank you for the Description of the Original Dataset.
 [4] ----- USER {Debugger} -> "Data Analysis Code"  <background_outputs:data_exploration>  ------------------------------------------------------------
 # Output of the Data Exploration Code
 Here is the Output of our Data Exploration code:
+"data_exploration.txt":
 ```output
 # Data Size
 Number of rows: 253680
@@ -1620,14 +1622,14 @@ For clarity, access dataframes using string-based column/index names, rather tha
 
 [12] COMMENTER -> "Data Analysis Code"  : Starting to write and debug code. Revision 1/3 (attempt 1/2).
 
-Using GPT4 (max 8192 tokens) for 3942 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 3948 context tokens and 500 expected tokens.
 [13] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Data Analysis Code"  ================================================
 
-CONTEXT TOTAL (3942 tokens):
+CONTEXT TOTAL (3948 tokens):
 # 0    SYSTEM (  17 tokens): You are a brilliant data scientist. You are writing a Python code to analyze data.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
-# 3      USER ( 797 tokens): # Output of the Data Exploration Code Here is the Output of our Data [...] No missing values
+# 3      USER ( 803 tokens): # Output of the Data Exploration Code Here is the Output of our Data [...] No missing values
 # 4 SURROGATE (  12 tokens): Thank you for the Output of the Data Exploration Code.
 # 5      USER (  26 tokens): # Goal and Hypothesis For key variables, check their logistic regression with [...] other variables.
 # 6 SURROGATE (  11 tokens): Thank you for the Goal and Hypothesis.
@@ -3824,7 +3826,7 @@ Please return a triple-backtick Latex Block explaining what the code above does.
 Do not provide a line-by-line explanation, rather provide a high-level explanation of the code in a language suitable for a Methods section of a
 research paper.
 Focus on analysis steps. There is no need to explain trivial parts, like reading/writing a file, etc.
-Also explain what does the code write into the "additional_results.pkl" file.
+Also explain what does the code write into the files(s): ['df_1.pkl', 'df_2.pkl', 'additional_results.pkl'].
 
 
 Your explanation should be written in LaTeX, and should be enclosed within a LaTeX Code Block, like this:
@@ -3837,16 +3839,16 @@ Your explanation should be written in LaTeX, and should be enclosed within a LaT
 Remember to enclose your explanation within a LaTeX Code Block, so that I can easily copy-paste it!
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 1852 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 1865 context tokens and 500 expected tokens.
 [8] ===== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Data Analysis Code - Explanation"  ==============
 
-CONTEXT TOTAL (1852 tokens):
+CONTEXT TOTAL (1865 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Analysis code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER ( 149 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 162 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 
 # 6 ASSISTANT ( 414 tokens): \section{Code Explanation}  The provided code performs data analysis on the [...] and reporting.
                                                                                {'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>}
@@ -3892,16 +3894,16 @@ Please write the explanation of the Data Analysis code again according to my fee
 Remember, your response should be formatted as a triple backtick latex block.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT35_TURBO (max 4096 tokens) for 2347 context tokens and 500 expected tokens.
+Using GPT35_TURBO (max 4096 tokens) for 2360 context tokens and 500 expected tokens.
 [10] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO: 'gpt-3.5-turbo-0613'>} {Performer} -> "Data Analysis Code - Explanation"  ==============
 
-CONTEXT TOTAL (2347 tokens):
+CONTEXT TOTAL (2360 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Analysis code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER ( 149 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 162 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 # 6 ASSISTANT ( 414 tokens): \section{Code Explanation}  The provided code performs data analysis on the [...] and reporting.
 # 7      USER (  81 tokens): # Failed to extract latex block Error extracting 'triple-backtick "latex" [...] latex block.
 
@@ -3949,16 +3951,16 @@ Remember, your response should be formatted as a triple backtick latex block.
 
 DeleteMessages(<-2> - <-1> [2 MESSAGES]) -> Data Analysis Code - Explanation
 
-Using GPT35_TURBO_16 (max 16384 tokens) for 2347 context tokens and 500 expected tokens.
+Using GPT35_TURBO_16 (max 16384 tokens) for 2360 context tokens and 500 expected tokens.
 [10] ==== ASSISTANT{'model_engine': <ModelEngine.GPT35_TURBO_16: 'gpt-3.5-turbo-16k-0613'>} {Performer} -> "Data Analysis Code - Explanation"  =======
 
-CONTEXT TOTAL (2347 tokens):
+CONTEXT TOTAL (2360 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Analysis code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER ( 149 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 162 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 # 6 ASSISTANT ( 414 tokens): \section{Code Explanation}  The provided code performs data analysis on the [...] and reporting.
 # 7      USER (  81 tokens): # Failed to extract latex block Error extracting 'triple-backtick "latex" [...] latex block.
 
@@ -4004,16 +4006,16 @@ You seem totally drunk. Let's Bump you to GPT4_TURBO and try again...
 
 DeleteMessages(<-2> - <-1> [2 MESSAGES]) -> Data Analysis Code - Explanation
 
-Using GPT4_TURBO (max 128000 tokens) for 2347 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 2360 context tokens and 500 expected tokens.
 [10] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Data Analysis Code - Explanation"  ===============
 
-CONTEXT TOTAL (2347 tokens):
+CONTEXT TOTAL (2360 tokens):
 # 0    SYSTEM (  15 tokens): You are a scientist who needs to write explanation of the Data Analysis code.
 # 1      USER (1136 tokens): # Description of the Original Dataset ## General Description The dataset [...] ,1,5,30,30,1,0,9,4,8
 # 2 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER ( 149 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
+# 5      USER ( 162 tokens): Please return a triple-backtick Latex Block explaining what the code above [...] copy-paste it!
 # 6 ASSISTANT ( 414 tokens): \section{Code Explanation}  The provided code performs data analysis on the [...] and reporting.
 # 7      USER (  81 tokens): # Failed to extract latex block Error extracting 'triple-backtick "latex" [...] latex block.
 
@@ -5057,11 +5059,13 @@ You will write a scientific article for the journal Nature Communications, follo
 
 [2] ----- USER {Writer} -> "Writing: Title and Abstract (first draft)"  <background_general_dataset_description>  ------------------------------------
 # Overall Description of the Dataset
+
 The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year 2015.
 The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
 Each year, the survey collects responses from over 400,000 Americans on health-related risk behaviors, chronic health conditions, and the use of
 preventative services. These features are either questions directly asked of participants, or calculated variables based on individual participant
 responses.
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [3] ===== SURROGATE {Performer} -> "Writing: Title and Abstract (first draft)"  <background_thanks_general_dataset_description>  =====================
@@ -5080,6 +5084,7 @@ Here are the displayitems created by our data analysis code (figure/table latex 
 
 - "Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
+"df_1.tex":
 ```latex
 % This latex displayitem was generated from: `df_1.pkl`
 
@@ -5124,8 +5129,10 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
 ```
 
+
 - "Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
+"df_2.tex":
 ```latex
 % This latex displayitem was generated from: `df_2.pkl`
 
@@ -5177,12 +5184,15 @@ Thank you for the Displayitems of the Paper.
 
 [8] ----- USER {Writer} -> "Writing: Title and Abstract (first draft)"  <background_additional_results>  ---------------------------------------------
 # Additional Results (additional_results.pkl)
-Here are some additional numeric values that may be helpful in writing the paper (as saved to "additional_results.pkl"):
+Here are some additional numeric values that may be helpful in writing the paper:
 
+"additional_results.pkl":
+```output
 {
     'Total number of observations': 253680,
     'Goodness of fit of multivariable model': -8.598e+04        ,
 }
+```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [9] ===== SURROGATE {Performer} -> "Writing: Title and Abstract (first draft)"  <background_thanks_additional_results>  ==============================
@@ -5234,7 +5244,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Title and Abstract (first draft) (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Title and Abstract (first draft) (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -5287,18 +5297,18 @@ The title and abstract for a research paper should be formatted as a triple-back
 ```
 ======================================================================================================================================================
 
-Using GPT4_TURBO (max 128000 tokens) for 2396 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 2413 context tokens and 500 expected tokens.
 [12] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract (first draft)"  ======
 
-CONTEXT TOTAL (2396 tokens):
+CONTEXT TOTAL (2413 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 5      USER (1283 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 6 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
-# 7      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
+# 7      USER (  67 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
 # 8 SURROGATE (  12 tokens): Thank you for the Additional Results (additional_results.pkl).
 # 9      USER ( 285 tokens): Based on the material provided above ("Overall Description of the Dataset", [...] \end{abstract}
 
@@ -5379,18 +5389,18 @@ changes"; If you chose to provide bullet-point feedback then DO NOT include "The
 changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 3007 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 3024 context tokens and 500 expected tokens.
 [11] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Writer} -> "Writing: Title and Abstract (first draft) (other)"  =
 
-CONTEXT TOTAL (3007 tokens):
+CONTEXT TOTAL (3024 tokens):
 # 0    SYSTEM (  74 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 4 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 5      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 5      USER (1283 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 6 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
-# 7      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
+# 7      USER (  67 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
 # 8 SURROGATE ( 297 tokens): Thank you for the Additional Results (additional_results.pkl).   Based on the [...] \end{abstract}
 # 9      USER ( 626 tokens): latex \title{The Impact of Lifestyle and Health Indicators on Diabetes [...] any changes".
 
@@ -5648,6 +5658,7 @@ Thank you for the Title and Abstract.
 [4] ----- USER {Writer} -> "Writing: Results"  <background_data_file_descriptions_no_headers_linked>  ------------------------------------------------
 # Description of the Original Dataset (with hypertargets)
 ## General Description
+
 The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year
 \hypertarget{S0a}{2015}.
 The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
@@ -5655,10 +5666,13 @@ Each year, the survey collects responses from over \hypertarget{S1a}{400,000} Am
 and the use of preventative services. These features are either questions directly asked of participants, or calculated variables based on individual
 participant responses.
 
+
+
 ## Data Files
 The dataset consists of 1 data file:
 
 ### "diabetes_binary_health_indicators_BRFSS2015.csv"
+
 The csv file is a clean dataset of \hypertarget{T0a}{253,680} responses (rows) and \hypertarget{T0b}{22} features (columns).
 All rows with missing values were removed from the original dataset; the current file contains no missing values.
 
@@ -5715,6 +5729,7 @@ Here are the displayitems created by our data analysis code (figure/table latex 
 
 - "Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
+"df_1.tex":
 ```latex
 % This latex displayitem was generated from: `df_1.pkl`
 
@@ -5759,8 +5774,10 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
 ```
 
+
 - "Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
+"df_2.tex":
 ```latex
 % This latex displayitem was generated from: `df_2.pkl`
 
@@ -5812,12 +5829,15 @@ Thank you for the Displayitems of the Paper with hypertargets.
 
 [10] ---- USER {Writer} -> "Writing: Results"  <background_additional_results_linked>  ---------------------------------------------------------------
 # Additional Results (additional_results.pkl) with hypertargets
-Here are some additional numeric values that may be helpful in writing the paper (as saved to "additional_results.pkl"):
+Here are some additional numeric values that may be helpful in writing the paper:
 
+"additional_results.pkl":
+```output
 {
     'Total number of observations': \hypertarget{R0a}{253680},
     'Goodness of fit of multivariable model': \hypertarget{R1a}{-8.598e+04}        ,
 }
+```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [11] ==== SURROGATE {Performer} -> "Writing: Results"  <background_thanks_additional_results_linked>  ================================================
@@ -5991,20 +6011,20 @@ as part the Discussion section, not the Results section).
 numeric values in compilation).
 ======================================================================================================================================================
 
-Using GPT4_TURBO (max 128000 tokens) for 5554 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5575 context tokens and 500 expected tokens.
 [14] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (5554 tokens):
+CONTEXT TOTAL (5575 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-# 3      USER (1588 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
+# 3      USER (1596 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1668 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
-# 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
+# 9      USER (  90 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
 #11      USER (1250 tokens): Based on the material provided above ("Title and Abstract", "Description of [...] writing here>
 
@@ -6097,20 +6117,20 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [0 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6662 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6683 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6662 tokens):
+CONTEXT TOTAL (6683 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-# 3      USER (1588 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
+# 3      USER (1596 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1668 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
-# 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
+# 9      USER (  90 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
 #11      USER (1250 tokens): Based on the material provided above ("Title and Abstract", "Description of [...] writing here>
 #12 SURROGATE ( 638 tokens): latex \section{Results}  First, to understand the univariate relation between [...] this disease.
@@ -6204,20 +6224,20 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [2 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6670 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6691 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6670 tokens):
+CONTEXT TOTAL (6691 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-# 3      USER (1588 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
+# 3      USER (1596 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1668 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
-# 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
+# 9      USER (  90 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
 #11      USER (1250 tokens): Based on the material provided above ("Title and Abstract", "Description of [...] writing here>
 #12 SURROGATE ( 617 tokens): latex \section{Results}  First, to understand the univariate relation between [...] this disease.
@@ -6274,20 +6294,20 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<13> - <-3> [2 MESSAGES]) -> Writing: Results
 
-Using GPT4_TURBO (max 128000 tokens) for 6157 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 6178 context tokens and 500 expected tokens.
 [16] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Results"  ===============================
 
-CONTEXT TOTAL (6157 tokens):
+CONTEXT TOTAL (6178 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
-# 3      USER (1588 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
+# 3      USER (1596 tokens): # Description of the Original Dataset (with hypertargets) ## General [...] >75K)
 # 4 SURROGATE (  16 tokens): Thank you for the Description of the Original Dataset (with hypertargets).
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1655 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
+# 7      USER (1668 tokens): # Displayitems of the Paper with hypertargets Here are the displayitems [...] *** p < 0.0001
 # 8 SURROGATE (  15 tokens): Thank you for the Displayitems of the Paper with hypertargets.
-# 9      USER (  89 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
+# 9      USER (  90 tokens): # Additional Results (additional_results.pkl) with hypertargets Here are some [...] , }
 #10 SURROGATE (  17 tokens): Thank you for the Additional Results (additional_results.pkl) with hypertargets.
 #11      USER (1250 tokens): Based on the material provided above ("Title and Abstract", "Description of [...] writing here>
 #12 SURROGATE ( 495 tokens): latex \section{Results}  First, to understand whether individual health [...] the disease.
@@ -6372,10 +6392,10 @@ IMPORTANT: You should EITHER provide bullet-point feedback, or respond solely wi
 to provide bullet-point feedback then DO NOT include "The `Results` section does not require any changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 4181 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 4194 context tokens and 500 expected tokens.
 [13] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Writer} -> "Writing: Results (other)"  ==========================
 
-CONTEXT TOTAL (4181 tokens):
+CONTEXT TOTAL (4194 tokens):
 # 0    SYSTEM (  71 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
 # 1      USER ( 284 tokens): # Title and Abstract latex \title{The Impact of Lifestyle and Health [...] \end{abstract}
 # 2 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -6383,9 +6403,9 @@ CONTEXT TOTAL (4181 tokens):
 # 4 SURROGATE (  11 tokens): Thank you for the Description of the Original Dataset.
 # 5      USER ( 532 tokens): # Data Analysis Code Here is our Data Analysis Code: python  # IMPORT import [...] f)
 # 6 SURROGATE (   9 tokens): Thank you for the Data Analysis Code.
-# 7      USER (1270 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
+# 7      USER (1283 tokens): # Displayitems of the Paper Here are the displayitems created by our data [...] *** p < 0.0001
 # 8 SURROGATE (  11 tokens): Thank you for the Displayitems of the Paper.
-# 9      USER (  66 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
+# 9      USER (  67 tokens): # Additional Results (additional_results.pkl) Here are some additional [...] -8.598e+04 , }
 #10 SURROGATE ( 375 tokens): Thank you for the Additional Results (additional_results.pkl).   Based on the [...] in compilation).
 #11      USER ( 628 tokens): latex \section{Results}  First, to understand whether individual health [...] any changes".
 
@@ -6798,7 +6818,7 @@ Embedding similarity: 0.75
 
 
 [5] USER {Writer} -> "Writing: Title and Abstract"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [6] SURROGATE {Performer} -> "Writing: Title and Abstract"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -7192,12 +7212,12 @@ Your response should be formatted as a triple-backtick "latex" block, like this:
 ```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4_TURBO (max 128000 tokens) for 5021 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5025 context tokens and 500 expected tokens.
 [19] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5021 tokens):
+CONTEXT TOTAL (5025 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 386 tokens): # Results Section of the Paper latex \section{Results}  First, to understand [...] the disease.
 # 4 SURROGATE (  11 tokens): Thank you for the Results Section of the Paper.
@@ -7259,12 +7279,12 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<18> - <-3> [0 MESSAGES]) -> Writing: Title and Abstract
 
-Using GPT4_TURBO (max 128000 tokens) for 5395 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5399 context tokens and 500 expected tokens.
 [21] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5395 tokens):
+CONTEXT TOTAL (5399 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 386 tokens): # Results Section of the Paper latex \section{Results}  First, to understand [...] the disease.
 # 4 SURROGATE (  11 tokens): Thank you for the Results Section of the Paper.
@@ -7321,12 +7341,12 @@ Remember, your response should be formatted as a triple-backtick "latex" block, 
 
 DeleteMessages(<-2> - <-1> [2 MESSAGES]) -> Writing: Title and Abstract
 
-Using GPT4_TURBO (max 128000 tokens) for 5395 context tokens and 500 expected tokens.
+Using GPT4_TURBO (max 128000 tokens) for 5399 context tokens and 500 expected tokens.
 [21] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4_TURBO: 'gpt-4-1106-preview'>} {Performer} -> "Writing: Title and Abstract"  ====================
 
-CONTEXT TOTAL (5395 tokens):
+CONTEXT TOTAL (5399 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 386 tokens): # Results Section of the Paper latex \section{Results}  First, to understand [...] the disease.
 # 4 SURROGATE (  11 tokens): Thank you for the Results Section of the Paper.
@@ -7972,7 +7992,7 @@ Embedding similarity: 0.58
 
 
 [6] USER {Writer} -> "Writing: Introduction"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [7] SURROGATE {Performer} -> "Writing: Introduction"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -8152,7 +8172,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Introduction (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Introduction (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -8237,12 +8257,12 @@ The `Introduction` section should be formatted as a triple-backtick "latex" bloc
 ```
 ======================================================================================================================================================
 
-Using GPT4 (max 8192 tokens) for 6199 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 6203 context tokens and 500 expected tokens.
 [24] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Writing: Introduction"  =============================================
 
-CONTEXT TOTAL (6199 tokens):
+CONTEXT TOTAL (6203 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 266 tokens): # Title and Abstract latex \title{Diabetes Risk and Lifestyle Correlates [...] \end{abstract}
 # 4 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -8375,12 +8395,12 @@ IMPORTANT: You should EITHER provide bullet-point feedback, or respond solely wi
 chose to provide bullet-point feedback then DO NOT include "The `Introduction` section does not require any changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 6923 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 6927 context tokens and 500 expected tokens.
 [19] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Writer} -> "Writing: Introduction (other)"  ========================================
 
-CONTEXT TOTAL (6923 tokens):
+CONTEXT TOTAL (6927 tokens):
 # 0    SYSTEM (  71 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 266 tokens): # Title and Abstract latex \title{Diabetes Risk and Lifestyle Correlates [...] \end{abstract}
 # 4 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -8682,7 +8702,7 @@ Embedding similarity: 0.75
 
 
 [4] USER {Writer} -> "Writing: Discussion"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [5] SURROGATE {Performer} -> "Writing: Discussion"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -8793,7 +8813,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Discussion (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset The dataset includes diabetes related factors extracted from [...] based on individual participant responses.
+# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Discussion (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -8859,12 +8879,12 @@ The `Discussion` section should be formatted as a triple-backtick "latex" block,
 ```
 ======================================================================================================================================================
 
-Using GPT4 (max 8192 tokens) for 4704 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 4708 context tokens and 500 expected tokens.
 [20] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Performer} -> "Writing: Discussion"  ===============================================
 
-CONTEXT TOTAL (4704 tokens):
+CONTEXT TOTAL (4708 tokens):
 # 0    SYSTEM (  89 tokens): You are a data-scientist with experience writing accurate scientific research [...] results we have.
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 266 tokens): # Title and Abstract latex \title{Diabetes Risk and Lifestyle Correlates [...] \end{abstract}
 # 4 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
@@ -8971,12 +8991,12 @@ IMPORTANT: You should EITHER provide bullet-point feedback, or respond solely wi
 chose to provide bullet-point feedback then DO NOT include "The `Discussion` section does not require any changes".
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Using GPT4 (max 8192 tokens) for 5389 context tokens and 500 expected tokens.
+Using GPT4 (max 8192 tokens) for 5393 context tokens and 500 expected tokens.
 [17] ==== ASSISTANT{'model_engine': <ModelEngine.GPT4: 'gpt-4'>} {Writer} -> "Writing: Discussion (other)"  ==========================================
 
-CONTEXT TOTAL (5389 tokens):
+CONTEXT TOTAL (5393 tokens):
 # 0    SYSTEM (  71 tokens): You are a reviewer for a scientist who is writing a scientific paper about [...] any changes".
-# 1      USER ( 110 tokens): # Overall Description of the Dataset The dataset includes diabetes related [...] responses.
+# 1      USER ( 114 tokens): # Overall Description of the Dataset  The dataset includes diabetes related [...] responses.
 # 2 SURROGATE (  11 tokens): Thank you for the Overall Description of the Dataset.
 # 3      USER ( 266 tokens): # Title and Abstract latex \title{Diabetes Risk and Lifestyle Correlates [...] \end{abstract}
 # 4 SURROGATE (   9 tokens): Thank you for the Title and Abstract.
