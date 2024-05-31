@@ -180,8 +180,8 @@ class BaseCodeProductsGPT(BackgroundProductsConverser):
     _index_of_code_review: int = 0
 
     @property
-    def output_filename(self) -> str:
-        return self.output_file_requirements.get_single_content_file()
+    def requested_output_filenames(self):
+        return self.output_file_requirements.get_all_allowed_created_filenames()
 
     def _get_additional_contexts(self) -> Optional[Dict[str, Any]]:
         return None
