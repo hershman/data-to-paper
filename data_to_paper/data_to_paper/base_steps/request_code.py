@@ -13,7 +13,7 @@ from data_to_paper.code_and_output_files.output_file_requirements import TextCon
 from data_to_paper.utils import dedent_triple_quote_str
 from data_to_paper.utils.nice_list import NiceList
 from data_to_paper.utils.replacer import Replacer
-from data_to_paper.code_and_output_files.file_view_params import ContentViewPurpose
+from data_to_paper.code_and_output_files.file_view_params import ViewPurpose
 
 from data_to_paper.interactive.symbols import Symbols
 from data_to_paper.run_gpt_code.code_runner import CodeRunner
@@ -298,8 +298,7 @@ class BaseCodeProductsGPT(BackgroundProductsConverser):
         else:
             content_files_to_contents = \
                 code_and_output.created_files.get_created_content_files_to_pretty_contents(
-                    match_filename=wildcard_filename,
-                    content_view=ContentViewPurpose.CODE_REVIEW)
+                    view_purpose=ViewPurpose.CODE_REVIEW, match_filename=wildcard_filename)
             if not individually:
                 content_files_to_contents = {wildcard_filename: '\n'.join(content_files_to_contents.values())}
         return content_files_to_contents
