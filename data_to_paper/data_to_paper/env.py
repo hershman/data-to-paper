@@ -87,7 +87,7 @@ FOLDER_FOR_RUN = Path(__file__).parent / 'temp_run'
 TRACK_P_VALUES = Flag(True)
 
 # Debugging switches:
-SHOW_LLM_CONTEXT = Flag(True)
+SHOW_LLM_CONTEXT = Flag(False)
 SAVE_INTERMEDIATE_LATEX = Flag(False)
 PRINT_CITATIONS = Flag(True)
 PRINT_COMMENTS = Flag(False)
