@@ -229,7 +229,7 @@ I ran your code.
 
 Here is the content of the output file that the code created:
 
-"data_exploration.txt":
+### data_exploration.txt
 ```output
 # Data Size
 Number of rows: 253680
@@ -261,7 +261,6 @@ Not Applicable
 # Missing Values
 No missing values
 ```
-
 
 Please carefully check the Python code and the output for possible issues, and provide a point-by-point assessment.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -632,7 +631,7 @@ with open('data_exploration.txt', 'w') as f:
 
 
 Here is the Output of our Data Exploration code:
-"data_exploration.txt":
+### data_exploration.txt
 ```output
 # Data Size
 Number of rows: 253680
@@ -822,7 +821,7 @@ Remember, your response should be formatted as a Python dictionary with the foll
 DeleteMessages(<11> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
 FailedLLMResponse: FAILED:
-Number of tokens in context (3652) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
+Number of tokens in context (3653) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
 
 ############# Bumping model #############
 Using GPT35_TURBO_16.
@@ -903,7 +902,7 @@ Remember, your response should be formatted as a Python dictionary with the foll
 DeleteMessages(<11> - <-3> [0 MESSAGES]) -> Hypothesis Testing Plan
 
 FailedLLMResponse: FAILED:
-Number of tokens in context (4139) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
+Number of tokens in context (4140) is too large. Expected number of tokens in response: 500. Maximum number of tokens for GPT35_TURBO: 4096.
 
 ############# Bumping model #############
 Using GPT35_TURBO_16.
@@ -1217,7 +1216,7 @@ Thank you for the Description of the Original Dataset.
 [4] ----- USER {Debugger} -> "Data Analysis Code"  <background_outputs:data_exploration>  ------------------------------------------------------------
 # Output of the Data Exploration Code
 Here is the Output of our Data Exploration code:
-"data_exploration.txt":
+### data_exploration.txt
 ```output
 # Data Size
 Number of rows: 253680
@@ -1755,13 +1754,12 @@ I ran your code.
 
 Here is the content of the table 'df_1.pkl' that the code created for our scientific paper:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
             Coef. Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -2.745  0.01103  -248.8  <1e-06  -2.767  -2.724
 HighBP      1.617   0.0131   123.5  <1e-06   1.591   1.643
 ```
-
 
 Please review the table and return a list of point-by-point assessments.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -1834,13 +1832,12 @@ I ran your code.
 
 Here is the content of the table 'df_2.pkl' that the code created for our scientific paper:
 
-"df_2.pkl":
+### df_2.pkl
 ```output
             Coef.  Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -2.445  0.009654  -253.2  <1e-06  -2.464  -2.426
 HighChol     1.18   0.01214   97.22  <1e-06   1.156   1.204
 ```
-
 
 Please review the table and return a list of point-by-point assessments.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -1915,13 +1912,12 @@ I ran your code.
 
 Here is the content of the table 'df_3.pkl' that the code created for our scientific paper:
 
-"df_3.pkl":
+### df_3.pkl
 ```output
             Coef.  Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -1.885  0.005992  -314.6  <1e-06  -1.897  -1.873
 Stroke       1.12   0.02201   50.89  <1e-06   1.077   1.163
 ```
-
 
 Please review the table and return a list of point-by-point assessments.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -1996,7 +1992,7 @@ I ran your code.
 
 Here is the content of the table 'df_4.pkl' that the code created for our scientific paper:
 
-"df_4.pkl":
+### df_4.pkl
 ```output
              Coef.   Std.Err.       z   P>|z|  [0.025   0.975]
 Intercept   -6.379    0.04047  -157.6  <1e-06  -6.459     -6.3
@@ -2007,7 +2003,6 @@ Age         0.1446   0.002583   55.99  <1e-06  0.1396   0.1497
 BMI        0.07563  0.0008835    85.6  <1e-06  0.0739  0.07736
 Sex         0.1663    0.01241    13.4  <1e-06   0.142   0.1907
 ```
-
 
 Please review the table and return a list of point-by-point assessments.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -2084,28 +2079,25 @@ I ran your code.
 
 Here is the content of the file(s) that the code created for our scientific paper:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
             Coef. Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -2.745  0.01103  -248.8  <1e-06  -2.767  -2.724
 HighBP      1.617   0.0131   123.5  <1e-06   1.591   1.643
 ```
-
-"df_2.pkl":
+### df_2.pkl
 ```output
             Coef.  Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -2.445  0.009654  -253.2  <1e-06  -2.464  -2.426
 HighChol     1.18   0.01214   97.22  <1e-06   1.156   1.204
 ```
-
-"df_3.pkl":
+### df_3.pkl
 ```output
             Coef.  Std.Err.       z   P>|z|  [0.025  0.975]
 Intercept  -1.885  0.005992  -314.6  <1e-06  -1.897  -1.873
 Stroke       1.12   0.02201   50.89  <1e-06   1.077   1.163
 ```
-
-"df_4.pkl":
+### df_4.pkl
 ```output
              Coef.   Std.Err.       z   P>|z|  [0.025   0.975]
 Intercept   -6.379    0.04047  -157.6  <1e-06  -6.459     -6.3
@@ -2116,15 +2108,13 @@ Age         0.1446   0.002583   55.99  <1e-06  0.1396   0.1497
 BMI        0.07563  0.0008835    85.6  <1e-06  0.0739  0.07736
 Sex         0.1663    0.01241    13.4  <1e-06   0.142   0.1907
 ```
-
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': 253680,
-    'Goodness of fit of multivariable model': -8.632e+04        ,
+    'Goodness of fit of multivariable model': -8.632e+04,
 }
 ```
-
 
 Please carefully review the code and these output files and return a point by point assessment.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -2599,22 +2589,20 @@ I ran your code.
 
 Here is the content of the file(s) that the code created for our scientific paper:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
          Unadjusted_Coeff P-Value_Unadjusted Adjusted_Coeff P-Value_Adjusted
 HighBP              1.617             <1e-06          0.997           <1e-06
 HighChol             1.18             <1e-06         0.6951           <1e-06
 Stroke               1.12             <1e-06         0.5785           <1e-06
 ```
-
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': 253680,
-    'Goodness of fit of multivariable model': -8.632e+04        ,
+    'Goodness of fit of multivariable model': -8.632e+04,
 }
 ```
-
 
 Please carefully review the code and these output files and return a point by point assessment.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -2966,30 +2954,27 @@ I ran your code.
 
 Here is the content of the file(s) that the code created for our scientific paper:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
          Unadjusted_Coeff P-Value_Unadjusted
 HighBP              1.617             <1e-06
 HighChol             1.18             <1e-06
 Stroke               1.12             <1e-06
 ```
-
-"df_2.pkl":
+### df_2.pkl
 ```output
          Adjusted_Coeff P-Value_Adjusted
 HighBP            0.997           <1e-06
 HighChol         0.6951           <1e-06
 Stroke           0.5785           <1e-06
 ```
-
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': 253680,
-    'Goodness of fit of multivariable model': -8.632e+04        ,
+    'Goodness of fit of multivariable model': -8.632e+04,
 }
 ```
-
 
 Please carefully review the code and these output files and return a point by point assessment.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -3195,7 +3180,7 @@ I ran your code.
 
 Here is the content of the file(s) that the code created for our scientific paper:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
              Unadjusted_Coeff CI_Lower_Bound CI_Upper_Bound P-Value_Unadjusted
 HighBP                  1.617          1.591          1.643             <1e-06
@@ -3204,8 +3189,7 @@ Stroke                   1.12          1.077          1.163             <1e-06
 BMI                    0.0786          0.077        0.08019             <1e-06
 PhysActivity          -0.7134        -0.7372        -0.6896             <1e-06
 ```
-
-"df_2.pkl":
+### df_2.pkl
 ```output
              Adjusted_Coeff CI_Lower_Bound CI_Upper_Bound P-Value_Adjusted
 HighBP               0.9799         0.9518          1.008           <1e-06
@@ -3214,15 +3198,13 @@ Stroke               0.5472         0.5005         0.5938           <1e-06
 BMI                 0.07242        0.07068        0.07416           <1e-06
 PhysActivity         -0.351        -0.3771        -0.3249           <1e-06
 ```
-
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': 253680,
-    'Goodness of fit of multivariable model': -8.598e+04        ,
+    'Goodness of fit of multivariable model': -8.598e+04,
 }
 ```
-
 
 Please carefully review the code and these output files and return a point by point assessment.
 Your response should be formatted as a Python Dict[str, Tuple[str, str]], mapping the checks you have done (keys) to a Tuple[str, str], indicating
@@ -3575,7 +3557,7 @@ Thank you for the Data Analysis Code.
 # Content of Files Created by the Data Analysis Code
 Here is the content of files "df_?.pkl" created by the Data Analysis code:
 
-"df_1.pkl":
+### df_1.pkl
 ```output
              Unadjusted_Coeff CI_Lower_Bound CI_Upper_Bound P-Value_Unadjusted
 HighBP                  1.617          1.591          1.643             <1e-06
@@ -3585,8 +3567,7 @@ BMI                    0.0786          0.077        0.08019             <1e-06
 PhysActivity          -0.7134        -0.7372        -0.6896             <1e-06
 ```
 
-
-"df_2.pkl":
+### df_2.pkl
 ```output
              Adjusted_Coeff CI_Lower_Bound CI_Upper_Bound P-Value_Adjusted
 HighBP               0.9799         0.9518          1.008           <1e-06
@@ -4461,13 +4442,12 @@ You will write a scientific article for the journal Nature Communications, follo
 
 [2] ----- USER {Writer} -> "Writing: Title and Abstract (first draft)"  <background_general_dataset_description>  ------------------------------------
 # Overall Description of the Dataset
-
+## General Description
 The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year 2015.
 The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
 Each year, the survey collects responses from over 400,000 Americans on health-related risk behaviors, chronic health conditions, and the use of
 preventative services. These features are either questions directly asked of participants, or calculated variables based on individual participant
 responses.
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [3] ===== SURROGATE {Performer} -> "Writing: Title and Abstract (first draft)"  <background_thanks_general_dataset_description>  =====================
@@ -4486,7 +4466,7 @@ Here are the displayitems created by our data analysis code (figure/table latex 
 
 - "Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
-"df_1.tex":
+### df_1.tex
 ```latex
 % This latex displayitem was generated from: `df_1.pkl`
 
@@ -4531,10 +4511,9 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
 ```
 
-
 - "Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
-"df_2.tex":
+### df_2.tex
 ```latex
 % This latex displayitem was generated from: `df_2.pkl`
 
@@ -4588,11 +4567,11 @@ Thank you for the Displayitems of the Paper.
 # Additional Results (additional_results.pkl)
 Here are some additional numeric values that may be helpful in writing the paper:
 
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': 253680,
-    'Goodness of fit of multivariable model': -8.598e+04        ,
+    'Goodness of fit of multivariable model': -8.598e+04,
 }
 ```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4646,7 +4625,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Title and Abstract (first draft) (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Title and Abstract (first draft) (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -4664,7 +4643,7 @@ Thank you for the Data Analysis Code.
 Thank you for the Displayitems of the Paper.
 
 [8] USER {Performer} -> "Writing: Title and Abstract (first draft) (other)"  <background_additional_results>  : 
-# Additional Results (additional_results.pkl) Here are some additional numeric values that may be [...] fit of multivariable model': -8.598e+04 , }
+# Additional Results (additional_results.pkl) Here are some additional numeric values that may be [...] fit of multivariable model': -8.598e+04, }
 
 [9] ===== SURROGATE {Writer} -> "Writing: Title and Abstract (first draft) (other)"  <background_thanks_additional_results>  =========================
 Thank you for the Additional Results (additional_results.pkl).
@@ -5009,7 +4988,6 @@ Thank you for the Title and Abstract.
 [4] ----- USER {Writer} -> "Writing: Results"  <background_data_file_descriptions_no_headers_linked>  ------------------------------------------------
 # Description of the Original Dataset (with hypertargets)
 ## General Description
-
 The dataset includes diabetes related factors extracted from the CDC's Behavioral Risk Factor Surveillance System (BRFSS), year
 \hypertarget{S0a}{2015}.
 The original BRFSS, from which this dataset is derived, is a health-related telephone survey that is collected annually by the CDC.
@@ -5017,13 +4995,10 @@ Each year, the survey collects responses from over \hypertarget{S1a}{400,000} Am
 and the use of preventative services. These features are either questions directly asked of participants, or calculated variables based on individual
 participant responses.
 
-
-
 ## Data Files
 The dataset consists of 1 data file:
 
 ### "diabetes_binary_health_indicators_BRFSS2015.csv"
-
 The csv file is a clean dataset of \hypertarget{T0a}{253,680} responses (rows) and \hypertarget{T0b}{22} features (columns).
 All rows with missing values were removed from the original dataset; the current file contains no missing values.
 
@@ -5080,7 +5055,7 @@ Here are the displayitems created by our data analysis code (figure/table latex 
 
 - "Unadjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
-"df_1.tex":
+### df_1.tex
 ```latex
 % This latex displayitem was generated from: `df_1.pkl`
 
@@ -5125,10 +5100,9 @@ Significance: NS p $>$= 0.01, * p $<$ 0.01, ** p $<$ 0.001, *** p $<$ 0.0001. }
 % NS p >= 0.01, * p < 0.01, ** p < 0.001, *** p < 0.0001
 ```
 
-
 - "Adjusted Logistic Regression Coefficients, Confidence Intervals, and P-values for each variable":
 
-"df_2.tex":
+### df_2.tex
 ```latex
 % This latex displayitem was generated from: `df_2.pkl`
 
@@ -5182,11 +5156,11 @@ Thank you for the Displayitems of the Paper with hypertargets.
 # Additional Results (additional_results.pkl) with hypertargets
 Here are some additional numeric values that may be helpful in writing the paper:
 
-"additional_results.pkl":
+### additional_results.pkl
 ```output
 {
     'Total number of observations': \hypertarget{R0a}{253680},
-    'Goodness of fit of multivariable model': \hypertarget{R1a}{-8.598e+04}        ,
+    'Goodness of fit of multivariable model': \hypertarget{R1a}{-8.598e+04},
 }
 ```
 ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -5329,7 +5303,7 @@ Thank you for the Data Analysis Code.
 Thank you for the Displayitems of the Paper.
 
 [10] USER {Performer} -> "Writing: Results (other)"  <background_additional_results>  : 
-# Additional Results (additional_results.pkl) Here are some additional numeric values that may be [...] fit of multivariable model': -8.598e+04 , }
+# Additional Results (additional_results.pkl) Here are some additional numeric values that may be [...] fit of multivariable model': -8.598e+04, }
 
 [11] ==== SURROGATE {Writer} -> "Writing: Results (other)"  <background_thanks_additional_results>  ==================================================
 Thank you for the Additional Results (additional_results.pkl).
@@ -6068,7 +6042,7 @@ Embedding similarity: 0.75
 
 
 [5] USER {Writer} -> "Writing: Title and Abstract"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [6] SURROGATE {Performer} -> "Writing: Title and Abstract"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -7158,7 +7132,7 @@ Embedding similarity: 0.58
 
 
 [6] USER {Writer} -> "Writing: Introduction"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [7] SURROGATE {Performer} -> "Writing: Introduction"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -7338,7 +7312,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Introduction (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Introduction (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -7818,7 +7792,7 @@ Embedding similarity: 0.75
 
 
 [4] USER {Writer} -> "Writing: Discussion"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [5] SURROGATE {Performer} -> "Writing: Discussion"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
@@ -7929,7 +7903,7 @@ If you feel that the paper section does not need further improvements, you shoul
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [2] USER {Performer} -> "Writing: Discussion (other)"  <background_general_dataset_description>  : 
-# Overall Description of the Dataset  The dataset includes diabetes related factors extracted [...] based on individual participant responses.
+# Overall Description of the Dataset ## General Description The dataset includes diabetes related [...] based on individual participant responses.
 
 [3] SURROGATE {Writer} -> "Writing: Discussion (other)"  <background_thanks_general_dataset_description>  : 
 Thank you for the Overall Description of the Dataset.
