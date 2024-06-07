@@ -36,6 +36,7 @@ setup(
         "openai",
         "numpy",
         "pandas",
+        "matplotlib",
         "scikit-learn",
         "statsmodels",
         "colorama",
