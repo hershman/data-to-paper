@@ -59,8 +59,9 @@ class RequestCodeExplanation(BaseScientificPostCodeProductsHandler, LatexReviewB
         Do not provide a line-by-line explanation, rather provide a \t
         high-level explanation of the code in a language suitable for a Methods section of a research \t
         paper.
-        Focus on analysis steps. There is no need to explain trivial parts, like reading/writing a file, etc.  
-        {requesting_output_explanation}
+        Structure the explanation according to the steps of the analysis, and explain the purpose of each step, \t
+        and how it was implemented in the code.
+        There is no need to explain trivial parts, like reading/writing a file, etc.  
 
         Your explanation should be written in LaTeX, and should be enclosed within a LaTeX Code Block, like this:
 

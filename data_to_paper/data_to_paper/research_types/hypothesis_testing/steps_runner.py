@@ -6,8 +6,8 @@ from data_to_paper.base_steps import DirectorProductGPT, CheckLatexCompilation, 
 from .app_startup import HypothesisTestingStartDialog
 from .cast import ScientificAgent
 from .coding.after_coding import RequestCodeExplanation, RequestCodeProducts
-from .coding.data_analysis import DataAnalysisCodeProductsGPT
-from .coding.data_exploration import DataExplorationCodeProductsGPT
+from .coding.analysis import DataAnalysisCodeProductsGPT
+from .coding.exploration import DataExplorationCodeProductsGPT
 from .coding.displayitems import CreateDisplayitemsCodeProductsGPT
 from .coding.preprocessing import DataPreprocessingCodeProductsGPT
 from .literature_search import WritingLiteratureSearchReviewGPT, GoalLiteratureSearchReviewGPT

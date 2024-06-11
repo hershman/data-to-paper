@@ -1,0 +1,1 @@
+For key variables, check their logistic regression with diabetic alone and when accounting for the other variables.

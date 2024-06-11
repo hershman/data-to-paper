@@ -19,6 +19,7 @@ from .exceptions import CodeWriteForbiddenFile, CodeReadForbiddenFile, \
 from .run_issues import CodeProblem, RunIssue
 from data_to_paper.code_and_output_files.output_file_requirements import OutputFileRequirements
 from .base_run_contexts import SingletonRegisteredRunContext
+from ..env import FOLDER_FOR_RUN
 
 
 @dataclass
@@ -38,7 +39,8 @@ class IssueCollector(SingletonRegisteredRunContext):
 
 @dataclass
 class PreventFileOpen(SingletonRegisteredRunContext):
-    SYSTEM_FILES = ['templates/latex_table.tpl', 'templates/latex_longtable.tpl', 'ttf/DejaVuSans.ttf']
+    SYSTEM_FILES = ['templates/latex_table.tpl', 'templates/latex_longtable.tpl', 'ttf/DejaVuSans.ttf',
+                    'LICENSE.txt', 'LICENSE', 'LICENSE.md']
     SYSTEM_FOLDERS = \
         [r'C:\Windows', r'C:\Program Files', r'C:\Program Files (x86)'] if os.name == 'nt' \
         else ['/usr', '/etc', '/bin', '/sbin', '/sys', '/dev', '/var', '/opt', '/proc']
@@ -63,8 +65,11 @@ class PreventFileOpen(SingletonRegisteredRunContext):
             self._is_system_file(file_name)
 
     def is_allowed_write_file(self, file_name: str) -> bool:
+        file_path = Path(file_name).resolve()
+        if not file_path.parents[0].resolve() == FOLDER_FOR_RUN:
+            return False
         return self.allowed_write_files == 'all' or \
-            is_name_matches_list_of_wildcard_names(file_name, self.allowed_write_files)
+            is_name_matches_list_of_wildcard_names(file_path.name, self.allowed_write_files)
 
     def open_wrapper(self, *args, **kwargs):
         file_name = args[0] if len(args) > 0 else kwargs.get('file', None)
@@ -171,10 +176,12 @@ class ModifyImport(SingletonRegisteredRunContext):
 
     def custom_import(self, name, globals=None, locals=None, fromlist=(), level=0):
         if self._is_called_from_user_script():
+            # print('Importing from user script', name, globals, locals, fromlist, level)
             matched_module, new_name = \
                 next(((module, new_name) for module, new_name in self.modified_imports
                       if name.startswith(module)), (None, None))
             if matched_module:
+                print(f'Importing "{name}" as "{new_name}"')
                 if new_name is None:
                     raise CodeImportForbiddenModule(module=name)
                 name = new_name + name[len(matched_module):]

@@ -117,7 +117,7 @@ class ScientificProducts(Products):
 
     def get_created_dfs(self) -> List[str]:
         return [file for file in self.codes_and_outputs['data_analysis'].created_files.get_created_content_files()
-                if file.startswith('df_')]
+                if file.startswith('tbl_') or file.startswith('fig_')]
 
     def get_number_of_created_dfs(self) -> int:
         return len(self.get_created_dfs())

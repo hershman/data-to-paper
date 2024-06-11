@@ -4,6 +4,7 @@ import platform
 import threading
 import tempfile
 import uuid
+from multiprocessing import Process, Queue
 
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -63,29 +64,20 @@ class CodeRunnerWrapper(CacheRunToFile):
             queue_or_filepath = f"subprocess_output_{uuid.uuid4()}_{os.getpid()}.pkl"
             queue_or_filepath = os.path.join(tempfile.gettempdir(), queue_or_filepath)
         else:
-            queue_or_filepath = threading.Queue()
-        try:
-            process = threading.Thread(
-                target=self._run_code_and_put_result_in_queue,
-                args=(queue_or_filepath, ),
-            )
-        except (AttributeError, TypeError):
-            for k, v in self.__dict__.items():
-                if not is_serializable(v):
-                    print(f'Attribute {k} is not serializable.')
-            raise
+            queue_or_filepath = Queue()
+
+        process = Process(target=self._run_code_and_put_result_in_queue, args=(queue_or_filepath,))
         process.start()
         process.join(self.timeout_sec)
         if process.is_alive():
-            with os.popen(f'{"sudo -n " if platform.system() == "Darwin" else ""}py-spy dump --pid {process.pid}') as f:
-                py_spy_stack = f.read()
+            process.terminate()  # Terminate the process if it's still alive after timeout
             process.join()
             result = (
                 None,
                 [],
                 dict(),
-                FailedRunningCode.from_exception_with_py_spy(CodeTimeoutException(self.timeout_sec),
-                                                             (py_spy_stack, code)))
+                FailedRunningCode(exception=CodeTimeoutException(self.timeout_sec))
+            )
         else:
             if FILE_BASED_TRANSFER:
                 with open(queue_or_filepath, 'rb') as f:

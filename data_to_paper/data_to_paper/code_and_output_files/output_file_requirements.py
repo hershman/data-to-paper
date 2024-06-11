@@ -17,7 +17,7 @@ from data_to_paper.code_and_output_files.referencable_text import NumericReferen
 
 from data_to_paper.run_gpt_code.overrides.pvalue import OnStrPValue, OnStr
 from data_to_paper.run_gpt_code.run_issues import CodeProblem, RunIssue
-from data_to_paper.utils.text_formatting import wrap_text_with_triple_quotes
+from data_to_paper.utils.text_formatting import wrap_as_block
 
 from .file_view_params import ContentViewPurposeConverter, ViewPurpose
 from .ref_numeric_values import ReferencedValue, HypertargetFormat
@@ -83,6 +83,13 @@ class OutputFileRequirement:
         self.delete_if_needed(file_path)
         return content
 
+    def get_code_header_for_file(self, filename: str, content: Optional[Any] = None) -> Optional[str]:
+        """
+        Return a string which can be found in the line where we should go to when we want to see the code
+        that created the file.
+        """
+        return filename
+
 
 @dataclass(frozen=True)
 class DataOutputFileRequirement(OutputFileRequirement):
@@ -109,54 +116,63 @@ class BaseContentOutputFileRequirement(OutputFileRequirement):
         """
         return []
 
-    def _to_html(self, content: Any) -> str:
-        return format_text_with_code_blocks(content, from_md=True, is_html=True, width=None)
+    def _to_str(self, content: Any, pvalue_on_str: OnStr = OnStr.SMALLER_THAN, with_hyperlinks: bool = False) -> str:
+        with OnStrPValue(pvalue_on_str):
+            return str(content).strip()
 
-    def _to_str(self, content: Any, view_purpose: ViewPurpose) -> str:
-        return str(content).strip()
+    def _get_content_and_header_for_app_html(self, content: Any, filename: str = None, num_file: int = 0, level: int = 3):
+        content = self._to_str(content, OnStr.SMALLER_THAN)
+        content = format_text_with_code_blocks(content, from_md=True, is_html=True, width=None)
+        return content, f'<h{level}>{filename}</h{level}>'
 
-    def _get_header_html(self, filename: str = None, num_file: int = 0, level: int = 3):
-        return f'<h{level}>{filename}</h{level}>'
+    def _get_content_and_header_for_product(self, content: Any, filename: str = None, num_file: int = 0, level: int = 3, with_hypertarget: bool = False):
+        content = self._to_str(content, OnStr.SMALLER_THAN, with_hyperlinks=with_hypertarget)
+        content = wrap_as_block(content, get_block_label_from_filename(filename))
+        return content, '#' * level + f' {filename}'
 
-    def _get_header_llm(self, filename: str = None, num_file: int = 0,
-                        view_purpose: ViewPurpose = ViewPurpose.PRODUCT, header_level: int = 3) -> str:
-        if view_purpose.is_for_llm():
-            return f'### {filename}'
-        return f'"{filename}"'
+    def _get_content_and_header_for_code_review(self, content: Any, filename: str = None, num_file: int = 0, level: int = 3):
+        return self._get_content_and_header_for_product(content, filename, num_file, level, with_hypertarget=False)
 
-    def _get_header_paper(self, filename: str = None, num_file: int = 0,
-                          view_purpose: ViewPurpose = ViewPurpose.PRODUCT, header_level: int = 3) -> str:
-        return f'% {filename}'
+    def _get_content_and_header_for_final_appendix(self, content: Any, filename: str = None, num_file: int = 0, level: int = 3):
+        with OnStrPValue(OnStr.WITH_ZERO):
+            return self._to_str(content), f'% {filename}'
+
+    def _get_content_and_header_for_final_inline(self, content: Any, filename: str = None, num_file: int = 0, level: int = 3):
+        with OnStrPValue(OnStr.SMALLER_THAN):
+            return self._to_str(content), f'% {filename}'
+
+    def _get_pretty_content_and_header(self, content: Any, filename: str = None, num_file: int = 0,
+                                       view_purpose: ViewPurpose = ViewPurpose.PRODUCT,
+                                       header_level: Optional[int] = 3) -> Tuple[str, str]:
+        if view_purpose == ViewPurpose.APP_HTML:
+            return self._get_content_and_header_for_app_html(content, filename, num_file, header_level)
+        if view_purpose == ViewPurpose.PRODUCT:
+            return self._get_content_and_header_for_product(content, filename, num_file, header_level)
+        if view_purpose == ViewPurpose.HYPERTARGET_PRODUCT:
+            return self._get_content_and_header_for_product(content, filename, num_file, header_level, with_hypertarget=True)
+        if view_purpose == ViewPurpose.CODE_REVIEW:
+            return self._get_content_and_header_for_code_review(content, filename, num_file, header_level)
+        if view_purpose == ViewPurpose.FINAL_APPENDIX:
+            return self._get_content_and_header_for_final_appendix(content, filename, num_file, header_level)
+        if view_purpose == ViewPurpose.FINAL_INLINE:
+            return self._get_content_and_header_for_final_inline(content, filename, num_file, header_level)
 
     def get_header(self, filename: str = None, num_file: int = 0,
                    view_purpose: ViewPurpose = ViewPurpose.PRODUCT,
                    header_level: int = 3) -> str:
-        if view_purpose == ViewPurpose.APP_HTML:
-            return self._get_header_html(filename, num_file, header_level)
-        if view_purpose.is_for_llm():
-            return self._get_header_llm(filename, num_file, view_purpose, header_level)
-        if view_purpose.is_for_paper():
-            return self._get_header_paper(filename, num_file, view_purpose, header_level)
-        return f'"{filename}"'
+        _, header = self._get_pretty_content_and_header(None, filename, num_file, view_purpose, header_level)
+        return header
 
     def get_pretty_content(self, content: Any, filename: str = None, num_file: int = 0,
                            view_purpose: ViewPurpose = ViewPurpose.PRODUCT) -> str:
-        pvalue_on_str = OnStr.WITH_ZERO if view_purpose == ViewPurpose.FINAL_APPENDIX else OnStr.SMALLER_THAN
-        with OnStrPValue(pvalue_on_str):
-            if view_purpose == ViewPurpose.APP_HTML:
-                content = self._to_html(content)
-            else:
-                content = self._to_str(content, view_purpose)
-        if view_purpose.is_for_llm():
-            content = wrap_text_with_triple_quotes(content, get_block_label_from_filename(filename))
+        content, _ = self._get_pretty_content_and_header(content, filename, num_file, view_purpose)
         return content
 
     def get_pretty_content_with_header(self, content: Any, filename: str = None, num_file: int = 0,
                                        view_purpose: ViewPurpose = ViewPurpose.PRODUCT,
                                        header_level: Optional[int] = 3) -> str:
-        content = self.get_pretty_content(content, filename, num_file, view_purpose)
+        content, header = self._get_pretty_content_and_header(content, filename, num_file, view_purpose, header_level)
         if header_level:
-            header = self.get_header(filename, num_file, view_purpose)
             if header:
                 return header + '\n' + content
         return content
@@ -165,17 +181,10 @@ class BaseContentOutputFileRequirement(OutputFileRequirement):
 @dataclass(frozen=True)
 class ReferencableContentOutputFileRequirement(BaseContentOutputFileRequirement):
     hypertarget_prefixes: Optional[Tuple[str]] = None  # List of hypertarget prefixes to assign for each file
-    referenceable_text_product_cls: Type[ReferencableTextProduct] = ReferencableTextProduct
     referenceable_text_cls: Type[BaseReferenceableText] = NumericReferenceableText
 
-    def get_pretty_content(self, content: Any, filename: str = None, num_file: int = 0,
-                           view_purpose: ViewPurpose = None) -> str:
-        if view_purpose == ViewPurpose.APP_HTML:
-            content = self.get_pretty_content(content, filename, num_file, ViewPurpose.PRODUCT)
-            return super().get_pretty_content(content, filename, num_file, view_purpose)
-        else:
-            content = super().get_pretty_content(content, filename, num_file, view_purpose)
-        return self.get_formatted_text_and_header_references(content, filename, num_file, view_purpose)[0]
+    def _get_prefix(self, num_file: int) -> str:
+        return self.hypertarget_prefixes[num_file] if self.hypertarget_prefixes else None
 
     def get_formatted_text_and_header_references(self, content: Any, filename: str = None, num_file: int = 0,
                                                  view_purpose: ViewPurpose = None) -> Tuple[str, List[ReferencedValue]]:
@@ -187,7 +196,7 @@ class ReferencableContentOutputFileRequirement(BaseContentOutputFileRequirement)
                                view_purpose: ViewPurpose = None) -> BaseReferenceableText:
         return self.referenceable_text_cls(
             text=content,
-            hypertarget_prefix=self.hypertarget_prefixes[num_file] if self.hypertarget_prefixes else None,
+            hypertarget_prefix=self._get_prefix(num_file),
         )
 
     def _get_hyper_target_format(self, view_purpose: ViewPurpose) -> HypertargetFormat:
@@ -250,8 +259,8 @@ class NumericTextContentOutputFileRequirement(ReferencableContentOutputFileRequi
     target_precision: int = NUM_DIGITS_FOR_FLOATS
     source_precision: int = 10
 
-    def _to_str(self, content: Any, view_purpose: ViewPurpose) -> str:
-        content = super()._to_str(content, view_purpose)
+    def _to_str(self, content: Any, pvalue_on_str: OnStr = OnStr.SMALLER_THAN, with_hyperlinks: bool = False) -> str:
+        content = super()._to_str(content, pvalue_on_str, with_hyperlinks)
         return round_floats(content, self.target_precision, self.source_precision)
 
 
@@ -331,7 +340,7 @@ class OutputFileRequirementsToFileToContent(Dict[OutputFileRequirement, Dict[str
         return [filename for requirement, files_to_contents in self.items()
                 for filename in files_to_contents.keys() if requirement.should_keep_file]
 
-    def _get_created_files_to_requirements_and_contents(self, match_filename: str = '*',
+    def get_created_files_to_requirements_and_contents(self, match_filename: str = '*',
                                                         is_content: bool = None,
                                                         ) -> Dict[str, Tuple[OutputFileRequirement, Any]]:
         """
@@ -351,7 +360,7 @@ class OutputFileRequirementsToFileToContent(Dict[OutputFileRequirement, Dict[str
         Return the names of the files created by the run, and their content.
         """
         return {filename: content for filename, (requirement, content) in
-                self._get_created_files_to_requirements_and_contents(match_filename, is_content=True).items()}
+                self.get_created_files_to_requirements_and_contents(match_filename, is_content=True).items()}
 
     def get_created_content_files(self, match_filename: str = '*') -> List[str]:
         """
@@ -363,7 +372,7 @@ class OutputFileRequirementsToFileToContent(Dict[OutputFileRequirement, Dict[str
         """
         Return the names of the files created by the run, and which were kept, not deleted.
         """
-        return list(self._get_created_files_to_requirements_and_contents(match_filename, is_content=False).keys())
+        return list(self.get_created_files_to_requirements_and_contents(match_filename, is_content=False).keys())
 
     def delete_all_created_files(self, run_folder: Optional[Path] = None):
         """

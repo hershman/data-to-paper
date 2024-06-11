@@ -23,7 +23,7 @@ from data_to_paper.run_gpt_code.exceptions import FailedRunningCode, UnAllowedFi
 from data_to_paper.interactive import PanelNames
 
 from data_to_paper.base_cast import Agent
-from data_to_paper.utils.text_formatting import wrap_text_with_triple_quotes
+from data_to_paper.utils.text_formatting import wrap_as_block
 from data_to_paper.interactive.symbols import Symbols
 from data_to_paper.run_gpt_code.base_run_contexts import RunContext
 from data_to_paper.run_gpt_code.code_runner import CodeRunner
@@ -263,9 +263,10 @@ class DebuggerConverser(BackgroundProductsConverser):
 
     def _get_issue_for_forbidden_write(self, error: CodeWriteForbiddenFile, e: FailedRunningCode) -> RunIssue:
         file = error.file
+        file_and_ext = Path(file).name
         return RunIssue(
-            category='Wrong output files',
-            issue=f'Your code writes to the file "{file}" which is not allowed.',
+            category='Write to unallowed files',
+            issue=f'Your code writes to the file "{file_and_ext}" which is not allowed.',
             instructions=self.description_of_allowed_output_files,
             code_problem=CodeProblem.RuntimeError,
             comment='Code writes to forbidden file',
@@ -400,7 +401,7 @@ class DebuggerConverser(BackgroundProductsConverser):
         self.previous_code = code
 
         self.apply_append_surrogate_message(
-            content=message + '\n' + wrap_text_with_triple_quotes(code, 'python'),
+            content=message + '\n' + wrap_as_block(code, 'python'),
             comment=comment,
         )
 

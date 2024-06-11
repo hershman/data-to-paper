@@ -1,0 +1,17 @@
+## Statistical considerations:
+### Confounding variables:
+There may be confounding variables present that could influence the relationship between each key variable and diabetes. These confounding variables should be included as control variables in the logistic regression models to account for their potential influence on the outcome variable.
+### Dependencies between data points:
+The assumption of independence between data points may not hold if there are dependencies or clustering within the data. If such dependencies exist, appropriate statistical techniques, such as clustered standard errors or mixed-effects models, should be used to account for the dependencies within the dataset.
+
+## Hypotheses:
+### Hypothesis:
+H1: Hypothesis for individual associations
+### Test:
+We hypothesize that there are individual associations between diabetes and the following variables: HighBP (High Blood Pressure), HighChol (High Cholesterol), Stroke. We will perform separate logistic regression models to test the association of each key variable with diabetes, with Diabetes_binary as the independent variable and each of the variables mentioned as the dependent variables.
+
+### Hypothesis:
+H2: Hypothesis for adjusted associations
+### Test:
+We hypothesize that after adjusting for confounding variables, there will be significant associations between diabetes and the following variables: HighBP (High Blood Pressure), HighChol (High Cholesterol), Stroke. We will perform logistic regression models with Diabetes_binary as the independent variable and each of the variables mentioned as the dependent variables. These models will include control variables such as Age, BMI, and Sex to account for potential confounding effects.
+

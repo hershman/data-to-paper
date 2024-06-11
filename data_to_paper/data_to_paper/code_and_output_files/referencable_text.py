@@ -4,9 +4,8 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Tuple, Union
 
 from data_to_paper.base_products.product import Product
-from data_to_paper.code_and_output_files.file_view_params import ViewPurpose, ContentViewPurposeConverter
-from data_to_paper.code_and_output_files.ref_numeric_values import \
-    numeric_values_in_products_pattern, ReferencedValue, HypertargetFormat
+from .file_view_params import ViewPurpose, ContentViewPurposeConverter
+from .ref_numeric_values import numeric_values_in_products_pattern, ReferencedValue, HypertargetFormat
 
 
 @dataclass

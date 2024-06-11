@@ -19,6 +19,9 @@ class ViewPurpose(Enum):
     def is_for_paper(self):
         return self in [ViewPurpose.FINAL_APPENDIX, ViewPurpose.FINAL_INLINE]
 
+    def is_for_html(self):
+        return self in [ViewPurpose.APP_HTML]
+
 
 DEFAULT_VIEW_PURPOSE_TO_PARAMS: Dict[ViewPurpose, HypertargetFormat] = {
     None: HypertargetFormat(position=HypertargetPosition.NONE),

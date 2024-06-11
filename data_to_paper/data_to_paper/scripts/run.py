@@ -43,6 +43,9 @@ The script will run the project and save the results in the specified run folder
 See the `env.py` file for setting other available options.
 """
 
+import data_to_paper.config
+import data_to_paper.env
+
 import argparse
 from data_to_paper.research_types.hypothesis_testing.steps_runner import HypothesisTestingStepsRunner
 from data_to_paper.research_types.toy_example.steps_runner import ToyStepsRunner

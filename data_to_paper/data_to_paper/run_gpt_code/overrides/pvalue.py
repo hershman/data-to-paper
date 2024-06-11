@@ -206,6 +206,38 @@ def is_containing_p_value(value):
     return False
 
 
+def is_only_p_values(value):
+    if is_p_value(value):
+        return True
+    if isinstance(value, np.ndarray):
+        return np.all(np.vectorize(is_only_p_values)(value))
+    if isinstance(value, pd.Series):
+        return value.apply(is_only_p_values).all()
+    if isinstance(value, pd.DataFrame):
+        return value.applymap(is_only_p_values).all().all()
+    if isinstance(value, (list, tuple)):
+        return all(is_only_p_values(val) for val in value)
+    if isinstance(value, dict):
+        return all(is_only_p_values(val) for val in value.values())
+    return False
+
+
+def convert_p_values_to_floats(value):
+    if is_p_value(value):
+        return value.value
+    if isinstance(value, np.ndarray):
+        return np.vectorize(convert_p_values_to_floats)(value)
+    if isinstance(value, pd.Series):
+        return value.apply(convert_p_values_to_floats)
+    if isinstance(value, pd.DataFrame):
+        return value.applymap(convert_p_values_to_floats)
+    if isinstance(value, (list, tuple)):
+        return type(value)(convert_p_values_to_floats(val) for val in value)
+    if isinstance(value, dict):
+        return {key: convert_p_values_to_floats(val) for key, val in value.items()}
+    return value
+
+
 @dataclass
 class TrackPValueCreationFuncs(RunContext):
     package_names: Iterable[str] = ()

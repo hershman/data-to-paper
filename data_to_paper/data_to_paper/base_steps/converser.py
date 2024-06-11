@@ -142,8 +142,7 @@ class Converser(Copier, AppInteractor):
                 content = self._app_receive_text(app_panel, content,
                                                  title=editing_title, instructions=editing_instructions,
                                                  in_field_instructions=in_field_instructions, sleep_for=sleep_for)
-            self._app_send_prompt(app_panel, content, from_md=True, demote_headers_by=1,
-                                  sleep_for=sleep_for)
+            self._app_send_prompt(app_panel, content, from_md=True, demote_headers_by=1, sleep_for=sleep_for)
         return content
 
     def apply_append_user_message(self, content: StrOrReplacer, tag: Optional[StrOrReplacer] = None,
@@ -157,15 +156,21 @@ class Converser(Copier, AppInteractor):
                                   **kwargs):
         if send_to_app is None:
             send_to_app = not is_background and not ignore
-        content = \
-            self._show_and_edit_content(content, editing_title, editing_instructions, in_field_instructions,
-                                        send_to_app, app_panel, sleep_for)
-        return self.conversation_manager.append_user_message(
+        is_edit = editing_title or editing_instructions
+        if is_edit:
+            content = \
+                self._show_and_edit_content(content, editing_title, editing_instructions, in_field_instructions,
+                                            send_to_app, app_panel, sleep_for)
+        result = self.conversation_manager.append_user_message(
             content=content,
             tag=tag,
             comment=comment,
             ignore=ignore,
             previous_code=previous_code, is_background=is_background, **kwargs)
+        if not is_edit:
+            self._show_and_edit_content(content, editing_title, editing_instructions, in_field_instructions,
+                                        send_to_app, app_panel, sleep_for)
+        return result
 
     def apply_append_system_message(self, content: StrOrReplacer, tag: Optional[StrOrReplacer] = None,
                                     comment: Optional[StrOrReplacer] = None,
